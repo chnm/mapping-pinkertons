@@ -1,8 +1,8 @@
 -- Create schema
-CREATE SCHEMA IF NOT EXISTS elpaso;
+CREATE SCHEMA IF NOT EXISTS detectives;
 
 -- Create locations table first (no dependencies)
-CREATE TABLE elpaso.locations (
+CREATE TABLE detectives.locations (
     id SERIAL PRIMARY KEY,
     locality TEXT,
     street_address TEXT,
@@ -14,7 +14,7 @@ CREATE TABLE elpaso.locations (
 );
 
 -- Create activities table
-CREATE TABLE elpaso.activities (
+CREATE TABLE detectives.activities (
     id INTEGER PRIMARY KEY,
     source TEXT,
     operative TEXT,
@@ -34,16 +34,16 @@ CREATE TABLE elpaso.activities (
 );
 
 -- Create junction table for activity-location relationship
-CREATE TABLE elpaso.activity_locations (
-    activity_id INTEGER REFERENCES elpaso.activities (id) ON DELETE CASCADE,
-    location_id INTEGER REFERENCES elpaso.locations (id) ON DELETE CASCADE,
+CREATE TABLE detectives.activity_locations (
+    activity_id INTEGER REFERENCES detectives.activities (id) ON DELETE CASCADE,
+    location_id INTEGER REFERENCES detectives.locations (id) ON DELETE CASCADE,
     PRIMARY KEY (activity_id, location_id)
 );
 
 -- Create indexes for common queries
-CREATE INDEX idx_activities_date ON elpaso.activities (date);
-CREATE INDEX idx_activities_operative ON elpaso.activities (operative);
-CREATE INDEX idx_activities_subject ON elpaso.activities (subject);
-CREATE INDEX idx_activities_mode ON elpaso.activities (mode);
-CREATE INDEX idx_locations_locality ON elpaso.locations (locality);
-CREATE INDEX idx_locations_type ON elpaso.locations (location_type);
+CREATE INDEX idx_activities_date ON detectives.activities (date);
+CREATE INDEX idx_activities_operative ON detectives.activities (operative);
+CREATE INDEX idx_activities_subject ON detectives.activities (subject);
+CREATE INDEX idx_activities_mode ON detectives.activities (mode);
+CREATE INDEX idx_locations_locality ON detectives.locations (locality);
+CREATE INDEX idx_locations_type ON detectives.locations (location_type);

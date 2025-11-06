@@ -1,6 +1,6 @@
 #!/usr/bin/env uv run
 """
-Load El Paso surveillance data from CSV into Postgres database.
+Load Pinkerton data from CSV into Postgres database.
 """
 
 import csv
@@ -18,7 +18,7 @@ load_dotenv()
 
 # Database connection parameters from environment
 DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME", "elpaso"),
+    "dbname": os.getenv("DB_NAME", "detectives"),
     "user": os.getenv("DB_USER", "postgres"),
     "password": os.getenv("DB_PASSWORD", "postgres"),
     "host": os.getenv("DB_HOST", "localhost"),
@@ -26,7 +26,7 @@ DB_CONFIG = {
 }
 
 # Schema name
-SCHEMA_NAME = os.getenv("DB_SCHEMA", "elpaso")
+SCHEMA_NAME = os.getenv("DB_SCHEMA", "detectives")
 
 
 def setup_logging():
@@ -185,6 +185,19 @@ def parse_boolean(value):
     return None
 
 
+def parse_people(people_str):
+    """
+    Parse people string into a list of names.
+    Splits by commas and strips whitespace.
+    Returns empty list if input is empty.
+    """
+
+    # People are in the "Subject" field, separated by a comma or by an ampersand
+    if not people_str or people_str.strip() == "":
+        return []
+    return [name.strip() for name in re.split(r",|&", people_str) if name.strip()]
+
+
 def get_or_create_location(
     cursor,
     locality,
@@ -257,6 +270,54 @@ def get_or_create_location(
         f"New location created: {locality} / {location_name} (ID: {location_id}){coord_str}"
     )
     return location_id
+
+
+# TODO: get_or_create_subject instead? separate one for get_or_create_operative?
+def get_or_create_people(cursor, people_list):
+    """
+    Get existing people IDs or create new people and return their IDs. Names come as
+    First Name Last Name and need to be parsed into first_name and last_name fields.
+    """
+    people_ids = []
+
+    for full_name in people_list:
+        name_parts = full_name.split()
+        if len(name_parts) < 2:
+            logging.warning(f"Invalid name format: '{full_name}'")
+            continue
+
+        first_name = " ".join(name_parts[:-1])
+        last_name = name_parts[-1]
+
+        # Check if person exists
+        cursor.execute(
+            f"""
+            SELECT id FROM {SCHEMA_NAME}.people 
+            WHERE first_name = %s AND last_name = %s
+        """,
+            (first_name, last_name),
+        )
+
+        result = cursor.fetchone()
+        if result:
+            person_id = result[0]
+            logging.debug(f"Person found: {full_name} (ID: {person_id})")
+        else:
+            # Create new person
+            cursor.execute(
+                f"""
+                INSERT INTO {SCHEMA_NAME}.people (first_name, last_name)
+                VALUES (%s, %s)
+                RETURNING id
+            """,
+                (first_name, last_name),
+            )
+            person_id = cursor.fetchone()[0]
+            logging.info(f"New person created: {full_name} (ID: {person_id})")
+
+        people_ids.append(person_id)
+
+    return people_ids
 
 
 def load_data(csv_file):

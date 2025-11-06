@@ -60,18 +60,3 @@ migrate-reset: ## Drop and recreate all migrations
 migrate-version: ## Show current migration version
 	@migrate -path db/migrations -database "$(DB_URL)" version
 
-load-data: ## Load data from CSV file
-	@echo "Loading data from $(CSV)..."
-	uv run utils/load_data.py data/el_paso.csv
-
-setup: db-create migrate-up ## Create database and run all migrations
-	@echo "Setup complete"
-
-clean: ## Clean up log files
-	@echo "Cleaning up log files..."
-	@rm -rf logs/
-	@echo "Cleanup complete"
-
-psql: ## Connect to database with psql
-	@psql -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER) -d $(DB_NAME)
-

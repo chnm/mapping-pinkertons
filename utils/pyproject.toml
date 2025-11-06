@@ -1,7 +1,7 @@
 [project]
-name = "mapping-el-paso"
+name = "mapping-pinkertons"
 version = "0.1.0"
-description = "Add your description here"
+description = "A project of the Roy Rosenzweig Center for History and New Media to map Pinkerton detective activities in El Paso."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

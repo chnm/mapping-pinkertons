@@ -1,6 +1,8 @@
-# El Paso Surveillance Database
+# Pinkertons Surveillance Database
 
-Website, database schema, and data loading scripts for Mapping El Paso.
+![Pinkerton Detective Agency](https://cdn.britannica.com/86/178186-004-5FC5A55E.jpg)
+
+Website, database schema, and data loading scripts for Mapping the Pinkertons.
 
 ## Database Schema Overview
 
@@ -30,7 +32,7 @@ uv install
 
 ```bash
 # Create database
-createdb elpaso
+createdb detectives
 ```
 
 ### Environment Configuration
@@ -45,10 +47,10 @@ Migrations require the use of [golang-migrate](https://github.com/golang-migrate
 
 ```bash
 # Run migrations
-migrate -path . -database "postgresql://postgres:postgres@localhost:5432/elpaso?sslmode=disable" up
+migrate -path . -database "postgresql://postgres:postgres@localhost:5432/detectives?sslmode=disable" up
 
 # Rollback if needed
-migrate -path . -database "postgresql://postgres:postgres@localhost:5432/elpaso?sslmode=disable" down
+migrate -path . -database "postgresql://postgres:postgres@localhost:5432/detectives?sslmode=disable" down
 ```
 
 ## Loading Data
@@ -70,7 +72,7 @@ The script will:
 
 Database credentials are loaded from the `.env`` file. The script uses these environment variables:
 
-- `DB_NAME` - Database name (default: `elpaso`)
+- `DB_NAME` - Database name (default: `detectives`)
 - `DB_USER` - Database user (default: `postgres`)
 - `DB_PASSWORD` - Database password (default: `postgres`)
 - `DB_HOST` - Database host (default: `localhost`)
