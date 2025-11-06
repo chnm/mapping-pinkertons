@@ -4,7 +4,7 @@
 include .env
 export
 
-# Default database URL for migrations
+# Database URL
 DB_URL := postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
 
 help: ## Show this help message
@@ -58,26 +58,14 @@ migrate-reset: ## Drop and recreate all migrations
 	@echo "Database reset complete"
 
 migrate-version: ## Show current migration version
-	@migrate -path . -database "$(DB_URL)" version
+	@migrate -path db/migrations -database "$(DB_URL)" version
 
-load-data: ## Load data from CSV file (usage: make load-data CSV=data/el_paso.csv)
-	@if [ -z "$(CSV)" ]; then \
-		echo "Error: CSV file not specified"; \
-		echo "Usage: make load-data CSV=data/el_paso.csv"; \
-		exit 1; \
-	fi
+load-data: ## Load data from CSV file
 	@echo "Loading data from $(CSV)..."
-	@./utils/load_data.py $(CSV)
+	uv run utils/load_data.py data/el_paso.csv
 
 setup: db-create migrate-up ## Create database and run all migrations
 	@echo "Setup complete"
-
-init: setup ## Initialize database and load sample data (usage: make init CSV=data/el_paso.csv)
-	@if [ -n "$(CSV)" ]; then \
-		make load-data CSV=$(CSV); \
-	else \
-		echo "Run 'make load-data CSV=data/el_paso.csv' to load data"; \
-	fi
 
 clean: ## Clean up log files
 	@echo "Cleaning up log files..."

@@ -56,7 +56,7 @@ migrate -path . -database "postgresql://postgres:postgres@localhost:5432/elpaso?
 ### Run the loader
 
 ```bash
-uv run load_data.py ../data/el_paso.csv
+uv run utils/load_data.py data/el_paso.csv
 ```
 
 The script will:
