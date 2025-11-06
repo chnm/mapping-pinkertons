@@ -25,8 +25,10 @@ DB_CONFIG = {
     "port": int(os.getenv("DB_PORT", "5432")),
 }
 
+# Schema name
+SCHEMA_NAME = os.getenv("DB_SCHEMA", "elpaso")
 
-# Setup logging
+
 def setup_logging():
     """
     Setup logging to both file and console.
@@ -136,6 +138,37 @@ def parse_date(date_str, row_id=None):
         return None
 
 
+def parse_coordinates(location_notes):
+    """
+    Extract latitude and longitude from location notes if present.
+    Looks for patterns like: "31.75942197504869, -106.49579584576844"
+    Returns tuple of (latitude, longitude) or (None, None) if not found.
+    """
+    if not location_notes or location_notes.strip() == "":
+        return None, None
+
+    # Match decimal coordinates pattern (handles negative values)
+    # Pattern: optional text, then lat, comma, optional space, lon
+    pattern = r"(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)"
+    match = re.search(pattern, location_notes)
+
+    if match:
+        try:
+            lat = float(match.group(1))
+            lon = float(match.group(2))
+
+            # Validate coordinate ranges
+            if -90 <= lat <= 90 and -180 <= lon <= 180:
+                logging.debug(f"Parsed coordinates: ({lat}, {lon})")
+                return lat, lon
+            else:
+                logging.warning(f"Coordinates out of valid range: ({lat}, {lon})")
+        except ValueError as e:
+            logging.warning(f"Could not parse coordinates from '{location_notes}': {e}")
+
+    return None, None
+
+
 def parse_boolean(value):
     """
     Parse Yes/No/Query into boolean.
@@ -153,15 +186,22 @@ def parse_boolean(value):
 
 
 def get_or_create_location(
-    cursor, locality, street_address, location_name, location_type, location_notes
+    cursor,
+    locality,
+    street_address,
+    location_name,
+    location_type,
+    location_notes,
+    latitude=None,
+    longitude=None,
 ):
     """
     Get existing location ID or create new location and return its ID.
     """
     # Check if location exists
     cursor.execute(
-        """
-        SELECT id FROM locations 
+        f"""
+        SELECT id FROM {SCHEMA_NAME}.locations 
         WHERE locality IS NOT DISTINCT FROM %s 
         AND street_address IS NOT DISTINCT FROM %s 
         AND location_name IS NOT DISTINCT FROM %s
@@ -171,14 +211,33 @@ def get_or_create_location(
 
     result = cursor.fetchone()
     if result:
-        logging.debug(f"Location found: {locality} / {location_name} (ID: {result[0]})")
-        return result[0]
+        location_id = result[0]
+
+        # Update coordinates if provided and not already set
+        if latitude is not None and longitude is not None:
+            cursor.execute(
+                f"""
+                UPDATE {SCHEMA_NAME}.locations 
+                SET latitude = %s, longitude = %s 
+                WHERE id = %s AND latitude IS NULL AND longitude IS NULL
+            """,
+                (latitude, longitude, location_id),
+            )
+            if cursor.rowcount > 0:
+                logging.info(
+                    f"Location {location_id}: Added coordinates ({latitude}, {longitude})"
+                )
+
+        logging.debug(
+            f"Location found: {locality} / {location_name} (ID: {location_id})"
+        )
+        return location_id
 
     # Create new location
     cursor.execute(
-        """
-        INSERT INTO locations (locality, street_address, location_name, location_type, location_notes)
-        VALUES (%s, %s, %s, %s, %s)
+        f"""
+        INSERT INTO {SCHEMA_NAME}.locations (locality, street_address, location_name, location_type, location_notes, latitude, longitude)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """,
         (
@@ -187,12 +246,15 @@ def get_or_create_location(
             location_name or None,
             location_type or None,
             location_notes or None,
+            latitude,
+            longitude,
         ),
     )
 
     location_id = cursor.fetchone()[0]
+    coord_str = f" at ({latitude}, {longitude})" if latitude and longitude else ""
     logging.info(
-        f"New location created: {locality} / {location_name} (ID: {location_id})"
+        f"New location created: {locality} / {location_name} (ID: {location_id}){coord_str}"
     )
     return location_id
 
@@ -276,8 +338,8 @@ def load_data(csv_file):
                 try:
                     # Insert activity
                     cursor.execute(
-                        """
-                        INSERT INTO activities (
+                        f"""
+                        INSERT INTO {SCHEMA_NAME}.activities (
                             id, source, operative, date, time, duration, roping, mode,
                             activity_notes, subject, information, information_type, edited, edit_type
                         ) VALUES (
@@ -309,6 +371,9 @@ def load_data(csv_file):
                 # Handle location data if present
                 if any([row["Locality"], row["Street Address"], row["Location Name"]]):
                     try:
+                        # Parse coordinates from location notes if present
+                        latitude, longitude = parse_coordinates(row["Location Notes"])
+
                         location_id = get_or_create_location(
                             cursor,
                             row["Locality"],
@@ -316,12 +381,14 @@ def load_data(csv_file):
                             row["Location Name"],
                             row["Location Type"],
                             row["Location Notes"],
+                            latitude,
+                            longitude,
                         )
 
                         # Link activity to location
                         cursor.execute(
-                            """
-                            INSERT INTO activity_locations (activity_id, location_id)
+                            f"""
+                            INSERT INTO {SCHEMA_NAME}.activity_locations (activity_id, location_id)
                             VALUES (%s, %s)
                             ON CONFLICT DO NOTHING
                         """,
@@ -362,13 +429,13 @@ def load_data(csv_file):
         logging.info(f"Errors encountered: {stats['errors']}")
 
         # Get unique locations count
-        cursor.execute("SELECT COUNT(DISTINCT id) FROM locations")
+        cursor.execute(f"SELECT COUNT(DISTINCT id) FROM {SCHEMA_NAME}.locations")
         unique_locations = cursor.fetchone()[0]
         logging.info(f"Unique locations in database: {unique_locations}")
 
         cursor.close()
 
-        print(f"\nImport complete! See {log_path} for details.")
+        print(f"\n✅ Import complete! See {log_path} for details.")
 
     except psycopg2.Error as e:
         logging.error(f"Database error: {e}")
