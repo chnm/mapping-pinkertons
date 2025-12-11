@@ -1,0 +1,70 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="/images/favicon.ico" />
+
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    href="{{.Site.BaseURL }}/index.xml"
+    title="{{ .Site.Title }}"
+  />
+
+  <title>{{ with .Title }}{{ . }} - {{ end }}{{ .Site.Title }}</title>
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}" />
+  <meta property="og:description" content="{{ .Site.Params.description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ .Permalink }}" />
+  <meta property="og:image" content="{{ .Site.BaseURL }}/images/pinkertons.jpg" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ .Title }} - {{ .Site.Title }}" />
+  <meta name="twitter:description" content="{{ .Site.Params.description }}" />
+  <meta name="twitter:image" content="{{ .Site.BaseURL }}/images/pinkertons.jpg" />
+
+
+  {{ $style := resources.Get "css/style.css" }}
+  <link rel="stylesheet" href="{{ $style.Permalink }}" />
+
+  {{ if ne hugo.Environment "development" }}
+  <!-- Matomo -->
+  <script>
+    var _paq = (window._paq = window._paq || []);
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function () {
+      var u = "https://stats.rrchnm.org/";
+      _paq.push(["setTrackerUrl", u + "matomo.php"]);
+      _paq.push(["setSiteId", "SITE_ID_HERE"]);
+      var d = document,
+        g = d.createElement("script"),
+        s = d.getElementsByTagName("script")[0];
+      g.async = true;
+      g.src = u + "matomo.js";
+      s.parentNode.insertBefore(g, s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+  {{ end }}
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/littlefoot/dist/littlefoot.css"
+  />
+  {{/* Commented out until js/common.js is created
+  {{ $js := resources.Get "js/common.js" | js.Build | resources.Minify }}
+  {{ $secureJS := $js | resources.Fingerprint "sha512" }}
+  <script src="{{ $secureJS.Permalink }}" integrity="{{ $secureJS.Data.Integrity }}" async></script>
+  */}}
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="https://kit.fontawesome.com/5090c71735.js" crossorigin="anonymous"></script>
+</head>

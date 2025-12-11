@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
-<head>
-  {{ partial "head.html" . }}
-</head>
-<body>
-  <header>
-    {{ partial "header.html" . }}
-  </header>
-  <main>
-    {{ block "main" . }}{{ end }}
-  </main>
-  <footer>
-    {{ partial "footer.html" . }}
-  </footer>
-</body>
+<html>
+    {{- partial "head.html" . -}}
+    <body class="bg-grit-bg min-h-screen flex flex-col font-body text-grit-text">
+        {{ if .IsHome }}
+        {{- partial "hero.html" . -}}
+        {{- else }}
+        {{- partial "header.html" . -}}
+        {{- end }}
+        <div class="bg-grit-bg flex-grow" id="content">
+        {{- block "main" . }}{{- end }}
+        </div>
+        {{- partial "footer.html" . -}}
+        <script src="https://unpkg.com/littlefoot/dist/littlefoot.js"></script>
+        <script>littlefoot.littlefoot()</script>
+    </body>
 </html>

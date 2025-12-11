@@ -1,0 +1,44 @@
+baseURL: "https://pinkertons.rrchnm.org"
+languageCode: "en-us"
+title: "Mapping the Pinkertons"
+description: >-
+  Mapping the Pinkertons is a digital scholarly research project on the Pinkerton Detective Agency
+  by the Roy Rosenzweig Center for History and New Media
+copyright: 2025-2026
+permalinks:
+  blog: "/:year/:month/:day/:slug/"
+  archive: "/:slug/"
+  page: "/:section/:slug/"
+
+theme: "pinkertons"
+
+pagination:
+  pagerSize: 10
+
+author:
+  name: Roy Rosenzweig Center for History and New Media
+  email: webmaster@chnm.gmu.edu
+
+# We need this set for TailwindCSS
+build:
+  writeStats: true
+
+# We need this for embedding visualizations
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
+
+sitemap:
+  changefreq: weekly
+  priority: 0.5
+  filename: sitemap.xml
+
+taxonomies:
+  category: categories
+  tag: tags
+  author: author
+

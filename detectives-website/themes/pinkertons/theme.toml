@@ -1,0 +1,24 @@
+# theme.toml
+
+name = "Pinkertons"
+license = "MIT"
+licenselink = "https://github.com/chnm/pinkertons/LICENSE"
+description = "Theme for the Mapping the Pinkertons project at the Roy Rosenzweig Center for History and New Media"
+homepage = "https://pinkertons.rrchnm.org/"
+min_version = "0.41.0"
+languageCode = "en-us"
+
+[author]
+  name = "Jason Heppler"
+  homepage = "https://jasonheppler.org"
+  version = 1.0
+
+[taxonomies]
+    tag = "tags"
+    category = "categories"
+    author = "authors"
+  
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
