@@ -60,3 +60,8 @@ migrate-reset: ## Drop and recreate all migrations
 migrate-version: ## Show current migration version
 	@migrate -path db/migrations -database "$(DB_URL)" version
 
+load-data: ## Load data from CSV into database
+	@echo "Loading data from CSV..."
+	@python utils/load_data.py data/el_paso.csv
+	@echo "Data load complete"
+
