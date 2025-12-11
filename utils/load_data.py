@@ -185,17 +185,30 @@ def parse_boolean(value):
     return None
 
 
-def parse_people(people_str):
+def parse_subjects(subjects_str):
     """
-    Parse people string into a list of names.
+    Parse subjects string into a list of names.
     Splits by commas and strips whitespace.
     Returns empty list if input is empty.
     """
 
-    # People are in the "Subject" field, separated by a comma or by an ampersand
-    if not people_str or people_str.strip() == "":
+    # Subjects are in the "Subject" field, separated by a comma or by an ampersand
+    if not subjects_str or subjects_str.strip() == "":
         return []
-    return [name.strip() for name in re.split(r",|&", people_str) if name.strip()]
+    return [name.strip() for name in re.split(r",|&", subjects_str) if name.strip()]
+
+
+def parse_operatives(operative_str):
+    """
+    Parse operatives string into a list of names.
+    Splits by commas and strips whitespace.
+    Returns empty list if input is empty.
+    """
+
+    # Operatives are in the "Operative" field, separated by a comma or by an ampersand
+    if not operative_str or operative_str.strip() == "":
+        return []
+    return [name.strip() for name in re.split(r",|&", operative_str) if name.strip()]
 
 
 def get_or_create_location(
@@ -272,8 +285,7 @@ def get_or_create_location(
     return location_id
 
 
-# TODO: get_or_create_subject instead? separate one for get_or_create_operative?
-def get_or_create_people(cursor, people_list):
+def get_or_create_subjects(cursor, people_list):
     """
     Get existing people IDs or create new people and return their IDs. Names come as
     First Name Last Name and need to be parsed into first_name and last_name fields.
@@ -318,6 +330,53 @@ def get_or_create_people(cursor, people_list):
         people_ids.append(person_id)
 
     return people_ids
+
+
+def get_or_create_operatives(cursor, operative_list):
+    """
+    Get existing operative IDs or create new operatives and return their IDs. Names come as
+    First Name Last Name and need to be parsed into first_name and last_name fields.
+    """
+    operative_ids = []
+
+    for full_name in operative_list:
+        name_parts = full_name.split()
+        if len(name_parts) < 2:
+            logging.warning(f"Invalid name format: '{full_name}'")
+            continue
+
+        first_name = " ".join(name_parts[:-1])
+        last_name = name_parts[-1]
+
+        # Check if operative exists
+        cursor.execute(
+            f"""
+            SELECT id FROM {SCHEMA_NAME}.operatives 
+            WHERE first_name = %s AND last_name = %s
+        """,
+            (first_name, last_name),
+        )
+
+        result = cursor.fetchone()
+        if result:
+            operative_id = result[0]
+            logging.debug(f"Operative found: {full_name} (ID: {operative_id})")
+        else:
+            # Create new operative
+            cursor.execute(
+                f"""
+                INSERT INTO {SCHEMA_NAME}.operatives (first_name, last_name)
+                VALUES (%s, %s)
+                RETURNING id
+            """,
+                (first_name, last_name),
+            )
+            operative_id = cursor.fetchone()[0]
+            logging.info(f"New operative created: {full_name} (ID: {operative_id})")
+
+        operative_ids.append(operative_id)
+
+    return operative_ids
 
 
 def load_data(csv_file):
@@ -496,7 +555,7 @@ def load_data(csv_file):
 
         cursor.close()
 
-        print(f"\n✅ Import complete! See {log_path} for details.")
+        print(f"\nImport complete! See {log_path} for details.")
 
     except psycopg2.Error as e:
         logging.error(f"Database error: {e}")
@@ -518,8 +577,9 @@ def load_data(csv_file):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python load_data.py <csv_file>")
+        print("Example: python load_data.py data/el_paso.csv")
         sys.exit(1)
 
     csv_file = sys.argv[1]
