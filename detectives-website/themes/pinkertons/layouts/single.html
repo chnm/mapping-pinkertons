@@ -1,10 +1,37 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-4xl mx-auto">
+      <!-- Page Header -->
+      <header class="mb-8">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
 
-  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-  {{ $dateHuman := .Date | time.Format ":date_long" }}
-  <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        {{ if .Description }}
+        <p class="text-xl text-grit-text-dark/80 leading-relaxed">{{ .Description }}</p>
+        {{ end }}
 
-  {{ .Content }}
-  {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+        {{ if .Date }}
+        {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+        {{ $dateHuman := .Date | time.Format ":date_long" }}
+        <div class="mt-4 text-sm text-grit-text-dark/60">
+          <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        </div>
+        {{ end }}
+      </header>
+
+      <!-- Page Content -->
+      <article class="prose prose-lg">
+        {{ .Content }}
+      </article>
+
+      <!-- Taxonomies (Tags, Categories) -->
+      {{ if or .Params.tags .Params.categories }}
+      <footer class="mt-12 pt-8 border-t border-grit-steel/30">
+        {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+        {{ partial "terms.html" (dict "taxonomy" "categories" "page" .) }}
+      </footer>
+      {{ end }}
+    </div>
+  </div>
+</section>
 {{ end }}

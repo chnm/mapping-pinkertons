@@ -1,8 +1,53 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-4xl mx-auto">
+      <!-- Section Header -->
+      <header class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+
+        {{ if .Description }}
+        <p class="text-xl text-grit-text-dark/80 leading-relaxed">{{ .Description }}</p>
+        {{ end }}
+
+        {{ if .Content }}
+        <div class="mt-6 prose prose-lg">
+          {{ .Content }}
+        </div>
+        {{ end }}
+      </header>
+
+      <!-- Page Listing -->
+      {{ if .Pages }}
+      <div class="space-y-8">
+        {{ range .Pages }}
+        <article class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-steel/50 transition-colors shadow-sm">
+          <h2 class="text-2xl font-heading font-semibold text-grit-text-dark mb-3">
+            <a href="{{ .RelPermalink }}" class="hover:text-grit-steel transition-colors">
+              {{ .LinkTitle }}
+            </a>
+          </h2>
+
+          {{ if .Date }}
+          {{ $dateMachine := .Date | time.Format "2006-01-02" }}
+          {{ $dateHuman := .Date | time.Format "January 2, 2006" }}
+          <div class="text-sm text-grit-text-dark/60 mb-3">
+            <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+          </div>
+          {{ end }}
+
+          {{ if .Summary }}
+          <p class="text-grit-text-dark/80 leading-relaxed">{{ .Summary }}</p>
+          {{ end }}
+
+          <a href="{{ .RelPermalink }}" class="inline-block mt-4 text-grit-steel hover:text-grit-steel/80 font-medium transition-colors">
+            Read more &rarr;
+          </a>
+        </article>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
 {{ end }}

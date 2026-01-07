@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
     {{- partial "head.html" . -}}
-    <body class="bg-grit-bg min-h-screen flex flex-col font-body text-grit-text">
+    <body class="bg-grit-bg-light min-h-screen flex flex-col font-body text-grit-text-dark">
+        {{- partial "header.html" . -}}
         {{ if .IsHome }}
         {{- partial "hero.html" . -}}
-        {{- else }}
-        {{- partial "header.html" . -}}
         {{- end }}
-        <div class="bg-grit-bg flex-grow" id="content">
+        <div class="bg-grit-bg-light flex-grow" id="content">
         {{- block "main" . }}{{- end }}
         </div>
         {{- partial "footer.html" . -}}

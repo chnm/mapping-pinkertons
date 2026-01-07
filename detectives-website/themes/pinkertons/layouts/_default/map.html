@@ -1,0 +1,761 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+      <div class="text-lg text-grit-text-dark/80 mb-8">{{ .Content }}</div>
+
+      <!-- Map Container -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 relative overflow-hidden shadow-sm" x-data="mapSidebar()">
+        <!-- Map Controls -->
+        <div class="mb-4">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-grit-text-dark">View Mode:</label>
+            <button
+              @click="viewMode = 'all'"
+              :class="viewMode === 'all' ? 'bg-grit-accent text-white' : 'bg-gray-100 text-grit-text-dark hover:bg-gray-200'"
+              class="px-3 py-1 text-sm rounded transition-colors">
+              All Activities
+            </button>
+            <button
+              @click="viewMode = 'types'"
+              :class="viewMode === 'types' ? 'bg-grit-accent text-white' : 'bg-gray-100 text-grit-text-dark hover:bg-gray-200'"
+              class="px-3 py-1 text-sm rounded transition-colors">
+              Investigation Types
+            </button>
+          </div>
+        </div>
+
+        <div id="map" class="w-full h-[600px] rounded"></div>
+
+        <!-- Legend (shown in types mode, dynamically generated from data) -->
+        <div x-show="viewMode === 'types'" x-transition class="mt-3">
+          <div class="font-sans text-xs text-grit-text-dark font-medium mb-2">Legend:</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-1.5 text-xs">
+            <template x-for="category in locationCategories" :key="category.type">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <div class="w-3 h-3 rounded-full flex-shrink-0" :style="`background-color: ${category.color}`"></div>
+                <span class="font-mono text-grit-text-dark truncate" x-text="category.label" :title="category.label"></span>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Sidebar Panel -->
+        <div
+          x-show="sidebarOpen"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="translate-x-full"
+          x-transition:enter-end="translate-x-0"
+          x-transition:leave="transition ease-in duration-300"
+          x-transition:leave-start="translate-x-0"
+          x-transition:leave-end="translate-x-full"
+          @keydown.escape.window="closeSidebar()"
+          class="sidebar-panel"
+          style="display: none;">
+          <div class="sidebar-header">
+            <div>
+              <h2 class="text-lg font-heading font-semibold text-grit-gold">
+                <span x-text="sidebarTitle"></span>
+              </h2>
+              <div class="text-xs text-grit-text/60 mt-1" x-show="locationVisits !== null">
+                <span x-text="locationVisits"></span> <span x-text="locationVisits === 1 ? 'visit' : 'visits'"></span>
+                <span class="mx-1">•</span>
+                <span x-text="activities.length"></span> <span x-text="activities.length === 1 ? 'activity record' : 'activity records'"></span>
+              </div>
+            </div>
+            <button @click="closeSidebar()" class="close-btn">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="sidebar-content">
+            <template x-if="activities.length === 0">
+              <p class="text-grit-text/60 text-sm">Click on a marker to view details</p>
+            </template>
+
+            <template x-for="activity in activities" :key="activity.id">
+              <div class="activity-detail" :style="`border-left: 4px solid ${activity.border_color}`">
+                <div class="flex items-baseline justify-between mb-2">
+                  <h4 class="text-base font-semibold" x-text="activity.activity_notes || 'Activity'"></h4>
+                  <span class="text-xs text-grit-text/40" x-show="activity.id" x-text="`#${activity.id}`"></span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                  <template x-if="activity.formatted_date">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Date:</span>
+                      <span class="activity-field-value" x-text="activity.formatted_date"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.formatted_time">
+                    <div class="activity-field-compact">
+                      <span class="activity-field-label">Time:</span>
+                      <span class="activity-field-value" x-text="activity.formatted_time"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.duration">
+                    <div class="activity-field-compact">
+                      <span class="activity-field-label">Duration:</span>
+                      <span class="activity-field-value" x-text="activity.duration"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.location">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Location:</span>
+                      <span class="activity-field-value" x-text="activity.location"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.information_type">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Information Type:</span>
+                      <span class="activity-field-value" x-text="activity.information_type"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.location_category">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Category:</span>
+                      <span class="activity-field-value" x-text="activity.location_category"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.operative">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Operative:</span>
+                      <span class="activity-field-value" x-text="activity.operative"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.subject">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Subject:</span>
+                      <span class="activity-field-value" x-text="activity.subject"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.source">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Source:</span>
+                      <span class="activity-field-value" x-text="activity.source"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.roping">
+                    <div class="col-span-2 activity-field-compact">
+                      <span class="activity-field-label">Roping:</span>
+                      <span class="activity-field-value" x-text="activity.roping"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.mode">
+                    <div class="activity-field-compact">
+                      <span class="activity-field-label">Mode:</span>
+                      <span class="activity-field-value" x-text="activity.mode"></span>
+                    </div>
+                  </template>
+
+                  <template x-if="activity.edit_type">
+                    <div class="activity-field-compact">
+                      <span class="activity-field-label">Edit Type:</span>
+                      <span class="activity-field-value" x-text="activity.edit_type"></span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loading" class="mt-4 text-center text-grit-text/80">
+        <p>Loading map data...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div id="error" class="mt-4 text-center text-grit-accent hidden">
+        <p></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<!-- Custom Map Styles -->
+<style>
+  .sidebar-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 450px;
+    max-width: 95%;
+    height: 100%;
+    background-color: #1c1f22;
+    border-left: 2px solid rgba(68, 105, 125, 0.3);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 8px 8px 0;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(68, 105, 125, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(68, 105, 125, 0.1);
+  }
+
+  .sidebar-content {
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 1;
+    color: #f5f2e8;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: #d0a85c;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .close-btn:hover {
+    color: #f5f2e8;
+  }
+
+  .activity-detail {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 0.75rem;
+    border-bottom: 1px solid rgba(68, 105, 125, 0.2);
+  }
+
+  .activity-detail:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .activity-detail h4 {
+    font-family: 'Oswald', sans-serif;
+    color: #d0a85c;
+    line-height: 1.3;
+  }
+
+  .activity-field-compact {
+    line-height: 1.5;
+  }
+
+  .activity-field-label {
+    color: #d0a85c;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 60px;
+  }
+
+  .activity-field-value {
+    color: rgba(245, 242, 232, 0.9);
+  }
+
+  /* Circle marker styles */
+  .leaflet-interactive {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .leaflet-interactive:hover {
+    fill-opacity: 0.9 !important;
+    stroke-width: 2 !important;
+  }
+
+  .leaflet-interactive.selected {
+    fill-opacity: 1 !important;
+    stroke-width: 3 !important;
+    stroke: #9c1b1b !important;
+  }
+</style>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script>
+  // Initialize the map
+  const map = L.map('map').setView([31.7619, -106.4850], 14); // Center on El Paso, TX
+
+  // Add Carto Dark Matter tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
+  }).addTo(map);
+
+  // Helper function to format date
+  function formatDate(dateString) {
+    if (!dateString) return null;
+    const dateMatch = dateString.match(/(\d{4}-\d{2}-\d{2})/);
+    return dateMatch ? dateMatch[1] : dateString;
+  }
+
+  // Helper function to format time to 12-hour format
+  function formatTime(timeString) {
+    if (!timeString) return null;
+
+    // Extract HH:MM:SS from formats like "12:00:00.000000" or "12:00:00"
+    const timeMatch = timeString.match(/(\d{2}):(\d{2}):(\d{2})/);
+    if (!timeMatch) return timeString;
+
+    let hours = parseInt(timeMatch[1], 10);
+    const minutes = timeMatch[2];
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 should be 12
+
+    return `${hours}:${minutes} ${ampm}`;
+  }
+
+  // Define category mappings and colors
+  const categoryColors = {
+    'Bars, Theaters, Poolrooms': '#e74c3c',     // Red
+    'Businesses': '#3498db',                      // Blue
+    'Government & Organizations': '#2ecc71',      // Green
+    'Neighborhoods & Parks': '#f39c12',           // Orange
+    'Residence': '#9b59b6',                       // Purple
+    'Roadways': '#1abc9c',                        // Turquoise
+    'Taxi, Train, Bus': '#e67e22'                 // Carrot
+  };
+
+  // Map specific location types to categories
+  const locationTypeMapping = {
+    // Bars, Theaters, Poolrooms
+    'Bar': 'Bars, Theaters, Poolrooms',
+    'Poolroom': 'Bars, Theaters, Poolrooms',
+    'Theater': 'Bars, Theaters, Poolrooms',
+
+    // Businesses
+    'Auto Wrecker': 'Businesses',
+    'Automobile Dealership': 'Businesses',
+    'Barber': 'Businesses',
+    'Barber Shop': 'Businesses',
+    'Café': 'Businesses',
+    'Café?': 'Businesses',
+    'Car Dealer': 'Businesses',
+    'Dentist': 'Businesses',
+    'Garage': 'Businesses',
+    'Hotel': 'Businesses',
+    'Office': 'Businesses',
+    'Service Station': 'Businesses',
+    'Store': 'Businesses',
+
+    // Government & Organizations
+    'Courthouse': 'Government & Organizations',
+    'Post Office': 'Government & Organizations',
+    'YMCA': 'Government & Organizations',
+
+    // Neighborhoods & Parks
+    'Neighborhood': 'Neighborhoods & Parks',
+    'Park': 'Neighborhoods & Parks',
+    'Zoo': 'Neighborhoods & Parks',
+
+    // Residence
+    'Apartment House': 'Residence',
+    'Farm': 'Residence',
+    'House': 'Residence',
+
+    // Roadways
+    'Bridge': 'Roadways',
+    'Highway': 'Roadways',
+    'Street': 'Roadways',
+
+    // Taxi, Train, Bus
+    'Bus Depot': 'Taxi, Train, Bus',
+    'Bus stop': 'Taxi, Train, Bus',
+    'Bus Stop': 'Taxi, Train, Bus',
+    'Car': 'Taxi, Train, Bus',
+    'Taxi stand': 'Taxi, Train, Bus',
+    'Taxi Stand': 'Taxi, Train, Bus',
+    'Train station': 'Taxi, Train, Bus',
+    'Train Station': 'Taxi, Train, Bus'
+  };
+
+  // Helper function to get category for a location type
+  function categorizeLocationType(locationType) {
+    if (!locationType) return null;
+    return locationTypeMapping[locationType] || null;
+  }
+
+  // Helper function to get color based on location type
+  function getTypeColor(locationType) {
+    const category = categorizeLocationType(locationType);
+    return category ? categoryColors[category] : '#95a5a6'; // Gray for unmapped
+  }
+
+  // Get category label for a location type
+  function getCategoryLabel(locationType) {
+    return categorizeLocationType(locationType);
+  }
+
+  // Alpine.js component for sidebar state management
+  function mapSidebar() {
+    return {
+      sidebarOpen: false,
+      sidebarTitle: 'Activity Details',
+      activities: [],
+      locationVisits: null,
+      selectedMarker: null,
+      viewMode: 'all', // 'all' or 'types'
+      groupedMarkers: [], // Grouped markers for "all" mode
+      individualMarkers: [], // Individual markers for "types" mode
+      locationCategories: [], // Dynamic categories from data
+
+      init() {
+        // Watch for viewMode changes and toggle marker sets
+        this.$watch('viewMode', (newMode) => {
+          this.toggleMarkerSets(newMode);
+        });
+      },
+
+      toggleMarkerSets(mode) {
+        // Remove all markers from map first
+        this.groupedMarkers.forEach(m => map.removeLayer(m.marker));
+        this.individualMarkers.forEach(m => map.removeLayer(m.marker));
+
+        // Add the appropriate marker set
+        if (mode === 'types') {
+          this.individualMarkers.forEach(m => m.marker.addTo(map));
+        } else {
+          this.groupedMarkers.forEach(m => m.marker.addTo(map));
+        }
+
+        // Close sidebar when switching modes
+        this.closeSidebar();
+      },
+
+      buildLocationCategories() {
+        // Build legend from the predefined categories
+        const usedCategories = new Set();
+
+        // Check which categories are actually in the data
+        this.individualMarkers.forEach(markerData => {
+          const category = categorizeLocationType(markerData.locationType);
+          if (category) {
+            usedCategories.add(category);
+          }
+        });
+
+        // Build categories array in a specific order
+        const categoryOrder = [
+          'Bars, Theaters, Poolrooms',
+          'Businesses',
+          'Government & Organizations',
+          'Neighborhoods & Parks',
+          'Residence',
+          'Roadways',
+          'Taxi, Train, Bus'
+        ];
+
+        const categories = [];
+        categoryOrder.forEach(categoryName => {
+          if (usedCategories.has(categoryName)) {
+            categories.push({
+              type: categoryName,
+              label: categoryName,
+              color: categoryColors[categoryName]
+            });
+          }
+        });
+
+        this.locationCategories = categories;
+      },
+
+      openSidebar(activities, locationData = null) {
+        // Sort activities by ID, then format dates and times
+        const sortedActivities = [...activities].sort((a, b) => a.id - b.id);
+
+        const formattedActivities = sortedActivities.map(activity => {
+          // Extract location_type from nested locations array
+          let locationType = null;
+          if (activity.locations && Array.isArray(activity.locations) && activity.locations.length > 0) {
+            locationType = activity.locations[0].location_type;
+          } else if (activity.locations && typeof activity.locations === 'object') {
+            locationType = activity.locations.location_type;
+          }
+
+          // Get the category and color for this location type
+          const category = getCategoryLabel(locationType);
+          const borderColor = getTypeColor(locationType);
+
+          return {
+            ...activity,
+            formatted_date: formatDate(activity.date),
+            formatted_time: formatTime(activity.time),
+            location_type: locationType,
+            location_category: category,
+            border_color: borderColor
+          };
+        });
+
+        // Get location name from first activity if available
+        let locationName = 'Location Details';
+        if (sortedActivities.length > 0 && sortedActivities[0].locations) {
+          const loc = Array.isArray(sortedActivities[0].locations)
+            ? sortedActivities[0].locations[0]
+            : sortedActivities[0].locations;
+          locationName = loc.location_name || loc.locality || 'Location Details';
+        }
+
+        this.sidebarTitle = locationName;
+        this.activities = formattedActivities;
+        this.locationVisits = locationData ? locationData.visits : null;
+        this.sidebarOpen = true;
+      },
+
+      closeSidebar() {
+        this.sidebarOpen = false;
+        if (this.selectedMarker) {
+          this.selectedMarker.getElement().classList.remove('selected');
+          this.selectedMarker = null;
+        }
+      },
+
+      setSelectedMarker(marker) {
+        // Remove selected class from previous marker
+        if (this.selectedMarker) {
+          this.selectedMarker.getElement().classList.remove('selected');
+        }
+        // Add selected class to new marker
+        marker.getElement().classList.add('selected');
+        this.selectedMarker = marker;
+      }
+    };
+  }
+
+  // Fetch and display activities
+  const loadingEl = document.getElementById('loading');
+  const errorEl = document.getElementById('error');
+
+  // Wait for Alpine to be fully initialized before fetching data
+  document.addEventListener('alpine:init', () => {
+    fetch('http://localhost:8090/pinkertons/activities')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      loadingEl.classList.add('hidden');
+
+      // Create markers for activities with location data
+      // Group activities by location_id to handle multiple activities at same location
+      const locationMap = new Map();
+      const markers = [];
+
+      data.forEach((activity) => {
+        // Check if locations field exists and has coordinates
+        let lat = null;
+        let lon = null;
+        let locationType = null;
+        let visits = null;
+        let locationId = null;
+
+        // First check if locations field exists (could be object or array)
+        if (activity.locations) {
+          if (Array.isArray(activity.locations) && activity.locations.length > 0) {
+            // If it's an array, use the first location
+            locationId = activity.locations[0].id;
+            lat = activity.locations[0].latitude || activity.locations[0].lat;
+            lon = activity.locations[0].longitude || activity.locations[0].lon;
+            locationType = activity.locations[0].location_type;
+            visits = (activity.locations[0].visits !== null && activity.locations[0].visits !== undefined)
+              ? parseInt(activity.locations[0].visits, 10)
+              : null;
+          } else if (typeof activity.locations === 'object') {
+            // If it's an object
+            locationId = activity.locations.id;
+            lat = activity.locations.latitude || activity.locations.lat;
+            lon = activity.locations.longitude || activity.locations.lon;
+            locationType = activity.locations.location_type;
+            visits = (activity.locations.visits !== null && activity.locations.visits !== undefined)
+              ? parseInt(activity.locations.visits, 10)
+              : null;
+          }
+        }
+        // Fallback to direct fields
+        else {
+          lat = activity.latitude || activity.lat;
+          lon = activity.longitude || activity.lon;
+        }
+
+        if (lat && lon && locationId) {
+          // Group by location_id instead of lat/lon
+          if (!locationMap.has(locationId)) {
+            locationMap.set(locationId, {
+              locationId: locationId,
+              lat: parseFloat(lat),
+              lon: parseFloat(lon),
+              activities: [],
+              locationType: locationType,
+              visits: visits !== null ? visits : null
+            });
+          }
+          locationMap.get(locationId).activities.push(activity);
+        }
+      });
+
+      // Get Alpine component instance for the map container
+      const mapContainer = document.querySelector('[x-data="mapSidebar()"]');
+      const alpineData = Alpine.$data(mapContainer);
+
+      // Helper function to add small jitter to coordinates
+      function addJitter(coord, jitterAmount = 0.0003) {
+        return coord + (Math.random() - 0.5) * jitterAmount;
+      }
+
+      // Track coordinates to detect overlaps and add jitter
+      const coordCounts = new Map();
+      locationMap.forEach((location) => {
+        const coordKey = `${location.lat.toFixed(6)},${location.lon.toFixed(6)}`;
+        coordCounts.set(coordKey, (coordCounts.get(coordKey) || 0) + 1);
+      });
+
+      // Create grouped markers (for "all" mode) and individual markers (for "types" mode)
+      const groupedMarkers = [];
+      const individualMarkers = [];
+
+      // Create grouped markers for each unique location
+      locationMap.forEach((location) => {
+        // Use actual visits count, treating null/undefined as 0
+        const visits = location.visits !== null && location.visits !== undefined ? location.visits : 0;
+        // For 0 visits, use minimum size of 3, otherwise scale with sqrt
+        const radius = visits > 0 ? (2 + Math.sqrt(visits) * 2) : 3;
+
+        // Add jitter if multiple locations share these coordinates
+        const coordKey = `${location.lat.toFixed(6)},${location.lon.toFixed(6)}`;
+        const hasOverlap = coordCounts.get(coordKey) > 1;
+        const lat = hasOverlap ? addJitter(location.lat) : location.lat;
+        const lon = hasOverlap ? addJitter(location.lon) : location.lon;
+
+        // Debug: log visits and radius
+        console.log(`Location ID ${location.locationId}: ${location.activities.length} activities, visits=${visits}, radius=${radius.toFixed(2)}, type=${location.locationType || 'none'}`);
+
+        const marker = L.circleMarker([lat, lon], {
+          radius: radius,
+          fillColor: '#d0a85c',
+          color: '#f5f2e8',
+          weight: 1,
+          opacity: 0.8,
+          fillOpacity: 0.6
+        });
+
+        marker.on('click', function(e) {
+          alpineData.setSelectedMarker(e.target);
+          alpineData.openSidebar(location.activities, location);
+        });
+
+        groupedMarkers.push({
+          marker: marker,
+          locationData: location,
+          type: 'grouped'
+        });
+      });
+
+      // Create individual markers for each activity with jitter
+      data.forEach((activity) => {
+        let lat = null;
+        let lon = null;
+        let locationType = null;
+        let visits = null;
+
+        if (activity.locations) {
+          if (Array.isArray(activity.locations) && activity.locations.length > 0) {
+            lat = activity.locations[0].latitude || activity.locations[0].lat;
+            lon = activity.locations[0].longitude || activity.locations[0].lon;
+            locationType = activity.locations[0].location_type;
+            visits = (activity.locations[0].visits !== null && activity.locations[0].visits !== undefined)
+              ? parseInt(activity.locations[0].visits, 10)
+              : null;
+          } else if (typeof activity.locations === 'object') {
+            lat = activity.locations.latitude || activity.locations.lat;
+            lon = activity.locations.longitude || activity.locations.lon;
+            locationType = activity.locations.location_type;
+            visits = (activity.locations.visits !== null && activity.locations.visits !== undefined)
+              ? parseInt(activity.locations.visits, 10)
+              : null;
+          }
+        } else {
+          lat = activity.latitude || activity.lat;
+          lon = activity.longitude || activity.lon;
+        }
+
+        if (lat && lon) {
+          // Add jitter to prevent exact overlaps
+          const jitteredLat = addJitter(parseFloat(lat));
+          const jitteredLon = addJitter(parseFloat(lon));
+
+          const color = getTypeColor(locationType);
+
+          const marker = L.circleMarker([jitteredLat, jitteredLon], {
+            radius: 4,
+            fillColor: color,
+            color: '#f5f2e8',
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0.7
+          });
+
+          marker.on('click', function(e) {
+            alpineData.setSelectedMarker(e.target);
+            // Pass minimal location data for individual markers
+            const locationData = { visits: visits };
+            alpineData.openSidebar([activity], locationData);
+          });
+
+          individualMarkers.push({
+            marker: marker,
+            activity: activity,
+            locationType: locationType,
+            type: 'individual'
+          });
+        }
+      });
+
+      // Store both marker sets in Alpine
+      alpineData.groupedMarkers = groupedMarkers;
+      alpineData.individualMarkers = individualMarkers;
+
+      // Initially show grouped markers (default "all" mode)
+      groupedMarkers.forEach(m => m.marker.addTo(map));
+      markers.push(...groupedMarkers.map(m => m.marker));
+
+      // Build the location categories for the legend
+      alpineData.buildLocationCategories();
+    })
+    .catch(error => {
+      loadingEl.classList.add('hidden');
+      errorEl.classList.remove('hidden');
+      errorEl.querySelector('p').textContent = `Error loading map data: ${error.message}. Make sure the API server is running on localhost:8090.`;
+      console.error('Error fetching activities:', error);
+    });
+  }); // End alpine:init event listener
+</script>
+{{ end }}

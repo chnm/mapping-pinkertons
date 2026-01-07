@@ -1,0 +1,238 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+      <div class="text-lg text-grit-text-dark/80 mb-8">{{ .Content }}</div>
+
+      <!-- Controls -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-sm" x-data="activitiesTable()">
+        <!-- Search and Filter -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-grit-text-dark mb-2">Search</label>
+            <input
+              type="text"
+              x-model="searchTerm"
+              @input="filterActivities"
+              placeholder="Search activities..."
+              class="w-full px-4 py-2 bg-white border border-gray-300 rounded text-grit-text-dark focus:outline-none focus:border-grit-steel focus:ring-1 focus:ring-grit-steel"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-grit-text-dark mb-2">Operative</label>
+            <input
+              type="text"
+              x-model="operativeFilter"
+              @input="filterActivities"
+              placeholder="Filter by operative..."
+              class="w-full px-4 py-2 bg-white border border-gray-300 rounded text-grit-text-dark focus:outline-none focus:border-grit-steel focus:ring-1 focus:ring-grit-steel"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-grit-text-dark mb-2">Date Range</label>
+            <input
+              type="text"
+              x-model="dateFilter"
+              @input="filterActivities"
+              placeholder="YYYY"
+              class="w-full px-4 py-2 bg-white border border-gray-300 rounded text-grit-text-dark focus:outline-none focus:border-grit-steel focus:ring-1 focus:ring-grit-steel"
+            />
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-sm text-grit-text-dark/80">
+          <div>
+            Showing <span x-text="filteredActivities.length"></span> of <span x-text="allActivities.length"></span> activities
+          </div>
+          <button
+            @click="clearFilters"
+            class="px-4 py-2 bg-grit-accent hover:bg-grit-accent/90 text-white rounded transition-colors"
+          >
+            Clear Filters
+          </button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div x-show="loading" class="mt-4 text-center text-grit-text-dark/80">
+          <p>Loading activities...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div x-show="error" class="mt-4 text-center text-grit-accent">
+          <p x-text="errorMessage"></p>
+        </div>
+
+        <!-- Table -->
+        <div class="mt-6 overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b-2 border-gray-300 bg-gray-50">
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase whitespace-nowrap text-left">Date</th>
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase text-left">Notes</th>
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase text-left">Location</th>
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase text-left">Type</th>
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase text-left">Operative</th>
+                <th class="px-4 py-3 text-grit-steel font-heading text-sm uppercase text-left">Subject</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="activity in paginatedActivities" :key="activity.id">
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm whitespace-nowrap" x-text="formatDate(activity.date)"></td>
+                  <td class="px-4 py-3 text-grit-text-dark" x-text="activity.activity_notes || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-html="formatLocations(activity.locations)"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.information_type || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.operative || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.subject || 'N/A'"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-6 flex justify-between items-center">
+          <button
+            @click="previousPage"
+            :disabled="currentPage === 1"
+            :class="currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-grit-accent/90'"
+            class="px-4 py-2 bg-grit-accent text-white rounded transition-colors"
+          >
+            Previous
+          </button>
+
+          <div class="text-grit-text-dark/80">
+            Page <span x-text="currentPage"></span> of <span x-text="totalPages"></span>
+          </div>
+
+          <button
+            @click="nextPage"
+            :disabled="currentPage === totalPages"
+            :class="currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-grit-accent/90'"
+            class="px-4 py-2 bg-grit-accent text-white rounded transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function activitiesTable() {
+    return {
+      allActivities: [],
+      filteredActivities: [],
+      searchTerm: '',
+      operativeFilter: '',
+      dateFilter: '',
+      currentPage: 1,
+      itemsPerPage: 20,
+      loading: true,
+      error: false,
+      errorMessage: '',
+
+      get paginatedActivities() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredActivities.slice(start, end);
+      },
+
+      get totalPages() {
+        return Math.ceil(this.filteredActivities.length / this.itemsPerPage) || 1;
+      },
+
+      init() {
+        this.loadActivities();
+      },
+
+      async loadActivities() {
+        try {
+          const response = await fetch('http://localhost:8090/pinkertons/activities');
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          this.allActivities = data;
+          this.filteredActivities = data;
+          this.loading = false;
+          console.log(`Loaded ${data.length} activities`);
+        } catch (err) {
+          this.loading = false;
+          this.error = true;
+          this.errorMessage = `Error loading activities: ${err.message}. Make sure the API server is running on localhost:8090.`;
+          console.error('Error fetching activities:', err);
+        }
+      },
+
+      formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        // Extract just the date part (yyyy-mm-dd) from various formats
+        const dateMatch = dateString.match(/(\d{4}-\d{2}-\d{2})/);
+        return dateMatch ? dateMatch[1] : dateString;
+      },
+
+      formatLocations(locations) {
+        if (!locations || locations.length === 0) return 'N/A';
+
+        return locations.map(loc => {
+          const name = loc.location_name || loc.locality || 'Unknown';
+          const visits = loc.visits ? ` <span class="text-xs text-grit-accent">(${loc.visits} visit${loc.visits !== 1 ? 's' : ''})</span>` : '';
+          return `${name}${visits}`;
+        }).join(', ');
+      },
+
+      filterActivities() {
+        this.filteredActivities = this.allActivities.filter(activity => {
+          // Search in locations array
+          const locationMatch = activity.locations && activity.locations.some(loc =>
+            (loc.location_name && loc.location_name.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+            (loc.locality && loc.locality.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+            (loc.location_type && loc.location_type.toLowerCase().includes(this.searchTerm.toLowerCase()))
+          );
+
+          const matchesSearch = !this.searchTerm ||
+            (activity.activity_notes && activity.activity_notes.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+            locationMatch ||
+            (activity.information_type && activity.information_type.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+            (activity.subject && activity.subject.toLowerCase().includes(this.searchTerm.toLowerCase()));
+
+          const matchesOperative = !this.operativeFilter ||
+            (activity.operative && activity.operative.toLowerCase().includes(this.operativeFilter.toLowerCase()));
+
+          const matchesDate = !this.dateFilter ||
+            (activity.date && activity.date.includes(this.dateFilter));
+
+          return matchesSearch && matchesOperative && matchesDate;
+        });
+
+        // Reset to first page when filtering
+        this.currentPage = 1;
+      },
+
+      clearFilters() {
+        this.searchTerm = '';
+        this.operativeFilter = '';
+        this.dateFilter = '';
+        this.filterActivities();
+      },
+
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+        }
+      },
+
+      previousPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+        }
+      }
+    };
+  }
+</script>
+{{ end }}
