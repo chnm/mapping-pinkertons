@@ -1,0 +1,26 @@
+name: "[detectives-website] Build, Release, Deploy"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "detectives-website/**"
+
+jobs:
+  hugo-build-release-deploy:
+    uses: chnm/.github/.github/workflows/hugo--build-release-deploy.yml@main
+    secrets: inherit
+    with:
+      container-registry: "ghcr.io"
+      container-image-name: "detectives-website"
+      hugo-context-root: "detectives-website"
+      hugo-devl-url: "https://mappingpinkertons.rrchnm.org"
+      hugo-prod-url: "https://mappingpinkertons.rrchnm.org"
+
+      build-artifact-name: "detectives-website"
+      release-tag-name-type: "iso"
+
+      website-devl-fqdn: "mappingpinkertons.rrchnm.org"
+      website-prod-fqdn: "mappingpinkertons.rrchnm.org"
