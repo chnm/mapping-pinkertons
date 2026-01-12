@@ -3,14 +3,14 @@
   <div class="container mx-auto">
     <div class="max-w-7xl mx-auto">
       <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
-      <div class="text-lg text-grit-text-dark/80 mb-8">{{ .Content }}</div>
+      <div class="text-xl text-grit-text-dark/80 mb-8">{{ .Content }}</div>
 
       <!-- Controls -->
       <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-sm" x-data="activitiesTable()">
         <!-- Search and Filter -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
-            <label class="block text-sm font-medium text-grit-text-dark mb-2">Search</label>
+            <label class="block text-base font-medium text-grit-text-dark mb-2">Search</label>
             <input
               type="text"
               x-model="searchTerm"
@@ -21,7 +21,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-grit-text-dark mb-2">Operative</label>
+            <label class="block text-base font-medium text-grit-text-dark mb-2">Operative</label>
             <input
               type="text"
               x-model="operativeFilter"
@@ -32,7 +32,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-grit-text-dark mb-2">Date Range</label>
+            <label class="block text-base font-medium text-grit-text-dark mb-2">Date Range</label>
             <input
               type="text"
               x-model="dateFilter"
@@ -43,7 +43,7 @@
           </div>
         </div>
 
-        <div class="flex justify-between items-center text-sm text-grit-text-dark/80">
+        <div class="flex justify-between items-center text-base text-grit-text-dark/80">
           <div>
             Showing <span x-text="filteredActivities.length"></span> of <span x-text="allActivities.length"></span> activities
           </div>
@@ -81,12 +81,12 @@
             <tbody>
               <template x-for="activity in paginatedActivities" :key="activity.id">
                 <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm whitespace-nowrap" x-text="formatDate(activity.date)"></td>
-                  <td class="px-4 py-3 text-grit-text-dark" x-text="activity.activity_notes || 'N/A'"></td>
-                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-html="formatLocations(activity.locations)"></td>
-                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.information_type || 'N/A'"></td>
-                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.operative || 'N/A'"></td>
-                  <td class="px-4 py-3 text-grit-text-dark/80 text-sm" x-text="activity.subject || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-base whitespace-nowrap" x-text="formatDate(activity.date)"></td>
+                  <td class="px-4 py-3 text-grit-text-dark text-base" x-text="activity.activity_notes || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-base" x-html="formatLocations(activity.locations)"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-base" x-text="activity.information_type || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-base" x-text="activity.operative || 'N/A'"></td>
+                  <td class="px-4 py-3 text-grit-text-dark/80 text-base" x-text="activity.subject || 'N/A'"></td>
                 </tr>
               </template>
             </tbody>
