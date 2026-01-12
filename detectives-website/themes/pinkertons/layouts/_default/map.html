@@ -1,190 +1,449 @@
 {{ define "main" }}
-<section class="py-16 px-6">
-  <div class="container mx-auto">
-    <div class="max-w-6xl mx-auto">
-      <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
-      <div class="text-lg text-grit-text-dark/80 mb-8">{{ .Content }}</div>
+<!-- Full viewport map container -->
+<div class="fixed left-0 right-0 top-[57px] bottom-0 bg-gray-900" x-data="mapInterface()">
 
-      <!-- Map Container -->
-      <div class="bg-white border border-gray-200 rounded-lg p-4 relative overflow-hidden shadow-sm" x-data="mapSidebar()">
-        <!-- Map Controls -->
-        <div class="mb-4">
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-medium text-grit-text-dark">View Mode:</label>
-            <button
-              @click="viewMode = 'all'"
-              :class="viewMode === 'all' ? 'bg-grit-accent text-white' : 'bg-gray-100 text-grit-text-dark hover:bg-gray-200'"
-              class="px-3 py-1 text-sm rounded transition-colors">
-              All Activities
-            </button>
-            <button
-              @click="viewMode = 'types'"
-              :class="viewMode === 'types' ? 'bg-grit-accent text-white' : 'bg-gray-100 text-grit-text-dark hover:bg-gray-200'"
-              class="px-3 py-1 text-sm rounded transition-colors">
-              Investigation Types
-            </button>
+  <!-- Mobile Backdrop Overlay -->
+  <div
+    x-show="activePanel !== null || sidebarOpen"
+    x-transition:enter="transition-opacity ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    @click="closePanel(); closeSidebar();"
+    class="fixed inset-0 bg-black/50 z-[1080] md:hidden"
+    style="display: none;">
+  </div>
+
+  <!-- Icon Sidebar (Always Visible) -->
+  <div class="absolute left-0 top-0 bottom-0 w-12 md:w-16 bg-grit-bg z-[1100] flex flex-col items-center py-3 md:py-4 space-y-4 md:space-y-6">
+    <!-- Home/About Icon -->
+    <button
+      @click="togglePanel('home')"
+      :class="activePanel === 'home' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
+      class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors"
+      title="Mapping Surveillance">
+      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+    </button>
+
+    <!-- View Mode Icon -->
+    <button
+      @click="togglePanel('viewMode')"
+      :class="activePanel === 'viewMode' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
+      class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors"
+      title="View Modes">
+      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+      </svg>
+    </button>
+
+    <!-- Locations Icon -->
+    <button
+      @click="togglePanel('locations')"
+      :class="activePanel === 'locations' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
+      class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors"
+      title="Locations">
+      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+    </button>
+
+    <!-- Basemap Icon -->
+    <button
+      @click="togglePanel('basemap')"
+      :class="activePanel === 'basemap' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
+      class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors"
+      title="Map Layers">
+      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Slide-out Panel -->
+  <div
+    x-show="activePanel !== null"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="-translate-x-full"
+    x-transition:enter-end="translate-x-0"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="-translate-x-full"
+    class="absolute left-12 md:left-16 top-0 bottom-0 w-[280px] md:w-80 bg-grit-bg border-r border-grit-steel z-[1090] flex flex-col shadow-xl"
+    style="display: none;">
+
+    <!-- Panel Header -->
+    <div class="px-4 md:px-5 py-3 md:py-4 border-b border-grit-steel flex items-center justify-between bg-grit-steel/20">
+      <h2 class="text-base md:text-lg font-heading font-semibold text-grit-gold" x-text="panelTitle"></h2>
+      <button @click="closePanel()" class="text-grit-text hover:text-grit-gold transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Panel Content -->
+    <div class="flex-1 overflow-y-auto px-4 md:px-5 py-3 md:py-4">
+
+      <!-- Home/About Panel -->
+      <div x-show="activePanel === 'home'" style="display: none;">
+        <div class="space-y-3 md:space-y-4 text-grit-text">
+          <div>
+            <h3 class="text-base md:text-lg font-semibold text-grit-gold mb-2">About This Map</h3>
+            <p class="text-sm md:text-base leading-relaxed">
+              This interactive map visualizes the activities of Pinkerton detectives across the United States. Each marker represents locations where detective work was conducted, including surveillance, investigations, and other operations.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-base md:text-lg font-semibold text-grit-gold mb-2">How to Use</h3>
+            <ul class="text-sm md:text-base space-y-1.5 md:space-y-2">
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-grit-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span><strong>Click markers</strong> to view detailed activity information for that location</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-grit-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span><strong>Use the view mode</strong> icon to switch between different visualization modes</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-grit-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span><strong>Zoom and pan</strong> the map explore details</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-grit-accent mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span><strong>Marker sizes</strong> indicate the number of visits to that location</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-base md:text-lg font-semibold text-grit-gold mb-2">Data Sources</h3>
+            <p class="text-sm md:text-base leading-relaxed">
+              The data comes from historical Pinkerton detective reports and operational records. Each activity record includes information about dates, operatives, subjects, and the nature of investigations.
+            </p>
+          </div>
+
+          <!-- Credits and Logos -->
+          <div class="pt-4 mt-4 border-t border-grit-steel">
+            <p class="text-sm md:text-base text-grit-text leading-relaxed mb-4">
+              Developed by the
+              <a class="text-white underline hover:no-underline transition-colors" href="https://rrchnm.org/" target="_blank" rel="noopener noreferrer">
+                Roy Rosenzweig Center for History and New Media
+              </a> at
+              <a class="text-white underline hover:no-underline transition-colors" href="https://www.gmu.edu/" target="_blank" rel="noopener noreferrer">
+                George Mason University
+              </a>.
+            </p>
+            <div class="flex space-x-4 items-center pb-4">
+              <img class="h-10 w-auto opacity-80 hover:opacity-100 transition-opacity"
+                   src="/images/rrchnm-logo.png"
+                   alt="Roy Rosenzweig Center for History and New Media" />
+            </div>
+            <div class="flex space-x-4 items-center">
+              <img class="h-14 w-auto opacity-80 hover:opacity-100 transition-opacity"
+                   src="/images/gmu-logo.png"
+                   alt="George Mason University" />
+            </div>
           </div>
         </div>
+      </div>
 
-        <div id="map" class="w-full h-[600px] rounded"></div>
+      <!-- View Mode Panel -->
+      <div x-show="activePanel === 'viewMode'" style="display: none;">
+        <div class="space-y-2 md:space-y-3">
 
-        <!-- Legend (shown in types mode, dynamically generated from data) -->
-        <div x-show="viewMode === 'types'" x-transition class="mt-3">
-          <div class="font-sans text-xs text-grit-text-dark font-medium mb-2">Legend:</div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3 gap-y-1.5 text-xs">
-            <template x-for="category in locationCategories" :key="category.type">
-              <div class="flex items-center gap-1.5 min-w-0">
-                <div class="w-3 h-3 rounded-full flex-shrink-0" :style="`background-color: ${category.color}`"></div>
-                <span class="font-mono text-grit-text-dark truncate" x-text="category.label" :title="category.label"></span>
-              </div>
-            </template>
-          </div>
-        </div>
+          <!-- All Activities Mode -->
+          <button
+            @click="setViewMode('all')"
+            :class="viewMode === 'all' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">All Activities</h3>
+              <svg x-show="viewMode === 'all'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              View all detective activities grouped by location. Marker size indicates the number of visits to each location, helping identify areas of concentrated activity.
+            </p>
+          </button>
 
-        <!-- Sidebar Panel -->
-        <div
-          x-show="sidebarOpen"
-          x-transition:enter="transition ease-out duration-300"
-          x-transition:enter-start="translate-x-full"
-          x-transition:enter-end="translate-x-0"
-          x-transition:leave="transition ease-in duration-300"
-          x-transition:leave-start="translate-x-0"
-          x-transition:leave-end="translate-x-full"
-          @keydown.escape.window="closeSidebar()"
-          class="sidebar-panel"
-          style="display: none;">
-          <div class="sidebar-header">
-            <div>
-              <h2 class="text-lg font-heading font-semibold text-grit-gold">
-                <span x-text="sidebarTitle"></span>
-              </h2>
-              <div class="text-xs text-grit-text/60 mt-1" x-show="locationVisits !== null">
-                <span x-text="locationVisits"></span> <span x-text="locationVisits === 1 ? 'visit' : 'visits'"></span>
-                <span class="mx-1">•</span>
-                <span x-text="activities.length"></span> <span x-text="activities.length === 1 ? 'activity record' : 'activity records'"></span>
+          <!-- Investigation Types Mode -->
+          <button
+            @click="setViewMode('types')"
+            :class="viewMode === 'types' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Investigation Types</h3>
+              <svg x-show="viewMode === 'types'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed mb-2 md:mb-3">
+              Color-coded view showing different types of locations visited during investigations. Each color represents a category such as businesses, residences, transportation hubs, and more.
+            </p>
+
+            <!-- Legend (visible in types mode) -->
+            <div x-show="viewMode === 'types'" class="pt-3 border-t border-grit-steel/50">
+              <div class="text-sm font-medium text-grit-gold mb-2">Legend:</div>
+              <div class="grid grid-cols-1 gap-1.5 text-sm">
+                <template x-for="category in locationCategories" :key="category.type">
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full flex-shrink-0" :style="`background-color: ${category.color}`"></div>
+                    <span class="text-grit-text/90" x-text="category.label"></span>
+                  </div>
+                </template>
               </div>
             </div>
-            <button @click="closeSidebar()" class="close-btn">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Locations Panel -->
+      <div x-show="activePanel === 'locations'" style="display: none;">
+        <div class="space-y-2 md:space-y-3">
+
+          <!-- Location: El Paso -->
+          <button
+            @click="setLocation('el-paso')"
+            :class="selectedLocation === 'el-paso' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">El Paso, Texas</h3>
+              <svg x-show="selectedLocation === 'el-paso'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
-            </button>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              View Pinkerton detective activities in El Paso, a key border city where surveillance operations focused on labor disputes, border crossing activities, and investigations into suspected radicals.
+            </p>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="activityCount"></span> activities recorded
+            </div>
+          </button>
+
+          <!-- Placeholder for future locations -->
+          <div class="p-3 md:p-4 rounded-lg border-2 border-grit-steel/30 bg-grit-steel/10">
+            <p class="text-sm md:text-base text-grit-text/60 italic">
+              Additional locations coming soon.
+            </p>
           </div>
-          <div class="sidebar-content">
-            <template x-if="activities.length === 0">
-              <p class="text-grit-text/60 text-sm">Click on a marker to view details</p>
+
+        </div>
+      </div>
+
+      <!-- Basemap Panel -->
+      <div x-show="activePanel === 'basemap'" style="display: none;">
+        <div class="space-y-2 md:space-y-3">
+
+          <!-- Dark Map (current default) -->
+          <button
+            @click="setBasemap('dark')"
+            :class="selectedBasemap === 'dark' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Dark Map</h3>
+              <svg x-show="selectedBasemap === 'dark'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              A dark themed map with street details and labels.
+            </p>
+          </button>
+
+          <!-- Light Map -->
+          <button
+            @click="setBasemap('light')"
+            :class="selectedBasemap === 'light' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Light Map</h3>
+              <svg x-show="selectedBasemap === 'light'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              A light-colored map with street details and labels.
+            </p>
+          </button>
+          
+          <!-- Placeholder for future historic maps -->
+          <div class="p-3 md:p-4 rounded-lg border-2 border-grit-steel/30 bg-grit-steel/10">
+            <p class="text-sm md:text-base text-grit-text/60 italic">
+              Historic basemaps coming soon.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Map Container (fills remaining space) -->
+  <div id="map" class="absolute left-12 md:left-16 right-0 top-0 bottom-0 z-[1000]"></div>
+
+  <!-- Activity Details Sidebar (slides from right when marker clicked) -->
+  <div
+    x-show="sidebarOpen"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="translate-x-full"
+    x-transition:enter-end="translate-x-0"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="translate-x-full"
+    @keydown.escape.window="closeSidebar()"
+    class="sidebar-panel"
+    style="display: none;">
+    <div class="sidebar-header">
+      <div>
+        <h2 class="text-xl md:text-2xl font-heading font-semibold text-grit-gold">
+          <span x-text="sidebarTitle"></span>
+        </h2>
+        <div class="text-sm md:text-base text-grit-text/80 mt-1" x-show="locationVisits !== null">
+          <span x-text="locationVisits"></span> <span x-text="locationVisits === 1 ? 'visit' : 'visits'"></span>
+          <span class="mx-1">•</span>
+          <span x-text="activities.length"></span> <span x-text="activities.length === 1 ? 'activity record' : 'activity records'"></span>
+        </div>
+      </div>
+      <button @click="closeSidebar()" class="close-btn">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <template x-if="activities.length === 0">
+        <p class="text-grit-text/80 text-base">Click on a marker to view details</p>
+      </template>
+
+      <template x-for="activity in activities" :key="activity.id">
+        <div class="activity-detail" :style="`border-left: 4px solid ${activity.border_color}`">
+          <div class="flex items-baseline justify-between mb-3">
+            <h4 class="text-lg md:text-xl font-semibold" x-text="activity.activity_notes || 'Activity'"></h4>
+            <span class="text-base text-grit-text/60" x-show="activity.id" x-text="`#${activity.id}`"></span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-3 gap-y-2 text-base">
+            <template x-if="activity.formatted_date">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Date:</span>
+                <span class="activity-field-value" x-text="activity.formatted_date"></span>
+              </div>
             </template>
 
-            <template x-for="activity in activities" :key="activity.id">
-              <div class="activity-detail" :style="`border-left: 4px solid ${activity.border_color}`">
-                <div class="flex items-baseline justify-between mb-2">
-                  <h4 class="text-base font-semibold" x-text="activity.activity_notes || 'Activity'"></h4>
-                  <span class="text-xs text-grit-text/40" x-show="activity.id" x-text="`#${activity.id}`"></span>
-                </div>
+            <template x-if="activity.formatted_time">
+              <div class="activity-field-compact">
+                <span class="activity-field-label">Time:</span>
+                <span class="activity-field-value" x-text="activity.formatted_time"></span>
+              </div>
+            </template>
 
-                <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
-                  <template x-if="activity.formatted_date">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Date:</span>
-                      <span class="activity-field-value" x-text="activity.formatted_date"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.duration">
+              <div class="activity-field-compact">
+                <span class="activity-field-label">Duration:</span>
+                <span class="activity-field-value" x-text="activity.duration"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.formatted_time">
-                    <div class="activity-field-compact">
-                      <span class="activity-field-label">Time:</span>
-                      <span class="activity-field-value" x-text="activity.formatted_time"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.location">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Location:</span>
+                <span class="activity-field-value" x-text="activity.location"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.duration">
-                    <div class="activity-field-compact">
-                      <span class="activity-field-label">Duration:</span>
-                      <span class="activity-field-value" x-text="activity.duration"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.information_type">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Information Type:</span>
+                <span class="activity-field-value" x-text="activity.information_type"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.location">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Location:</span>
-                      <span class="activity-field-value" x-text="activity.location"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.location_category">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Category:</span>
+                <span class="activity-field-value" x-text="activity.location_category"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.information_type">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Information Type:</span>
-                      <span class="activity-field-value" x-text="activity.information_type"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.operative">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Operative:</span>
+                <span class="activity-field-value" x-text="activity.operative"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.location_category">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Category:</span>
-                      <span class="activity-field-value" x-text="activity.location_category"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.subject">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Subject:</span>
+                <span class="activity-field-value" x-text="activity.subject"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.operative">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Operative:</span>
-                      <span class="activity-field-value" x-text="activity.operative"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.source">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Source:</span>
+                <span class="activity-field-value" x-text="activity.source"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.subject">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Subject:</span>
-                      <span class="activity-field-value" x-text="activity.subject"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.roping">
+              <div class="col-span-2 activity-field-compact">
+                <span class="activity-field-label">Roping:</span>
+                <span class="activity-field-value" x-text="activity.roping"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.source">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Source:</span>
-                      <span class="activity-field-value" x-text="activity.source"></span>
-                    </div>
-                  </template>
+            <template x-if="activity.mode">
+              <div class="activity-field-compact">
+                <span class="activity-field-label">Mode:</span>
+                <span class="activity-field-value" x-text="activity.mode"></span>
+              </div>
+            </template>
 
-                  <template x-if="activity.roping">
-                    <div class="col-span-2 activity-field-compact">
-                      <span class="activity-field-label">Roping:</span>
-                      <span class="activity-field-value" x-text="activity.roping"></span>
-                    </div>
-                  </template>
-
-                  <template x-if="activity.mode">
-                    <div class="activity-field-compact">
-                      <span class="activity-field-label">Mode:</span>
-                      <span class="activity-field-value" x-text="activity.mode"></span>
-                    </div>
-                  </template>
-
-                  <template x-if="activity.edit_type">
-                    <div class="activity-field-compact">
-                      <span class="activity-field-label">Edit Type:</span>
-                      <span class="activity-field-value" x-text="activity.edit_type"></span>
-                    </div>
-                  </template>
-                </div>
+            <template x-if="activity.edit_type">
+              <div class="activity-field-compact">
+                <span class="activity-field-label">Edit Type:</span>
+                <span class="activity-field-value" x-text="activity.edit_type"></span>
               </div>
             </template>
           </div>
         </div>
-      </div>
-
-      <!-- Loading Indicator -->
-      <div id="loading" class="mt-4 text-center text-grit-text/80">
-        <p>Loading map data...</p>
-      </div>
-
-      <!-- Error Message -->
-      <div id="error" class="mt-4 text-center text-grit-accent hidden">
-        <p></p>
-      </div>
+      </template>
     </div>
   </div>
-</section>
+
+  <!-- Loading Indicator -->
+  <div id="loading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-[1050]">
+    <div class="bg-grit-bg/90 backdrop-blur-sm px-6 py-4 rounded-lg border border-grit-steel">
+      <p>Loading map data...</p>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div id="error" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-[1050] hidden">
+    <div class="bg-grit-bg/90 backdrop-blur-sm px-6 py-4 rounded-lg border border-grit-accent">
+      <p class="text-grit-accent"></p>
+    </div>
+  </div>
+</div>
 
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -193,24 +452,36 @@
 
 <!-- Custom Map Styles -->
 <style>
+  /* Activity Details Sidebar */
   .sidebar-panel {
     position: absolute;
     top: 0;
     right: 0;
-    width: 450px;
-    max-width: 95%;
-    height: 100%;
+    width: 100%;
+    max-width: 450px;
+    bottom: 0;
     background-color: #1c1f22;
     border-left: 2px solid rgba(68, 105, 125, 0.3);
-    z-index: 1000;
+    z-index: 1110;
     display: flex;
     flex-direction: column;
-    border-radius: 0 8px 8px 0;
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
   }
 
+  @media (min-width: 768px) {
+    .sidebar-panel {
+      max-width: 450px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sidebar-panel {
+      max-width: 85%;
+    }
+  }
+
   .sidebar-header {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid rgba(68, 105, 125, 0.3);
     display: flex;
     justify-content: space-between;
@@ -218,11 +489,23 @@
     background-color: rgba(68, 105, 125, 0.1);
   }
 
+  @media (min-width: 768px) {
+    .sidebar-header {
+      padding: 1rem 1.25rem;
+    }
+  }
+
   .sidebar-content {
-    padding: 1rem;
+    padding: 0.75rem;
     overflow-y: auto;
     flex: 1;
     color: #f5f2e8;
+  }
+
+  @media (min-width: 768px) {
+    .sidebar-content {
+      padding: 1rem;
+    }
   }
 
   .close-btn {
@@ -259,18 +542,18 @@
   }
 
   .activity-field-compact {
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .activity-field-label {
     color: #d0a85c;
-    font-weight: 500;
+    font-weight: 600;
     display: inline-block;
-    min-width: 60px;
+    min-width: 80px;
   }
 
   .activity-field-value {
-    color: rgba(245, 242, 232, 0.9);
+    color: rgba(245, 242, 232, 0.95);
   }
 
   /* Circle marker styles */
@@ -300,12 +583,27 @@
   // Initialize the map
   const map = L.map('map').setView([31.7619, -106.4850], 14); // Center on El Paso, TX
 
-  // Add Carto Dark Matter tile layer
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 20
-  }).addTo(map);
+  // Define basemap layers
+  const basemaps = {
+    dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }),
+    light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }),
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      maxZoom: 19
+    })
+  };
+
+  // Add default basemap (dark)
+  let currentBasemap = basemaps.dark;
+  currentBasemap.addTo(map);
 
   // Helper function to format date
   function formatDate(dateString) {
@@ -414,24 +712,96 @@
     return categorizeLocationType(locationType);
   }
 
-  // Alpine.js component for sidebar state management
-  function mapSidebar() {
+  // Alpine.js component for map interface
+  function mapInterface() {
     return {
+      // Left panel controls
+      activePanel: null,
+      panelTitle: '',
+
+      // Activity sidebar controls
       sidebarOpen: false,
       sidebarTitle: 'Activity Details',
       activities: [],
       locationVisits: null,
       selectedMarker: null,
+
+      // View mode
       viewMode: 'all', // 'all' or 'types'
       groupedMarkers: [], // Grouped markers for "all" mode
       individualMarkers: [], // Individual markers for "types" mode
       locationCategories: [], // Dynamic categories from data
+
+      // Location selection
+      selectedLocation: 'el-paso',
+      activityCount: 0,
+      locations: {
+        'el-paso': {
+          name: 'El Paso, Texas',
+          center: [31.7619, -106.4850],
+          zoom: 14
+        }
+        // Future locations will be added here
+      },
+
+      // Basemap selection
+      selectedBasemap: 'dark',
 
       init() {
         // Watch for viewMode changes and toggle marker sets
         this.$watch('viewMode', (newMode) => {
           this.toggleMarkerSets(newMode);
         });
+      },
+
+      // Left panel methods
+      togglePanel(panel) {
+        if (this.activePanel === panel) {
+          this.closePanel();
+        } else {
+          this.activePanel = panel;
+          if (panel === 'home') {
+            this.panelTitle = 'Mapping Surveillance';
+          } else if (panel === 'viewMode') {
+            this.panelTitle = 'View Modes';
+          } else if (panel === 'locations') {
+            this.panelTitle = 'Select Location';
+          } else if (panel === 'basemap') {
+            this.panelTitle = 'Map Layers';
+          }
+        }
+      },
+
+      closePanel() {
+        this.activePanel = null;
+      },
+
+      setViewMode(mode) {
+        this.viewMode = mode;
+        // Optionally close the panel after selection
+        // this.closePanel();
+      },
+
+      setLocation(locationKey) {
+        this.selectedLocation = locationKey;
+        const location = this.locations[locationKey];
+        if (location) {
+          // Center and zoom the map to the selected location
+          map.setView(location.center, location.zoom);
+        }
+        // Optionally close the panel after selection
+        // this.closePanel();
+      },
+
+      setBasemap(basemapKey) {
+        this.selectedBasemap = basemapKey;
+        // Remove current basemap
+        map.removeLayer(currentBasemap);
+        // Add new basemap
+        currentBasemap = basemaps[basemapKey];
+        currentBasemap.addTo(map);
+        // Optionally close the panel after selection
+        // this.closePanel();
       },
 
       toggleMarkerSets(mode) {
@@ -623,7 +993,7 @@
       });
 
       // Get Alpine component instance for the map container
-      const mapContainer = document.querySelector('[x-data="mapSidebar()"]');
+      const mapContainer = document.querySelector('[x-data="mapInterface()"]');
       const alpineData = Alpine.$data(mapContainer);
 
       // Helper function to add small jitter to coordinates
@@ -654,9 +1024,6 @@
         const hasOverlap = coordCounts.get(coordKey) > 1;
         const lat = hasOverlap ? addJitter(location.lat) : location.lat;
         const lon = hasOverlap ? addJitter(location.lon) : location.lon;
-
-        // Debug: log visits and radius
-        console.log(`Location ID ${location.locationId}: ${location.activities.length} activities, visits=${visits}, radius=${radius.toFixed(2)}, type=${location.locationType || 'none'}`);
 
         const marker = L.circleMarker([lat, lon], {
           radius: radius,
@@ -749,6 +1116,9 @@
 
       // Build the location categories for the legend
       alpineData.buildLocationCategories();
+
+      // Set activity count for current location
+      alpineData.activityCount = data.length;
     })
     .catch(error => {
       loadingEl.classList.add('hidden');
