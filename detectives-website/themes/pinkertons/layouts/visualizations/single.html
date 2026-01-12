@@ -1,0 +1,90 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-6xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="mb-6 text-sm">
+        <a href="/visualizations" class="text-grit-steel hover:text-grit-accent transition-colors">← Back to Visualizations</a>
+      </nav>
+
+      <!-- Header -->
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+        {{ if .Params.description }}
+        <p class="text-xl text-grit-text-dark/80 leading-relaxed">{{ .Params.description }}</p>
+        {{ end }}
+      </div>
+
+      <!-- Visualization Container -->
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
+        <div id="visualization-container" class="min-h-[400px]">
+          <!-- Visualization will be rendered here -->
+          <div class="flex items-center justify-center h-64 text-grit-text-dark/60">
+            <p>Loading visualization...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Content -->
+      <div class="prose prose-lg max-w-none">
+        {{ .Content }}
+      </div>
+
+      <!-- Data Source Info -->
+      {{ if .Params.dataSource }}
+      <div class="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-3">Data Source</h3>
+        <p class="text-base text-grit-text-dark/80">{{ .Params.dataSource }}</p>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<!-- Load visualization script -->
+<script type="module">
+  // Get visualization type from page params
+  const vizType = '{{ .Params.vizType }}';
+
+  // Fetch data from API
+  async function loadData() {
+    try {
+      const response = await fetch('http://localhost:8090/pinkertons/activities');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error loading data:', error);
+      document.getElementById('visualization-container').innerHTML =
+        '<div class="text-center text-grit-accent p-8"><p>Error loading visualization data. Make sure the API server is running.</p></div>';
+      return null;
+    }
+  }
+
+  // Load the appropriate visualization module
+  async function renderVisualization() {
+    const data = await loadData();
+    if (!data) return;
+
+    const container = document.getElementById('visualization-container');
+    container.innerHTML = ''; // Clear loading message
+
+    try {
+      // Dynamically import the visualization module
+      const module = await import(`/js/visualizations/${vizType}.js`);
+      const plot = await module.createVisualization(data);
+
+      if (plot) {
+        container.appendChild(plot);
+      }
+    } catch (error) {
+      console.error('Error loading visualization:', error);
+      container.innerHTML = `<div class="text-center text-grit-accent p-8"><p>Error loading visualization: ${error.message}</p></div>`;
+    }
+  }
+
+  // Start the visualization
+  renderVisualization();
+</script>
+{{ end }}
