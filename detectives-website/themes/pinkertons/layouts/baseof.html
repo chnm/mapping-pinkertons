@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html>
     {{- partial "head.html" . -}}
-    <body class="bg-grit-bg-light min-h-screen flex flex-col font-body text-grit-text-dark">
-        {{- partial "header.html" . -}}
+    <body class="bg-grit-bg-light min-h-screen flex flex-col font-body text-grit-text-dark {{ if eq .Layout "map" }}overflow-hidden{{ end }}">
         {{ if .IsHome }}
-        {{- partial "hero.html" . -}}
+        {{- partial "hero-with-nav.html" . -}}
+        {{ else }}
+        {{- partial "header.html" . -}}
         {{- end }}
+        {{ if eq .Layout "map" }}
+        {{- block "main" . }}{{- end }}
+        {{ else }}
         <div class="bg-grit-bg-light flex-grow" id="content">
         {{- block "main" . }}{{- end }}
         </div>
         {{- partial "footer.html" . -}}
+        {{ end }}
         <script src="https://unpkg.com/littlefoot/dist/littlefoot.js"></script>
         <script>littlefoot.littlefoot()</script>
     </body>

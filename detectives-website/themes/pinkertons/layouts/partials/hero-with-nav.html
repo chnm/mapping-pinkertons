@@ -1,0 +1,58 @@
+<a name="top"></a>
+
+<!-- Combined hero section with navigation for homepage -->
+<section class="hero relative bg-cover bg-center bg-no-repeat min-h-[70vh] flex flex-col"
+         style="background-image: url('/images/pinkertons.jpg')">
+  <!-- Dark overlay for text readability -->
+  <div class="absolute inset-0 bg-black/80"></div>
+
+  <!-- Navigation bar -->
+  <nav class="relative z-20 px-6 py-4">
+    <div class="container mx-auto flex items-center justify-between">
+      <div class="flex items-center">
+      </div>
+      <div class="hidden md:flex space-x-8">
+        <a href="/map" class="text-white hover:text-grit-gold font-medium transition-colors">Map</a>
+        <a href="/activities" class="text-white hover:text-grit-gold font-medium transition-colors">Activities</a>
+        <a href="/visualizations" class="text-white hover:text-grit-gold font-medium transition-colors">Visualizations</a>
+        <a href="/about" class="text-white hover:text-grit-gold font-medium transition-colors">About</a>
+      </div>
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button class="text-white hover:text-grit-gold">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero content -->
+  <div class="container mx-auto px-6 text-center relative z-10 flex-grow flex flex-col justify-center py-12">
+    <h1 class="text-5xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight drop-shadow-lg">
+      {{ .Site.Title }}
+    </h1>
+    <p class="text-2xl md:text-3xl font-body text-white/95 max-w-3xl mx-auto leading-relaxed mb-8 drop-shadow-md">
+      {{ .Site.Params.description | default "A digital history project on the Pinkerton Detective Agency" }}
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/map" class="bg-grit-accent hover:bg-grit-accent/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+        Explore the Map
+      </a>
+      <a href="/activities" class="bg-grit-accent hover:bg-grit-accent/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg">
+        Browse Activities
+      </a>
+    </div>
+  </div>
+
+  <!-- Image attribution -->
+  <div class="absolute bottom-2 right-2 z-20">
+    <a href="https://commons.wikimedia.org/wiki/File:Pinkerton_escorts_hocking_valley_leslies.jpg"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="text-xs text-white/70 hover:text-white bg-black/30 px-2 py-1 rounded backdrop-blur-sm transition-colors">
+      Image: Credit/Source 
+    </a>
+  </div>
+</section>
