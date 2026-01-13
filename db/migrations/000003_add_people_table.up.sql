@@ -10,16 +10,3 @@ CREATE TABLE IF NOT EXISTS detectives.people (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Insert data from load_data
-INSERT INTO detectives.people (first_name, last_name, alias, birth_year, death_year, occupation, notes)
-SELECT
-    first_name,
-    last_name,
-    alias,
-    birth_year,
-    death_year,
-    occupation,
-    notes
-FROM load_data
-WHERE name IS NOT NULL;
