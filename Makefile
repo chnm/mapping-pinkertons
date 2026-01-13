@@ -1,11 +1,12 @@
-.PHONY: help migrate-up migrate-down migrate-reset load-data clean db-create db-drop
+.PHONY: help migrate-up migrate-down migrate-reset load-data clean db-create db-drop db-check
 
 # Load environment variables from .env file
 include .env
 export
 
-# Database URL
-DB_URL := postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
+# Database URL constructed from individual variables
+# Use x-migrations-table to isolate this project's migrations from others in the same database
+DB_URL := postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable&x-migrations-table=detectives_schema_migrations
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -29,6 +30,16 @@ db-drop: ## Drop the database (WARNING: destructive!)
 	else \
 		echo "Cancelled"; \
 	fi
+
+db-check: ## Show current database connection info
+	@echo "Current database configuration:"
+	@echo "  Host:     $(DB_HOST)"
+	@echo "  Port:     $(DB_PORT)"
+	@echo "  User:     $(DB_USER)"
+	@echo "  Database: $(DB_NAME)"
+	@echo "  Schema:   $(DB_SCHEMA)"
+	@echo ""
+	@PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER) -d $(DB_NAME) -c '\conninfo'
 
 migrate-up: ## Run all pending migrations
 	@echo "Running migrations up..."
@@ -62,6 +73,6 @@ migrate-version: ## Show current migration version
 
 load-data: ## Load data from CSV into database
 	@echo "Loading data from CSV..."
-	@python utils/load_data.py data/el_paso.csv
+	@python utils/load_data.py data/el_paso.csv --crosswalk data/crosswalk.csv
 	@echo "Data load complete"
 
