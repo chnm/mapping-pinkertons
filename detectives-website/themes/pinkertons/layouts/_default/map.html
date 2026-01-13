@@ -925,7 +925,7 @@
 
   // Wait for Alpine to be fully initialized before fetching data
   document.addEventListener('alpine:init', () => {
-    fetch('http://localhost:8090/pinkertons/activities')
+    fetch('http://data.chnm.org/pinkertons/activities')
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1123,7 +1123,7 @@
     .catch(error => {
       loadingEl.classList.add('hidden');
       errorEl.classList.remove('hidden');
-      errorEl.querySelector('p').textContent = `Error loading map data: ${error.message}. Make sure the API server is running on localhost:8090.`;
+      errorEl.querySelector('p').textContent = `Error loading map data: ${error.message}.`;
       console.error('Error fetching activities:', error);
     });
   }); // End alpine:init event listener

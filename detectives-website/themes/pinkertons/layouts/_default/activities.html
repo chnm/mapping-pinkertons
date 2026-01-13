@@ -152,7 +152,7 @@
 
       async loadActivities() {
         try {
-          const response = await fetch('http://localhost:8090/pinkertons/activities');
+          const response = await fetch('http://data.chnm.org/pinkertons/activities');
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
@@ -164,7 +164,7 @@
         } catch (err) {
           this.loading = false;
           this.error = true;
-          this.errorMessage = `Error loading activities: ${err.message}. Make sure the API server is running on localhost:8090.`;
+          this.errorMessage = `Error loading activities: ${err.message}.`;
           console.error('Error fetching activities:', err);
         }
       },
