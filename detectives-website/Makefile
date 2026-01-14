@@ -4,12 +4,12 @@ serve :
 
 build :
 	@echo "\nBuilding the dev site with Hugo ..."
-	hugo --cleanDestinationDir --buildDrafts --buildFuture --baseURL http://dev.pinkertons.rrchnm.org/
+	hugo --cleanDestinationDir --buildDrafts --buildFuture --baseURL https://mappingpinkertons.rrchnm.org/
 	@echo "Website finished building."
 
 build-prod :
 	@echo "\nBuilding the prod site with Hugo ..."
-	hugo --cleanDestinationDir --minify --baseURL https://pinkertons.rrchnm.org/
+	hugo --cleanDestinationDir --minify --baseURL https://mappingpinkertons.rrchnm.org/
 	@echo "Website finished building."
 
 tailwind :
@@ -18,4 +18,4 @@ tailwind :
 	@echo "Tailwind css finished building."
 	cd ../../
 
-.PHONY : preview build-prod
+.PHONY : serve build build-prod tailwind
