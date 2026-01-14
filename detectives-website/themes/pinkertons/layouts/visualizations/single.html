@@ -49,7 +49,7 @@
   // Fetch data from API
   async function loadData() {
     try {
-      const response = await fetch('http://data.chnm.org/pinkertons/activities');
+      const response = await fetch('https://data.chnm.org/pinkertons/activities');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
