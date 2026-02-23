@@ -14,20 +14,13 @@ module.exports = {
       },
       colors: {
         grit: {
-          bg: "#1c1f22", // Charcoal background (for hero/header/footer)
-          'bg-light': "#f5f2e8", // Light background for content
-          text: "#f5f2e8", // Light text (for dark backgrounds)
-          'text-dark': "#2d3439", // Dark text (for light backgrounds)
-          accent: "#9c1b1b", // Crimson accent
-          steel: "#44697d", // Gunmetal blue
-          gold: "#d0a85c", // Aged gold
-
-          /* Or... */
-          // --rich-black: #000814ff;
-          // --oxford-blue: #001d3dff;
-          // --yale-blue: #003566ff;
-          // --mikado-yellow: #ffc300ff;
-          // --gold: #ffd60aff;
+          bg: "#2e2015", // Warm brown (formerly charcoal #1c1f22)
+          'bg-light': "#f5efe0", // Parchment (formerly cream #f5f2e8)
+          text: "#f5efe0", // Parchment text (for dark backgrounds)
+          'text-dark': "#2a1a0e", // Dark warm brown (for light backgrounds)
+          accent: "#b5381e", // Rust/brick (formerly crimson #9c1b1b)
+          steel: "#5d7a6b", // Warm sage (formerly gunmetal blue #44697d)
+          gold: "#c8a04a", // Amber (formerly aged gold #d0a85c)
         },
       },
       typography: ({ theme }) => ({
