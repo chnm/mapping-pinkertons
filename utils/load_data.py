@@ -601,7 +601,9 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     "date": parse_date(row["Date"], activity_id),
                     "time": parse_time(row["Time"], activity_id),
                     "duration": parse_duration(row["Duration"], activity_id),
-                    "roping": parse_boolean(row["Roping"]),
+                    "activity": row.get("Activity")
+                    or row.get("Roping")
+                    or None,  # Support both "Activity" and legacy "Roping" column names
                     "mode": row["Mode"] or None,
                     "activity_notes": row["Activity Notes"] or None,
                     "subject": row["Subject"] or None,
@@ -618,28 +620,39 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     )
 
                 try:
-                    # Insert activity
+                    # Insert or update activity
                     cursor.execute(
                         f"""
                         INSERT INTO {SCHEMA_NAME}.activities (
-                            id, source, operative, date, time, duration, roping, mode,
+                            id, source, operative, date, time, duration, activity, mode,
                             activity_notes, subject, information, information_type, edited, edit_type
                         ) VALUES (
-                            %(id)s, %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s, 
-                            %(roping)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s, 
+                            %(id)s, %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
+                            %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
                             %(information_type)s, %(edited)s, %(edit_type)s
                         )
-                        ON CONFLICT (id) DO NOTHING
+                        ON CONFLICT (id) DO UPDATE SET
+                            source = EXCLUDED.source,
+                            operative = EXCLUDED.operative,
+                            date = EXCLUDED.date,
+                            time = EXCLUDED.time,
+                            duration = EXCLUDED.duration,
+                            activity = EXCLUDED.activity,
+                            mode = EXCLUDED.mode,
+                            activity_notes = EXCLUDED.activity_notes,
+                            subject = EXCLUDED.subject,
+                            information = EXCLUDED.information,
+                            information_type = EXCLUDED.information_type,
+                            edited = EXCLUDED.edited,
+                            edit_type = EXCLUDED.edit_type
                     """,
                         activity_data,
                     )
 
                     if cursor.rowcount > 0:
                         stats["activities_inserted"] += 1
-                        logging.debug(f"Activity {activity_id}: Inserted successfully")
-                    else:
-                        logging.warning(
-                            f"Activity {activity_id}: Skipped (duplicate ID)"
+                        logging.debug(
+                            f"Activity {activity_id}: Inserted or updated successfully"
                         )
 
                 except psycopg2.Error as e:
