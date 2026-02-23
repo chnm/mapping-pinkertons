@@ -1,5 +1,5 @@
 node_modules/
-AGENTS.md
+.claude/
 
 # Hugo-related files 
 detectives-website/public/
@@ -7,6 +7,10 @@ detectives-website/public/
 /assets/jsconfig.json 
 hugo_stats.json 
 ./hugo_build.lock
+
+# Data backups and working files
+data/*_bak.csv
+detectives-website/feedback/
 
 # Environment variables
 .env
