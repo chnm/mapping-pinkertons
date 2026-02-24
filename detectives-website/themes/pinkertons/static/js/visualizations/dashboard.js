@@ -487,43 +487,29 @@ function renderActivityTypes(container, data, colorMap) {
   );
 }
 
-// ─── Information Gathered ─────────────────────────────────────────────────────
+// ─── Time of Day ──────────────────────────────────────────────────────────────
 
-function renderInfoGathered(container, data) {
+function renderTimeOfDay(container, data) {
   container.innerHTML = "";
-
-  const INFO_ORDER  = ["Yes", "No", "Not recorded"];
-  const INFO_COLORS = { Yes: GREEN, No: ACCENT, "Not recorded": STEEL };
-
-  const counts = {};
-  data.forEach(d => { counts[d.infoNorm] = (counts[d.infoNorm] || 0) + 1; });
-
-  const chartData = INFO_ORDER.filter(k => counts[k]).map(k => ({
-    value: k,
-    count: counts[k],
-  }));
-
-  if (chartData.length === 0) {
-    container.textContent = "No data for current filters.";
+  const withHours = data.filter(d => d.hour !== null);
+  if (withHours.length === 0) {
+    container.textContent = "No timed records match the current filters.";
     return;
   }
-
   container.appendChild(
     Plot.plot({
-      marginLeft: 110,
+      marginLeft: 40,
       marginBottom: 40,
       width: halfW(),
-      height: Math.max(160, chartData.length * 44 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null, domain: chartData.map(d => d.value) },
+      height: 220,
+      x: { label: "Hour of day", domain: [0, 23], ticks: [0, 6, 12, 18, 23] },
+      y: { grid: true, label: "Activities" },
       marks: [
-        pillBarX(chartData, {
-          x: "count",
-          y: "value",
-          fill: d => INFO_COLORS[d.value] || STEEL,
-          tip: true,
-        }),
-        Plot.ruleX([0]),
+        Plot.rectY(
+          withHours,
+          Plot.binX({ y: "count" }, { x: "hour", interval: 1, fill: STEEL, tip: true })
+        ),
+        Plot.ruleY([0]),
       ],
     })
   );
@@ -690,7 +676,7 @@ export async function createVisualization(rawData) {
   const { card: timelineCard, body: timelineBody } = section("Daily Activity Timeline");
   chartsWrapper.appendChild(timelineCard);
 
-  // Mid row: activity types + info gathered
+  // Mid row: activity types + time of day
   const midRow = document.createElement("div");
   midRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
   chartsWrapper.appendChild(midRow);
@@ -698,8 +684,8 @@ export async function createVisualization(rawData) {
   const { card: actTypeCard, body: actTypeBody } = section("Activity Type Breakdown");
   midRow.appendChild(actTypeCard);
 
-  const { card: infoCard, body: infoBody } = section("Information Gathered");
-  midRow.appendChild(infoCard);
+  const { card: todCard, body: todBody } = section("Time of Day");
+  midRow.appendChild(todCard);
 
   // Bottom row: operatives + location types
   const botRow = document.createElement("div");
@@ -723,7 +709,7 @@ export async function createVisualization(rawData) {
     renderKPIs(kpiRow, data);
     renderTimeline(timelineBody, data);
     renderActivityTypes(actTypeBody, data, colorMap);
-    renderInfoGathered(infoBody, data);
+    renderTimeOfDay(todBody, data);
     renderOperatives(opBody, data);
     renderLocationTypes(locBody, data);
     renderSubjects(subjectsBody, data);
