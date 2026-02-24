@@ -1,0 +1,80 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-screen-xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-6 text-sm">
+        <a href="/visualizations" class="text-grit-steel hover:text-grit-accent transition-colors">← Back to Visualizations</a>
+      </nav>
+
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+        {{ if .Params.description }}
+        <p class="text-xl text-grit-text-dark/80 leading-relaxed">{{ .Params.description }}</p>
+        {{ end }}
+      </div>
+
+      <!-- Prose instructions -->
+      {{ if .Content }}
+      <div class="prose prose-lg max-w-none mb-8">
+        {{ .Content }}
+      </div>
+      {{ end }}
+
+      <!-- Dashboard container (JS builds content here) -->
+      <div id="dashboard-container">
+        <div id="dashboard-loading" class="flex flex-col items-center justify-center py-24 text-grit-text-dark/60">
+          <svg id="dashboard-spinner" width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Loading">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"></circle>
+            <path fill="currentColor" opacity="0.75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p class="mt-4 text-lg">Loading dashboard data…</p>
+        </div>
+      </div>
+
+      <!-- Data Source (optional) -->
+      {{ if .Params.dataSource }}
+      <div class="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-3">Data Source</h3>
+        <p class="text-base text-grit-text-dark/80">{{ .Params.dataSource }}</p>
+      </div>
+      {{ end }}
+
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes dashboard-spin {
+    to { transform: rotate(360deg); }
+  }
+  #dashboard-spinner {
+    animation: dashboard-spin 1s linear infinite;
+    color: #b5381e;
+  }
+</style>
+
+<script type="module">
+  async function loadDashboard() {
+    const container = document.getElementById('dashboard-container');
+    const loading = document.getElementById('dashboard-loading');
+    try {
+      const res = await fetch('https://data.chnm.org/pinkertons/activities');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      loading.remove();
+      const mod = await import('/js/visualizations/dashboard.js');
+      const el = await mod.createVisualization(data);
+      if (el) container.appendChild(el);
+    } catch (err) {
+      console.error('Dashboard error:', err);
+      loading.innerHTML =
+        `<p class="text-grit-accent p-8 text-center">Error loading dashboard: ${err.message}</p>`;
+    }
+  }
+
+  loadDashboard();
+</script>
+{{ end }}
