@@ -10,7 +10,8 @@ module.exports = {
     extend: {
       fontFamily: {
         heading: ['Oswald', 'sans-serif'],
-        body: ['"EB Garamond"', 'serif'],
+        body: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+        serif: ['"EB Garamond"', 'Georgia', 'serif'],
       },
       colors: {
         grit: {
