@@ -10,4 +10,4 @@ Project description.
 ## Project Team 
 
 - Stephen Robertson, Principal Investigator, 2025--
-- Jason A. Heppler, Senior Developer-Scholar, 2025--
+- Jason A. Heppler, Senior Developer/Scholar, 2025--

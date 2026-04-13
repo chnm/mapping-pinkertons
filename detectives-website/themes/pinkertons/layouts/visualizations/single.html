@@ -30,26 +30,38 @@
         {{ .Content }}
       </div>
 
-      <!-- Data Source Info -->
-      {{ if .Params.dataSource }}
-      <div class="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-6">
-        <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-3">Data Source</h3>
-        <p class="text-base text-grit-text-dark/80">{{ .Params.dataSource }}</p>
-      </div>
-      {{ end }}
     </div>
   </div>
 </section>
 
 <!-- Load visualization script -->
 <script type="module">
-  // Get visualization type from page params
+  // Get visualization type and investigation filter from page params
   const vizType = '{{ .Params.vizType }}';
+  const investigation = '{{ .Params.investigation | default "" }}';
+
+  // Investigation locality mapping (must match dashboard.js)
+  const INVESTIGATIONS = {
+    'el-paso':  new Set(['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']),
+    'atlanta':  new Set(['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']),
+    'nyc':      new Set(['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']),
+  };
+
+  function filterByInvestigation(data, invKey) {
+    if (!invKey || !INVESTIGATIONS[invKey]) return data;
+    const localities = INVESTIGATIONS[invKey];
+    return data.filter(d => {
+      if (d.locations && d.locations.length > 0) {
+        return localities.has(d.locations[0].locality);
+      }
+      return false;
+    });
+  }
 
   // Fetch data from API
   async function loadData() {
     try {
-      const response = await fetch('https://data.chnm.org/pinkertons/activities');
+      const response = await fetch('http://localhost:8090/pinkertons/activities');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -64,8 +76,11 @@
 
   // Load the appropriate visualization module
   async function renderVisualization() {
-    const data = await loadData();
+    let data = await loadData();
     if (!data) return;
+
+    // Filter by investigation if specified
+    data = filterByInvestigation(data, investigation);
 
     const container = document.getElementById('visualization-container');
     container.innerHTML = ''; // Clear loading message

@@ -1522,6 +1522,10 @@ video {
   margin-top: 0.5rem;
 }
 
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -1594,6 +1598,10 @@ video {
   height: 16rem;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -1618,6 +1626,10 @@ video {
   width: 3rem;
 }
 
+.w-14 {
+  width: 3.5rem;
+}
+
 .w-3 {
   width: 0.75rem;
 }
@@ -1632,6 +1644,10 @@ video {
 
 .w-6 {
   width: 1.5rem;
+}
+
+.w-7 {
+  width: 1.75rem;
 }
 
 .w-8 {
@@ -1918,6 +1934,10 @@ video {
 .border-grit-accent {
   --tw-border-opacity: 1;
   border-color: rgb(181 56 30 / var(--tw-border-opacity, 1));
+}
+
+.border-grit-accent\/30 {
+  border-color: rgb(181 56 30 / 0.3);
 }
 
 .border-grit-gold\/30 {

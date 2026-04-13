@@ -249,7 +249,12 @@ def load_crosswalk_data(crosswalk_file):
         for row in reader:
             location_name = row.get("Location Name", "").strip() or None
             locality = row.get("Locality", "").strip() or None
-            street_address = row.get("Street Address", "").strip() or None
+            # Support both "Street Address" and "Address" column names
+            street_address = (
+                row.get("Street Address", "").strip()
+                or row.get("Address", "").strip()
+                or None
+            )
 
             # Parse coordinates
             try:
@@ -277,15 +282,22 @@ def load_crosswalk_data(crosswalk_file):
                         visits = None
                     break
 
+            specific_location_type = (
+                row.get("Specific Location Type", "").strip() or None
+            )
+
+            entry = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "visits": visits,
+                "street_address": street_address,
+                "specific_location_type": specific_location_type,
+            }
+
             # Store with multiple keys for flexible matching
             if location_name and locality:
                 key = (location_name, locality)
-                crosswalk[key] = {
-                    "latitude": latitude,
-                    "longitude": longitude,
-                    "visits": visits,
-                    "street_address": street_address,
-                }
+                crosswalk[key] = entry
                 logging.debug(
                     f"Crosswalk: {location_name}, {locality} -> lat={latitude}, lon={longitude}, visits={visits}"
                 )
@@ -294,12 +306,13 @@ def load_crosswalk_data(crosswalk_file):
             if location_name:
                 key = (location_name, None)
                 if key not in crosswalk:  # Don't overwrite more specific entries
-                    crosswalk[key] = {
-                        "latitude": latitude,
-                        "longitude": longitude,
-                        "visits": visits,
-                        "street_address": street_address,
-                    }
+                    crosswalk[key] = entry
+
+            # Also store by street address for matching when location_name is empty
+            if street_address:
+                key = (None, street_address)
+                if key not in crosswalk:
+                    crosswalk[key] = entry
 
     logging.info(f"Loaded {len(crosswalk)} location entries from crosswalk file")
     return crosswalk
@@ -316,6 +329,7 @@ def get_or_create_location(
     longitude=None,
     visits=None,
     enable_geocoding=False,
+    specific_location_type=None,
 ):
     """
     Get existing location ID or create new location and return its ID.
@@ -352,6 +366,11 @@ def get_or_create_location(
         if visits is not None:
             updates.append("visits = %s")
             params.append(visits)
+
+        # Update specific_location_type if provided
+        if specific_location_type is not None:
+            updates.append("specific_location_type = %s")
+            params.append(specific_location_type)
 
         if updates:
             params.append(location_id)
@@ -413,8 +432,8 @@ def get_or_create_location(
     # Create new location
     cursor.execute(
         f"""
-        INSERT INTO {SCHEMA_NAME}.locations (locality, street_address, location_name, location_type, location_notes, latitude, longitude, visits)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO {SCHEMA_NAME}.locations (locality, street_address, location_name, location_type, specific_location_type, location_notes, latitude, longitude, visits)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """,
         (
@@ -422,6 +441,7 @@ def get_or_create_location(
             street_address or None,
             location_name or None,
             location_type or None,
+            specific_location_type or None,
             location_notes or None,
             latitude,
             longitude,
@@ -574,33 +594,34 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
         with open(csv_file, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
 
+            # Detect whether this CSV has a "Specific Location Type" column
+            has_specific_location_type = "Specific Location Type" in reader.fieldnames
+
             row_num = 1  # Start at 1 for header
             for row in reader:
                 row_num += 1
 
-                # Skip if ID is empty
-                if not row["ID"] or row["ID"].strip() == "":
-                    logging.debug(f"Row {row_num}: Skipping row with empty ID")
-                    stats["rows_skipped"] += 1
-                    continue
-
-                try:
-                    activity_id = int(row["ID"])
-                except ValueError as e:
-                    logging.error(f"Row {row_num}: Invalid ID '{row['ID']}': {e}")
-                    stats["errors"] += 1
-                    continue
+                # Handle ID: use provided ID or auto-generate
+                has_id = row.get("ID") and row["ID"].strip() != ""
+                activity_id = None
+                if has_id:
+                    try:
+                        activity_id = int(row["ID"])
+                    except ValueError as e:
+                        logging.error(f"Row {row_num}: Invalid ID '{row['ID']}': {e}")
+                        stats["errors"] += 1
+                        continue
 
                 stats["activities_processed"] += 1
 
                 # Parse activity data
+                row_label = activity_id if activity_id else f"row {row_num}"
                 activity_data = {
-                    "id": activity_id,
                     "source": row["Source"] or None,
                     "operative": row["Operative"] or None,
-                    "date": parse_date(row["Date"], activity_id),
-                    "time": parse_time(row["Time"], activity_id),
-                    "duration": parse_duration(row["Duration"], activity_id),
+                    "date": parse_date(row["Date"], row_label),
+                    "time": parse_time(row["Time"], row_label),
+                    "duration": parse_duration(row["Duration"], row_label),
                     "activity": row.get("Activity")
                     or row.get("Roping")
                     or None,  # Support both "Activity" and legacy "Roping" column names
@@ -612,52 +633,72 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     "edited": parse_boolean(row["Edited"]),
                     "edit_type": row["Edit Type"] or None,
                 }
+                if activity_id is not None:
+                    activity_data["id"] = activity_id
 
                 # Validate required fields
                 if not activity_data["mode"]:
                     logging.warning(
-                        f"Activity {activity_id}: Missing mode (activity type)"
+                        f"Activity {row_label}: Missing mode (activity type)"
                     )
 
                 try:
-                    # Insert or update activity
-                    cursor.execute(
-                        f"""
-                        INSERT INTO {SCHEMA_NAME}.activities (
-                            id, source, operative, date, time, duration, activity, mode,
-                            activity_notes, subject, information, information_type, edited, edit_type
-                        ) VALUES (
-                            %(id)s, %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
-                            %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
-                            %(information_type)s, %(edited)s, %(edit_type)s
+                    if activity_id is not None:
+                        # Insert or update activity with explicit ID
+                        cursor.execute(
+                            f"""
+                            INSERT INTO {SCHEMA_NAME}.activities (
+                                id, source, operative, date, time, duration, activity, mode,
+                                activity_notes, subject, information, information_type, edited, edit_type
+                            ) VALUES (
+                                %(id)s, %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
+                                %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
+                                %(information_type)s, %(edited)s, %(edit_type)s
+                            )
+                            ON CONFLICT (id) DO UPDATE SET
+                                source = EXCLUDED.source,
+                                operative = EXCLUDED.operative,
+                                date = EXCLUDED.date,
+                                time = EXCLUDED.time,
+                                duration = EXCLUDED.duration,
+                                activity = EXCLUDED.activity,
+                                mode = EXCLUDED.mode,
+                                activity_notes = EXCLUDED.activity_notes,
+                                subject = EXCLUDED.subject,
+                                information = EXCLUDED.information,
+                                information_type = EXCLUDED.information_type,
+                                edited = EXCLUDED.edited,
+                                edit_type = EXCLUDED.edit_type
+                        """,
+                            activity_data,
                         )
-                        ON CONFLICT (id) DO UPDATE SET
-                            source = EXCLUDED.source,
-                            operative = EXCLUDED.operative,
-                            date = EXCLUDED.date,
-                            time = EXCLUDED.time,
-                            duration = EXCLUDED.duration,
-                            activity = EXCLUDED.activity,
-                            mode = EXCLUDED.mode,
-                            activity_notes = EXCLUDED.activity_notes,
-                            subject = EXCLUDED.subject,
-                            information = EXCLUDED.information,
-                            information_type = EXCLUDED.information_type,
-                            edited = EXCLUDED.edited,
-                            edit_type = EXCLUDED.edit_type
-                    """,
-                        activity_data,
-                    )
+                    else:
+                        # Insert activity with auto-generated ID
+                        cursor.execute(
+                            f"""
+                            INSERT INTO {SCHEMA_NAME}.activities (
+                                source, operative, date, time, duration, activity, mode,
+                                activity_notes, subject, information, information_type, edited, edit_type
+                            ) VALUES (
+                                %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
+                                %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
+                                %(information_type)s, %(edited)s, %(edit_type)s
+                            )
+                            RETURNING id
+                        """,
+                            activity_data,
+                        )
+                        activity_id = cursor.fetchone()[0]
 
                     if cursor.rowcount > 0:
                         stats["activities_inserted"] += 1
                         logging.debug(
-                            f"Activity {activity_id}: Inserted or updated successfully"
+                            f"Activity {row_label}: Inserted or updated successfully"
                         )
 
                 except psycopg2.Error as e:
                     logging.error(
-                        f"Activity {activity_id}: Database error during insert: {e}"
+                        f"Activity {row_label}: Database error during insert: {e}"
                     )
                     stats["errors"] += 1
                     conn.rollback()
@@ -669,6 +710,11 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                         # Parse coordinates from location notes if present
                         latitude, longitude = parse_coordinates(row["Location Notes"])
                         visits = None
+                        specific_location_type = (
+                            row.get("Specific Location Type", "").strip() or None
+                            if has_specific_location_type
+                            else None
+                        )
 
                         # Check crosswalk for enriched location data
                         if crosswalk:
@@ -684,6 +730,11 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                                 crosswalk_key = (location_name, None)
                                 crosswalk_data = crosswalk.get(crosswalk_key)
 
+                            # Fallback to street_address
+                            if not crosswalk_data and row["Street Address"]:
+                                crosswalk_key = (None, row["Street Address"].strip())
+                                crosswalk_data = crosswalk.get(crosswalk_key)
+
                             # Use crosswalk data if found
                             if crosswalk_data:
                                 enriched = False
@@ -694,7 +745,7 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                                     if latitude and longitude:
                                         enriched = True
                                         logging.debug(
-                                            f"Activity {activity_id}: Using crosswalk coordinates "
+                                            f"Activity {row_label}: Using crosswalk coordinates "
                                             f"for {location_name}, {locality}"
                                         )
 
@@ -702,8 +753,14 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                                 if visits:
                                     enriched = True
                                     logging.debug(
-                                        f"Activity {activity_id}: Using crosswalk visits={visits} "
+                                        f"Activity {row_label}: Using crosswalk visits={visits} "
                                         f"for {location_name}, {locality}"
+                                    )
+
+                                # Use crosswalk specific_location_type if not in CSV
+                                if specific_location_type is None:
+                                    specific_location_type = crosswalk_data.get(
+                                        "specific_location_type"
                                     )
 
                                 if enriched:
@@ -725,6 +782,7 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                             longitude,
                             visits,
                             enable_geocoding,
+                            specific_location_type,
                         )
 
                         # Track geocoding stats
@@ -756,7 +814,7 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
 
                     except psycopg2.Error as e:
                         logging.error(
-                            f"Activity {activity_id}: Error creating location: {e}"
+                            f"Activity {row_label}: Error creating location: {e}"
                         )
                         stats["errors"] += 1
                         conn.rollback()

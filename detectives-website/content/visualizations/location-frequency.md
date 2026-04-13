@@ -4,7 +4,7 @@ description: "Identify which locations received the most attention from Pinkerto
 icon: "location"
 vizType: "location-frequency"
 location: "El Paso, Texas"
-dataSource: "Pinkerton detective reports from El Paso operations"
+investigation: "el-paso"
 weight: 2
 ---
 

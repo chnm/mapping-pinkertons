@@ -247,6 +247,25 @@
       <div x-show="activePanel === 'locations'" style="display: none;">
         <div class="space-y-2 md:space-y-3">
 
+          <!-- All Locations -->
+          <button
+            @click="setLocation('all')"
+            :class="selectedLocation === 'all' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">All Locations</h3>
+              <svg x-show="selectedLocation === 'all'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              View all Pinkerton surveillance activities across all locations.
+            </p>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="activityCount"></span> activities recorded
+            </div>
+          </button>
+
           <!-- Location: El Paso -->
           <button
             @click="setLocation('el-paso')"
@@ -259,19 +278,50 @@
               </svg>
             </div>
             <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
-              View Pinkerton detective activities in El Paso, a key border city where surveillance operations focused on labor disputes, border crossing activities, and investigations into suspected radicals.
+              Surveillance operations in a key border city focused on labor disputes, border crossings, and investigations into suspected radicals.
             </p>
             <div class="mt-2 text-sm text-grit-text/60">
-              <span x-text="activityCount"></span> activities recorded
+              <span x-text="locationCounts['el-paso'] || 0"></span> activities recorded
             </div>
           </button>
 
-          <!-- Placeholder for future locations -->
-          <div class="p-3 md:p-4 rounded-lg border-2 border-grit-steel/30 bg-grit-steel/10">
-            <p class="text-sm md:text-base text-grit-text/60 italic">
-              Additional locations coming soon.
+          <!-- Location: Atlanta -->
+          <button
+            @click="setLocation('atlanta')"
+            :class="selectedLocation === 'atlanta' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Atlanta, Georgia</h3>
+              <svg x-show="selectedLocation === 'atlanta'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              Investigations into laundry industry theft and labor issues in Atlanta and surrounding areas.
             </p>
-          </div>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="locationCounts['atlanta'] || 0"></span> activities recorded
+            </div>
+          </button>
+
+          <!-- Location: New York City -->
+          <button
+            @click="setLocation('nyc')"
+            :class="selectedLocation === 'nyc' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">New York City</h3>
+              <svg x-show="selectedLocation === 'nyc'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              Surveillance of Corn Exchange Bank employees across Manhattan, Brooklyn, Queens, and the Bronx.
+            </p>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="locationCounts['nyc'] || 0"></span> activities recorded
+            </div>
+          </button>
 
         </div>
       </div>
@@ -621,7 +671,7 @@
 
 <script>
   // Initialize the map
-  const map = L.map('map').setView([31.7619, -106.4850], 14); // Center on El Paso, TX
+  const map = L.map('map').setView([38.5, -96], 5); // Start with US-wide view
 
   // Define basemap layers
   const basemaps = {
@@ -690,23 +740,36 @@
 
   // Define category mappings and colors
   const categoryColors = {
-    'Bars, Theaters, Poolrooms': '#e74c3c',     // Red
+    'Entertainment & Hospitality': '#e74c3c',     // Red
     'Businesses': '#3498db',                      // Blue
     'Government & Organizations': '#2ecc71',      // Green
     'Neighborhoods & Parks': '#f39c12',           // Orange
     'Residence': '#9b59b6',                       // Purple
     'Roadways': '#1abc9c',                        // Turquoise
-    'Taxi, Train, Bus': '#e67e22'                 // Carrot
+    'Transportation': '#e67e22'                   // Carrot
   };
 
-  // Map specific location types to categories
+  // Map location types to display categories
+  // Handles both broad types (Business, Residence) and specific types (Hotel, Bar)
   const locationTypeMapping = {
-    // Bars, Theaters, Poolrooms
-    'Bar': 'Bars, Theaters, Poolrooms',
-    'Poolroom': 'Bars, Theaters, Poolrooms',
-    'Theater': 'Bars, Theaters, Poolrooms',
+    // Entertainment & Hospitality
+    'Bar': 'Entertainment & Hospitality',
+    'Bar ': 'Entertainment & Hospitality',
+    'Poolroom': 'Entertainment & Hospitality',
+    'Theater': 'Entertainment & Hospitality',
+    'Hospitality': 'Entertainment & Hospitality',
+    'Entertainment': 'Entertainment & Hospitality',
+    'Restaurant': 'Entertainment & Hospitality',
+    'Lunchroom': 'Entertainment & Hospitality',
+    'Coffee Shop': 'Entertainment & Hospitality',
+    'Lunch Wagon': 'Entertainment & Hospitality',
+    'Soda store': 'Entertainment & Hospitality',
+    'ice Cream Parlor': 'Entertainment & Hospitality',
+    'Hotel': 'Entertainment & Hospitality',
+    'Motel': 'Entertainment & Hospitality',
 
     // Businesses
+    'Business': 'Businesses',
     'Auto Wrecker': 'Businesses',
     'Automobile Dealership': 'Businesses',
     'Barber': 'Businesses',
@@ -716,40 +779,89 @@
     'Car Dealer': 'Businesses',
     'Dentist': 'Businesses',
     'Garage': 'Businesses',
-    'Hotel': 'Businesses',
     'Office': 'Businesses',
     'Service Station': 'Businesses',
     'Store': 'Businesses',
+    'Bank': 'Businesses',
+    'Laundry': 'Businesses',
+    'Chinese laundry': 'Businesses',
+    'Dry Cleaning Store': 'Businesses',
+    'Dry Goods Store': 'Businesses',
+    'Candy Store': 'Businesses',
+    'Candy store': 'Businesses',
+    'Bakery': 'Businesses',
+    'Butcher': 'Businesses',
+    'Grocery store': 'Businesses',
+    'Furniture store': 'Businesses',
+    'Jeweler': 'Businesses',
+    'Liquor store': 'Businesses',
+    'Newsstand': 'Businesses',
+    'News store': 'Businesses',
+    'Newspaper': 'Businesses',
+    'Radio shop': 'Businesses',
+    'Secondhand Dealer': 'Businesses',
+    'Stationary Store': 'Businesses',
+    'Stationary store': 'Businesses',
+    'Produce Merchant': 'Businesses',
+    'Department store': 'Businesses',
+    'Auction House': 'Businesses',
+    'Drug Store': 'Businesses',
+    'Gas Station': 'Businesses',
+    'Gas station': 'Businesses',
+    'Used car dealer': 'Businesses',
+    'Ice company': 'Businesses',
+    '5 & 10 cent store': 'Businesses',
+    'Unspecified business': 'Businesses',
+    'Shirt factory': 'Businesses',
+    'Cigar factory': 'Businesses',
 
     // Government & Organizations
+    'Government/Organization': 'Government & Organizations',
     'Courthouse': 'Government & Organizations',
     'Post Office': 'Government & Organizations',
+    'Post office': 'Government & Organizations',
     'YMCA': 'Government & Organizations',
+    'Church': 'Government & Organizations',
+    'Army Base': 'Government & Organizations',
+    'Hospital': 'Government & Organizations',
+    "Brawner's Sanitarium": 'Government & Organizations',
+    'Police station': 'Government & Organizations',
 
     // Neighborhoods & Parks
     'Neighborhood': 'Neighborhoods & Parks',
+    'Neighborhood & Parks': 'Neighborhoods & Parks',
     'Park': 'Neighborhoods & Parks',
     'Zoo': 'Neighborhoods & Parks',
+    'Baseball field': 'Neighborhoods & Parks',
+    'Race track': 'Neighborhoods & Parks',
 
     // Residence
+    'Residence': 'Residence',
     'Apartment House': 'Residence',
     'Farm': 'Residence',
     'House': 'Residence',
 
     // Roadways
+    'Roadway': 'Roadways',
     'Bridge': 'Roadways',
     'Highway': 'Roadways',
     'Street': 'Roadways',
+    'Corner': 'Roadways',
+    'Mailbox': 'Roadways',
+    'Stop': 'Roadways',
 
-    // Taxi, Train, Bus
-    'Bus Depot': 'Taxi, Train, Bus',
-    'Bus stop': 'Taxi, Train, Bus',
-    'Bus Stop': 'Taxi, Train, Bus',
-    'Car': 'Taxi, Train, Bus',
-    'Taxi stand': 'Taxi, Train, Bus',
-    'Taxi Stand': 'Taxi, Train, Bus',
-    'Train station': 'Taxi, Train, Bus',
-    'Train Station': 'Taxi, Train, Bus'
+    // Transportation
+    'Transportation': 'Transportation',
+    'Bus Depot': 'Transportation',
+    'Bus stop': 'Transportation',
+    'Bus Stop': 'Transportation',
+    'Car': 'Transportation',
+    'Taxi stand': 'Transportation',
+    'Taxi Stand': 'Transportation',
+    'Train station': 'Transportation',
+    'Train Station': 'Transportation',
+    'Subway station': 'Transportation',
+    'Street car stop': 'Transportation'
   };
 
   // Helper function to get category for a location type
@@ -794,15 +906,34 @@
       activityCategories: [], // Dynamic categories from activity type data
 
       // Location selection
-      selectedLocation: 'el-paso',
+      selectedLocation: 'all',
       activityCount: 0,
+      locationCounts: {},
       locations: {
+        'all': {
+          name: 'All Locations',
+          center: [38.5, -96],
+          zoom: 5,
+          localities: null // null means show all
+        },
         'el-paso': {
           name: 'El Paso, Texas',
           center: [31.7619, -106.4850],
-          zoom: 14
+          zoom: 12,
+          localities: ['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']
+        },
+        'atlanta': {
+          name: 'Atlanta, Georgia',
+          center: [33.749, -84.388],
+          zoom: 13,
+          localities: ['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']
+        },
+        'nyc': {
+          name: 'New York City',
+          center: [40.730, -73.975],
+          zoom: 12,
+          localities: ['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']
         }
-        // Future locations will be added here
       },
 
       // Basemap selection
@@ -847,11 +978,75 @@
         this.selectedLocation = locationKey;
         const location = this.locations[locationKey];
         if (location) {
-          // Center and zoom the map to the selected location
           map.setView(location.center, location.zoom);
+          this.filterMarkersByLocation(locationKey);
         }
-        // Optionally close the panel after selection
-        // this.closePanel();
+      },
+
+      // Get locality from an activity object
+      getActivityLocality(activity) {
+        if (activity.locations) {
+          if (Array.isArray(activity.locations) && activity.locations.length > 0) {
+            return activity.locations[0].locality;
+          } else if (typeof activity.locations === 'object') {
+            return activity.locations.locality;
+          }
+        }
+        return null;
+      },
+
+      // Check if an activity belongs to a location filter
+      activityMatchesLocation(activity, locationKey) {
+        const locDef = this.locations[locationKey];
+        if (!locDef || !locDef.localities) return true; // 'all' or no filter
+        const locality = this.getActivityLocality(activity);
+        return locDef.localities.includes(locality);
+      },
+
+      // Filter all marker sets by the selected location
+      filterMarkersByLocation(locationKey) {
+        const locDef = this.locations[locationKey];
+        const showAll = !locDef || !locDef.localities;
+
+        // Filter grouped markers
+        this.groupedMarkers.forEach(m => {
+          const activities = m.locationData.activities;
+          const match = showAll || activities.some(a => this.activityMatchesLocation(a, locationKey));
+          if (this.viewMode === 'all') {
+            if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
+          }
+          m._hidden = !match;
+        });
+
+        // Filter individual markers (location type view)
+        this.individualMarkers.forEach(m => {
+          const match = showAll || this.activityMatchesLocation(m.activity, locationKey);
+          if (this.viewMode === 'types') {
+            if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
+          }
+          m._hidden = !match;
+        });
+
+        // Filter activity markers (activity type view)
+        this.activityMarkers.forEach(m => {
+          const match = showAll || this.activityMatchesLocation(m.activity, locationKey);
+          if (this.viewMode === 'activities') {
+            if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
+          }
+          m._hidden = !match;
+        });
+
+        // Update activity count for selected location
+        this.updateActivityCount();
+      },
+
+      updateActivityCount() {
+        // Count visible activities based on selected location
+        let count = 0;
+        this.groupedMarkers.forEach(m => {
+          if (!m._hidden) count += m.locationData.activities.length;
+        });
+        this.activityCount = count;
       },
 
       setBasemap(basemapKey) {
@@ -871,13 +1066,13 @@
         this.individualMarkers.forEach(m => map.removeLayer(m.marker));
         this.activityMarkers.forEach(m => map.removeLayer(m.marker));
 
-        // Add the appropriate marker set
+        // Add the appropriate marker set, respecting location filter
         if (mode === 'types') {
-          this.individualMarkers.forEach(m => m.marker.addTo(map));
+          this.individualMarkers.forEach(m => { if (!m._hidden) m.marker.addTo(map); });
         } else if (mode === 'activities') {
-          this.activityMarkers.forEach(m => m.marker.addTo(map));
+          this.activityMarkers.forEach(m => { if (!m._hidden) m.marker.addTo(map); });
         } else {
-          this.groupedMarkers.forEach(m => m.marker.addTo(map));
+          this.groupedMarkers.forEach(m => { if (!m._hidden) m.marker.addTo(map); });
         }
 
         // Close sidebar when switching modes
@@ -898,13 +1093,13 @@
 
         // Build categories array in a specific order
         const categoryOrder = [
-          'Bars, Theaters, Poolrooms',
+          'Entertainment & Hospitality',
           'Businesses',
           'Government & Organizations',
           'Neighborhoods & Parks',
           'Residence',
           'Roadways',
-          'Taxi, Train, Bus'
+          'Transportation'
         ];
 
         const categories = [];
@@ -995,11 +1190,19 @@
           };
         });
 
-        // Get location name, ID, and type from first activity if available
+        // Use locationData from grouped markers if available (has locationName, locationIds)
         let locationName = 'Location Details';
         let locationId = null;
         let locationType = null;
-        if (sortedActivities.length > 0 && sortedActivities[0].locations) {
+
+        if (locationData && locationData.locationName) {
+          locationName = locationData.locationName;
+          locationType = locationData.locationType || null;
+          // Use first location ID for the activities link
+          if (locationData.locationIds && locationData.locationIds.size > 0) {
+            locationId = locationData.locationIds.values().next().value;
+          }
+        } else if (sortedActivities.length > 0 && sortedActivities[0].locations) {
           const loc = Array.isArray(sortedActivities[0].locations)
             ? sortedActivities[0].locations[0]
             : sortedActivities[0].locations;
@@ -1042,7 +1245,7 @@
 
   // Wait for Alpine to be fully initialized before fetching data
   document.addEventListener('alpine:init', () => {
-    fetch('https://data.chnm.org/pinkertons/activities')
+    fetch('http://localhost:8090/pinkertons/activities')
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1053,59 +1256,72 @@
       loadingEl.classList.add('hidden');
 
       // Create markers for activities with location data
-      // Group activities by location_id to handle multiple activities at same location
-      const locationMap = new Map();
+      // Group activities by coordinate to deduplicate locations at the same place
+      const locationMap = new Map(); // keyed by coordinate string
       const markers = [];
 
-      data.forEach((activity) => {
-        // Check if locations field exists and has coordinates
-        let lat = null;
-        let lon = null;
-        let locationType = null;
-        let visits = null;
-        let locationId = null;
-
-        // First check if locations field exists (could be object or array)
+      // Helper to extract location info from an activity
+      function extractLocation(activity) {
         if (activity.locations) {
           if (Array.isArray(activity.locations) && activity.locations.length > 0) {
-            // If it's an array, use the first location
-            locationId = activity.locations[0].id;
-            lat = activity.locations[0].latitude || activity.locations[0].lat;
-            lon = activity.locations[0].longitude || activity.locations[0].lon;
-            locationType = activity.locations[0].location_type;
-            visits = (activity.locations[0].visits !== null && activity.locations[0].visits !== undefined)
-              ? parseInt(activity.locations[0].visits, 10)
-              : null;
+            const loc = activity.locations[0];
+            return {
+              id: loc.id,
+              lat: loc.latitude || loc.lat,
+              lon: loc.longitude || loc.lon,
+              locationType: loc.location_type,
+              locationName: loc.location_name,
+              locality: loc.locality,
+              visits: (loc.visits !== null && loc.visits !== undefined) ? parseInt(loc.visits, 10) : null
+            };
           } else if (typeof activity.locations === 'object') {
-            // If it's an object
-            locationId = activity.locations.id;
-            lat = activity.locations.latitude || activity.locations.lat;
-            lon = activity.locations.longitude || activity.locations.lon;
-            locationType = activity.locations.location_type;
-            visits = (activity.locations.visits !== null && activity.locations.visits !== undefined)
-              ? parseInt(activity.locations.visits, 10)
-              : null;
+            const loc = activity.locations;
+            return {
+              id: loc.id,
+              lat: loc.latitude || loc.lat,
+              lon: loc.longitude || loc.lon,
+              locationType: loc.location_type,
+              locationName: loc.location_name,
+              locality: loc.locality,
+              visits: (loc.visits !== null && loc.visits !== undefined) ? parseInt(loc.visits, 10) : null
+            };
           }
         }
-        // Fallback to direct fields
-        else {
-          lat = activity.latitude || activity.lat;
-          lon = activity.longitude || activity.lon;
-        }
+        return { id: null, lat: activity.latitude || activity.lat, lon: activity.longitude || activity.lon };
+      }
 
-        if (lat && lon && locationId) {
-          // Group by location_id instead of lat/lon
-          if (!locationMap.has(locationId)) {
-            locationMap.set(locationId, {
-              locationId: locationId,
-              lat: parseFloat(lat),
-              lon: parseFloat(lon),
-              activities: [],
-              locationType: locationType,
-              visits: visits !== null ? visits : null
-            });
-          }
-          locationMap.get(locationId).activities.push(activity);
+      data.forEach((activity) => {
+        const loc = extractLocation(activity);
+        if (!loc.lat || !loc.lon) return;
+
+        const lat = parseFloat(loc.lat);
+        const lon = parseFloat(loc.lon);
+        // Group by rounded coordinates to merge near-identical locations
+        const coordKey = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+
+        if (!locationMap.has(coordKey)) {
+          locationMap.set(coordKey, {
+            locationIds: new Set(),
+            lat: lat,
+            lon: lon,
+            activities: [],
+            locationType: loc.locationType,
+            locationName: loc.locationName,
+            locality: loc.locality,
+            visits: 0
+          });
+        }
+        const entry = locationMap.get(coordKey);
+        entry.activities.push(activity);
+        if (loc.id) entry.locationIds.add(loc.id);
+        // Use the highest visit count from any location at these coords
+        if (loc.visits !== null && loc.visits > entry.visits) {
+          entry.visits = loc.visits;
+        }
+        // Prefer a named location over unnamed
+        if (loc.locationName && !entry.locationName) {
+          entry.locationName = loc.locationName;
+          entry.locationType = loc.locationType;
         }
       });
 
@@ -1113,36 +1329,21 @@
       const mapContainer = document.querySelector('[x-data="mapInterface()"]');
       const alpineData = Alpine.$data(mapContainer);
 
-      // Helper function to add small jitter to coordinates
+      // Helper function to add small jitter to coordinates (for individual marker modes)
       function addJitter(coord, jitterAmount = 0.0003) {
         return coord + (Math.random() - 0.5) * jitterAmount;
       }
-
-      // Track coordinates to detect overlaps and add jitter
-      const coordCounts = new Map();
-      locationMap.forEach((location) => {
-        const coordKey = `${location.lat.toFixed(6)},${location.lon.toFixed(6)}`;
-        coordCounts.set(coordKey, (coordCounts.get(coordKey) || 0) + 1);
-      });
 
       // Create grouped markers (for "all" mode) and individual markers (for "types" mode)
       const groupedMarkers = [];
       const individualMarkers = [];
 
-      // Create grouped markers for each unique location
+      // Create one grouped marker per unique coordinate
       locationMap.forEach((location) => {
-        // Use actual visits count, treating null/undefined as 0
-        const visits = location.visits !== null && location.visits !== undefined ? location.visits : 0;
-        // For 0 visits, use minimum size of 3, otherwise scale with sqrt
+        const visits = location.visits || 0;
         const radius = visits > 0 ? (2 + Math.sqrt(visits) * 2) : 3;
 
-        // Add jitter if multiple locations share these coordinates
-        const coordKey = `${location.lat.toFixed(6)},${location.lon.toFixed(6)}`;
-        const hasOverlap = coordCounts.get(coordKey) > 1;
-        const lat = hasOverlap ? addJitter(location.lat) : location.lat;
-        const lon = hasOverlap ? addJitter(location.lon) : location.lon;
-
-        const marker = L.circleMarker([lat, lon], {
+        const marker = L.circleMarker([location.lat, location.lon], {
           radius: radius,
           fillColor: '#c8a04a',
           color: '#f5efe0',
@@ -1293,6 +1494,23 @@
       // Build the categories for legends
       alpineData.buildLocationCategories();
       alpineData.buildActivityCategories();
+
+      // Compute per-location activity counts
+      const locKeys = Object.keys(alpineData.locations);
+      locKeys.forEach(key => {
+        const locDef = alpineData.locations[key];
+        if (!locDef.localities) {
+          // 'all' — count everything
+          alpineData.locationCounts[key] = data.length;
+        } else {
+          alpineData.locationCounts[key] = data.filter(a => {
+            if (a.locations && Array.isArray(a.locations) && a.locations.length > 0) {
+              return locDef.localities.includes(a.locations[0].locality);
+            }
+            return false;
+          }).length;
+        }
+      });
 
       // Set activity count for current location
       alpineData.activityCount = data.length;
