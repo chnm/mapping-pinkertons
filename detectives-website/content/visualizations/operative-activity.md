@@ -4,7 +4,7 @@ description: "Compare the surveillance workload across different Pinkerton opera
 icon: "chart-bar"
 vizType: "operative-activity"
 location: "El Paso, Texas"
-dataSource: "Pinkerton detective reports from El Paso operations"
+investigation: "el-paso"
 weight: 3
 ---
 

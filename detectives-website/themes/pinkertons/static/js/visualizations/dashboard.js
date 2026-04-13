@@ -203,8 +203,28 @@ function preprocess(raw) {
       hour,
       locationType,
       infoNorm: normalizeInfo(d.information),
+      investigation: getInvestigation(d),
     };
   });
+}
+
+// ─── Investigation (Case) Mapping ─────────────────────────────────────────────
+
+const INVESTIGATIONS = {
+  'el-paso':  { label: 'El Paso, Texas',   localities: new Set(['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']) },
+  'atlanta':  { label: 'Atlanta, Georgia', localities: new Set(['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']) },
+  'nyc':      { label: 'New York City',    localities: new Set(['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']) },
+};
+
+function getInvestigation(activity) {
+  const locality = activity.locations && activity.locations.length > 0
+    ? activity.locations[0].locality
+    : null;
+  if (!locality) return null;
+  for (const [key, inv] of Object.entries(INVESTIGATIONS)) {
+    if (inv.localities.has(locality)) return key;
+  }
+  return null;
 }
 
 // ─── Filter Bar ───────────────────────────────────────────────────────────────
@@ -221,6 +241,22 @@ function buildFilterBar(allData, minDate, totalDays) {
   // ── Row 1: dropdowns + toggles + reset + count
   const row1 = document.createElement("div");
   row1.className = "flex flex-wrap items-center gap-4";
+
+  // — Investigation dropdown
+  const invWrap = document.createElement("div");
+  invWrap.className = "flex items-center gap-2";
+  const invLbl = document.createElement("label");
+  invLbl.htmlFor = "filter-investigation";
+  invLbl.className = "text-sm font-medium text-grit-text-dark whitespace-nowrap";
+  invLbl.textContent = "Investigation";
+  const invSel = document.createElement("select");
+  invSel.id = "filter-investigation";
+  invSel.className =
+    "text-sm border border-gray-300 rounded px-2 py-1 text-grit-text-dark bg-white";
+  Object.entries(INVESTIGATIONS).forEach(([key, inv]) => invSel.appendChild(makeOpt(key, inv.label)));
+  invWrap.appendChild(invLbl);
+  invWrap.appendChild(invSel);
+  row1.appendChild(invWrap);
 
   // — Operative dropdown
   const opWrap = document.createElement("div");
@@ -441,14 +477,14 @@ function renderTimeline(container, data) {
     Plot.plot({
       marginLeft: 50,
       marginBottom: 70,
-      width: fullW(),
+      width: halfW(),
       height: 280,
       x: { type: "time", label: "Date", tickFormat: "%b %Y", tickRotate: -30 },
       y: { grid: true, label: "Activities" },
       marks: [
         Plot.rectY(
           withDates,
-          Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: ACCENT, tip: true })
+          Plot.binX({ y: "count" }, { x: "dateObj", interval: "month", fill: ACCENT, tip: true })
         ),
         Plot.ruleY([0]),
       ],
@@ -608,9 +644,96 @@ function renderSubjects(container, data) {
   );
 }
 
+// ─── Mini Map ────────────────────────────────────────────────────────────────
+
+let dashboardMap = null;
+let mapMarkers = [];
+
+function renderMap(container, data, investigation) {
+  // Build location groups from data
+  const locationMap = new Map();
+  data.forEach(d => {
+    if (d.locations && d.locations.length > 0) {
+      const loc = d.locations[0];
+      if (loc.latitude && loc.longitude) {
+        const key = `${parseFloat(loc.latitude).toFixed(4)},${parseFloat(loc.longitude).toFixed(4)}`;
+        if (!locationMap.has(key)) {
+          locationMap.set(key, {
+            lat: parseFloat(loc.latitude),
+            lon: parseFloat(loc.longitude),
+            name: loc.location_name || loc.locality || 'Unknown',
+            visits: loc.visits || 0,
+            count: 0
+          });
+        }
+        locationMap.get(key).count++;
+      }
+    }
+  });
+
+  // Get center from investigation config
+  const centers = {
+    'el-paso':  { lat: 31.7619,  lon: -106.4850, zoom: 12 },
+    'atlanta':  { lat: 33.749,   lon: -84.388,    zoom: 12 },
+    'nyc':      { lat: 40.730,   lon: -73.975,    zoom: 11 },
+  };
+  const center = centers[investigation] || { lat: 38.5, lon: -96, zoom: 5 };
+
+  // Create or update the map
+  if (!dashboardMap) {
+    container.innerHTML = '';
+    const mapDiv = document.createElement('div');
+    mapDiv.id = 'dashboard-map';
+    mapDiv.style.cssText = 'height: 380px; width: 100%; border-radius: 8px;';
+    container.appendChild(mapDiv);
+
+    dashboardMap = L.map('dashboard-map', {
+      zoomControl: true,
+      attributionControl: false
+    }).setView([center.lat, center.lon], center.zoom);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(dashboardMap);
+  } else {
+    dashboardMap.setView([center.lat, center.lon], center.zoom);
+  }
+
+  // Clear existing markers
+  mapMarkers.forEach(m => dashboardMap.removeLayer(m));
+  mapMarkers = [];
+
+  // Add markers
+  locationMap.forEach(loc => {
+    const visits = loc.visits || 0;
+    const radius = visits > 0 ? (2 + Math.sqrt(visits) * 2) : 3;
+
+    const marker = L.circleMarker([loc.lat, loc.lon], {
+      radius: Math.min(radius, 20),
+      fillColor: '#c8a04a',
+      color: '#f5efe0',
+      weight: 1,
+      opacity: 0.8,
+      fillOpacity: 0.6
+    });
+
+    marker.bindTooltip(
+      `<strong>${loc.name}</strong><br>${visits} visits`,
+      { className: 'dashboard-map-tooltip' }
+    );
+
+    marker.addTo(dashboardMap);
+    mapMarkers.push(marker);
+  });
+
+  // Invalidate size in case container was hidden
+  setTimeout(() => dashboardMap.invalidateSize(), 100);
+}
+
 // ─── Main Export ──────────────────────────────────────────────────────────────
 
-export async function createVisualization(rawData) {
+export async function createVisualization(rawData, opts = {}) {
   injectSliderStyles();
 
   const activities = preprocess(rawData);
@@ -627,7 +750,9 @@ export async function createVisualization(rawData) {
   const totalDays = Math.round((maxDate - minDate) / DAY_MS);
 
   // ── Filter state
+  const defaultInvestigation = Object.keys(INVESTIGATIONS)[0];
   let state = {
+    investigation: defaultInvestigation,
     operative:    "all",
     activityType: "all",
     infoGathered: "all",
@@ -637,6 +762,7 @@ export async function createVisualization(rawData) {
 
   function filtered() {
     return activities.filter(d => {
+      if (d.investigation !== state.investigation) return false;
       if (state.operative    !== "all" && d.operative !== state.operative)    return false;
       if (state.activityType !== "all" && d.activity  !== state.activityType) return false;
       if (state.infoGathered !== "all" && d.infoNorm  !== state.infoGathered) return false;
@@ -657,6 +783,7 @@ export async function createVisualization(rawData) {
     buildFilterBar(activities, minDate, totalDays);
   root.appendChild(filterBar);
   const countBadge  = filterBar.querySelector("#filter-count");
+  const invSel      = filterBar.querySelector("#filter-investigation");
   const opSel       = filterBar.querySelector("#filter-operative");
   const actSel      = filterBar.querySelector("#filter-activity");
   const infoButtons = filterBar.querySelectorAll("[data-info-val]");
@@ -672,20 +799,16 @@ export async function createVisualization(rawData) {
   chartsWrapper.className = "space-y-6";
   root.appendChild(chartsWrapper);
 
-  // Timeline — full width
-  const { card: timelineCard, body: timelineBody } = section("Daily Activity Timeline");
-  chartsWrapper.appendChild(timelineCard);
+  // Top row: timeline + activity types side by side
+  const topRow = document.createElement("div");
+  topRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
+  chartsWrapper.appendChild(topRow);
 
-  // Mid row: activity types + time of day
-  const midRow = document.createElement("div");
-  midRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
-  chartsWrapper.appendChild(midRow);
+  const { card: timelineCard, body: timelineBody } = section("Daily Activity Timeline");
+  topRow.appendChild(timelineCard);
 
   const { card: actTypeCard, body: actTypeBody } = section("Activity Type Breakdown");
-  midRow.appendChild(actTypeCard);
-
-  const { card: todCard, body: todBody } = section("Time of Day");
-  midRow.appendChild(todCard);
+  topRow.appendChild(actTypeCard);
 
   // Bottom row: operatives + location types
   const botRow = document.createElement("div");
@@ -698,9 +821,16 @@ export async function createVisualization(rawData) {
   const { card: locCard, body: locBody } = section("Location Types Surveilled");
   botRow.appendChild(locCard);
 
-  // Subjects — full width
+  // Bottom row: subjects + map
+  const subMapRow = document.createElement("div");
+  subMapRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
+  chartsWrapper.appendChild(subMapRow);
+
   const { card: subjectsCard, body: subjectsBody } = section("Top Subjects Watched");
-  chartsWrapper.appendChild(subjectsCard);
+  subMapRow.appendChild(subjectsCard);
+
+  const { card: mapCard, body: mapBody } = section("Locations");
+  subMapRow.appendChild(mapCard);
 
   // ── Render all panels from current filter state
   function renderAll() {
@@ -709,10 +839,10 @@ export async function createVisualization(rawData) {
     renderKPIs(kpiRow, data);
     renderTimeline(timelineBody, data);
     renderActivityTypes(actTypeBody, data, colorMap);
-    renderTimeOfDay(todBody, data);
     renderOperatives(opBody, data);
     renderLocationTypes(locBody, data);
     renderSubjects(subjectsBody, data);
+    renderMap(mapBody, data, state.investigation);
   }
 
   // ── Helper: update info-toggle button styles
@@ -724,6 +854,36 @@ export async function createVisualization(rawData) {
       btn.style.borderColor     = active ? ACCENT  : "#d1d5db";
     });
   }
+
+  // ── Rebuild operative & activity dropdowns for current investigation
+  function updateDropdownsForInvestigation() {
+    const invData = activities.filter(d => d.investigation === state.investigation);
+    const ops = [...new Set(invData.map(d => d.operative).filter(Boolean))].sort();
+    const types = [...new Set(invData.map(d => d.activity).filter(Boolean))].sort();
+
+    // Rebuild operative dropdown
+    const prevOp = opSel.value;
+    opSel.innerHTML = '';
+    opSel.appendChild(makeOpt("all", "All operatives"));
+    ops.forEach(op => opSel.appendChild(makeOpt(op, op)));
+    opSel.value = ops.includes(prevOp) ? prevOp : "all";
+    state.operative = opSel.value;
+
+    // Rebuild activity type dropdown
+    const prevAct = actSel.value;
+    actSel.innerHTML = '';
+    actSel.appendChild(makeOpt("all", "All types"));
+    types.forEach(t => actSel.appendChild(makeOpt(t, t)));
+    actSel.value = types.includes(prevAct) ? prevAct : "all";
+    state.activityType = actSel.value;
+  }
+
+  // ── Wire up investigation dropdown
+  invSel.addEventListener("change", () => {
+    state.investigation = invSel.value;
+    updateDropdownsForInvestigation();
+    renderAll();
+  });
 
   // ── Wire up operative dropdown
   opSel.addEventListener("change", () => {
@@ -776,11 +936,11 @@ export async function createVisualization(rawData) {
   // ── Wire up reset
   resetBtn.addEventListener("click", () => {
     state = {
-      operative: "all", activityType: "all", infoGathered: "all",
+      investigation: defaultInvestigation, operative: "all", activityType: "all", infoGathered: "all",
       dateMin: 0, dateMax: totalDays,
     };
-    opSel.value  = "all";
-    actSel.value = "all";
+    invSel.value = defaultInvestigation;
+    updateDropdownsForInvestigation();
     setInfoActive("all");
     minSlider.value = 0;
     maxSlider.value = totalDays;
@@ -791,8 +951,15 @@ export async function createVisualization(rawData) {
     renderAll();
   });
 
-  // Initial render
-  renderAll();
+  // Scope dropdowns to default investigation
+  updateDropdownsForInvestigation();
+
+  // Initial render — defer if requested (map needs DOM attachment first)
+  if (opts.deferRender) {
+    root.addEventListener('dashboard:mounted', () => renderAll(), { once: true });
+  } else {
+    renderAll();
+  }
 
   return root;
 }
