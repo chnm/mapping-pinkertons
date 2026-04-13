@@ -5,7 +5,7 @@
 
       <!-- Breadcrumb -->
       <nav class="mb-6 text-sm">
-        <a href="/visualizations" class="text-grit-steel hover:text-grit-accent transition-colors">← Back to Visualizations</a>
+        <a href="/visualizations" class="text-grit-text-dark/70 hover:text-grit-accent transition-colors">← Back to Visualizations</a>
       </nav>
 
       <!-- Header -->
@@ -66,7 +66,7 @@
     const container = document.getElementById('dashboard-container');
     const loading = document.getElementById('dashboard-loading');
     try {
-      const res = await fetch('http://localhost:8090/pinkertons/activities');
+      const res = await fetch('https://data.chnm.org/pinkertons/activities');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       loading.remove();
