@@ -9,8 +9,8 @@ on:
       - "detectives-website/**"
 
 jobs:
-  hugo-build-release-deploy:
-    uses: chnm/.github/.github/workflows/hugo--build-release-deploy.yml@main
+  build-release:
+    uses: chnm/.github/.github/workflows/hugo--build-release.yml@main
     secrets: inherit
     with:
       container-registry: "ghcr.io"
@@ -24,3 +24,12 @@ jobs:
 
       website-devl-fqdn: "mappingpinkertons.rrchnm.org"
       website-prod-fqdn: "mappingpinkertons.rrchnm.org"
+
+  deploy:
+    uses: chnm/.github/.github/workflows/docker--deploy.yml@main
+    needs: [build-release]
+    secrets: inherit
+    with:
+      website-devl-fqdn: "mappingpinkertons.rrchnm.org"
+      website-prod-fqdn: "mappingpinkertons.rrchnm.org"
+
