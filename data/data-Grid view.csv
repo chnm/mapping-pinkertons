@@ -1,0 +1,479 @@
+id,tropy.title,image.title,date,operative,"""With""",with local police?,with infromant,Activity,activity notes,Mode,subject,Street Address copy,Time Start,Time End,name,notes,locality,State,Location Type (from data) copy (from Street Address copy),location information,Duration (HH:MM),Information,Information Type,Edited,Edit Type,created
+2,Reports_3,HRM1,2/21/36,H.R.M.,,,,Surveillance,"""take up watch fro Dover's father and sister""",,"Bessie Dover,Dover's Father",465 Broadway,7:20,22:10,,-where Dover's sister was being watched,Long Branch,NJ,Residence,"""the vicinity of Pearl St. and Bath Ave"" ",14:50,,,,,2/9/2026 10:37am
+3,Reports_3,WLC1,2/21/36,W.L.C.,,,,Surveillance,"""took up watch...at 465 Broadway...""",,Bessie Dover,465 Broadway,7:20,7:35,,-where Dover's sister was being watched,Long Branch,NJ,Residence,,0:15,,,,,2/9/2026 10:49am
+,Reports_3,WLC1,2/21/36,W.L.C.,,,,Shadowing,"board bus, rode with her to work",,,Broadway & Pearl,,,,,Long Branch,NJ,Bus stop,,,,,,,
+,,,,,,,,Shadowing,"Got off at corner, went to dress factory",,,[Corner of North Broadway and Long Branch Ave],,,,,Long Branch,NJ,Bus stop,,,,,,,
+4,Reports_3,WLC1,2/21/36,W.L.C.,,,,Surveillance,"watched her at work
+",,Bessie Dover,[Corner of North Broadway and Long Branch Ave],7:35,12:30,"Dress Factory
+","""the corner of North Broadway and Long Branch Avenue"" ",Long Branch,NJ,Factory,"""the corner of North Broadway and Long Branch Avenue"" ",4:55,,,,,2/9/2026 11:14am
+5,Reports_3,WLC1,2/21/36,W.L.C.,,,,Shadowing,"Bought jewlery
+",,Bessie Dover,[Woolworth 5 and 10 sent Store],12:30,12:50,Woolworth 5 and 10 Cent Store,#NAME?,Long Branch,NJ,Store,"near the dress factory
+",0:20,,,,,2/9/2026 11:23am
+,Reports_3,WLC1,2/21/36,W.L.C.,,,,Shadowing,"Bought jewlery
+",,Bessie Dover,Newbury 5 & 10 cent store,,,,,Long Branch,NJ,Store,"near the dress factory
+",,,,,,
+6,Reports_3,WLC1,2/21/36,W.L.C.,,,,Surveillance,"Watched her at work
+",,Bessie Dover,[Corner of North Broadway and Long Branch Ave],12:50,17:00,"Dress Factory
+","""the corner of North Broadway and Long Branch Avenue"" ",Long Branch,NJ,Factory,"""the corner of North Broadway and Long Branch Avenue"" ",4:10,,,,,2/9/2026 11:25am
+7,Reports_3,WLC1,2/21/36,W.L.C.,,,,Surveillance,"""sister left the factory and was driven to the vicinity of the her residence by Informant"" ",car,Bessie Dover,[Corner of North Broadway and Long Branch Ave],,,"Dress Factory
+","""the corner of North Broadway and Long Branch Avenue"" ",Long Branch,NJ,Factory,,,,,,,2/9/2026 11:28am
+,Reports_3,WLC1,2/21/36,W.L.C.,,,,Surveillance,"""took up watch...at 465 Broadway...""",,Bessie Dover,465 Broadway,,,,,,,,,,,,,,
+8,Reports_3,AA1,2/22/36,A.A.,,,,Search,"Instructed by Monmouth detectives Sacco and Zuckerman to go to dance hall where party they thought Dover would attend - tried to get in, refused as private party - saw crowds of men so impossible to locate Dover",,Charles Dover,130 Rockaway Ave,18:30,24:00:00,"Brooklyn Palace
+","""Rockaway Avenue and Hull Street""",Brooklyn,NY,Dance Hall,,,,,,,2/9/2026 11:30am
+10,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Surveillance,,car,"Bessie Dover,Dover's Father",465 Broadway,7:00,7:45,,-where Dover's sister was being watched,Long Branch,NJ,Residence,,0:45,,,,,2/9/2026 11:36am
+12,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,Walk to LI train station,car,"Bessie Dover,Dover's Father",[Long Branch Train Station],,,Long Branch Train Station,,Long Branch,NJ,Train Station,,,,,,,2/9/2026 11:42am
+13,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,Train to ferry,,"Bessie Dover,Dover's Father",[Jersey City Ferry Station],,,Jersey City Ferry Station,ferry's leave here,Jersey City,NJ,Train Station,"gets on a ferry to Liberty Street NY
+
+",,,,,,2/9/2026 11:44am
+14,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,Walk to El,car,"Bessie Dover,Dover's Father",[Ninth Avenue Elevated],,,Ninth Avenue Elevated,"-https://en.wikipedia.org/wiki/IRT_Ninth_Avenue_Line
+",New York City,NY,Train Station,"gets on a line to South Ferry
+",,,,,,2/9/2026 11:48am
+16,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,following them to various locations,car,"Bessie Dover,Dover's Father",[South Ferry Station],,,"South Ferry Station
+",-train station in 1936?,New York City,NY,Train Station,,,,,,,2/9/2026 12:10pm
+17,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,following them to various locations,car,,[Second Avenue Station],,,Second Avenue Station ,#NAME?,New York City,NY,Train Station,gets on train to Essex,,,,,,2/9/2026 12:10pm
+15,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,following them to various locations,car,"Bessie Dover,Dover's Father",[Essex Street Station],,,Essex Street Station,#NAME?,,NJ,Train Station,,,,,,,2/9/2026 12:08pm
+20,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,following them to various locations,car,"Bessie Dover,Dover's Father",[Eastern Parkway Station],,,Eastern Parkway Station,,Brooklyn,NY,Train Station,,,,,,,2/9/2026 12:26pm
+21,Reports_3,HRM2,2/22/36,H.R.M.,W.L.C.,,,Shadowing,destination of trip,car,"Bessie Dover,Dover's Father",121A Hull Street,,,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,,,,,,2/9/2026 1:03pm
+22,Reports_3,HRM2,2/22/36,H.R.M.,K.S.M.,,,Surveillance,,car,"Bessie Dover,Dover's Father",121A Hull Street,13:30,18:20,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,4:50,,,,,2/9/2026 1:05pm
+23,Reports_3,HRM2,2/22/36,H.R.M.,K.S.M.,,,Surveillance,1 member of engaged couple lives here' - are attending engagement?,car,"Bessie Dover,Dover's Father",115 Hull Street,13:30,18:20,,"-residence
+-notes from DWF2: ""Is a three-story, fame house occupied by three families: first floor- J. Soardartci, second floor- A. Mauro, third floor- A. Lepore""",Brooklyn,NY,Residence,,4:50,,,,,2/9/2026 1:08pm
+24,Reports_3,HRM2,2/22/36,H.R.M.,K.S.M.,,,Surveillance,,car,"Bessie Dover,Dover's Father",130 Rockaway Ave,18:20,12:45,Brooklyn Palace,#VALUE!,Brooklyn,NY,Dance Hall,"""Rockaway Avenue and Hull Street""",18:25,,,,,2/9/2026 1:10pm
+29,Reports_3,HRM3,2/23/36,H.R.M.,,,,Surveillance,"Says can't find WLC & KSM so goes to Long Branch, arriving at 5:30 PM??
+",car,"Bessie Dover,Dover's Father",121A Hull Street,2:00,17:30,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,,,,,,2/9/2026 1:42pm
+34,Reports_3,KSM2,2/23/36,K.S.M.,,,,Surveillance,"Remained when sister left and WLC followed her, dscintinue when they leave",car,"Bessie Dover,Dover's Father",121A Hull Street,7:00,20:30,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,13:30,,,,,2/11/2026 10:39am
+35,Reports_3,WLC3,2/23/36,W.L.C.,,,,Surveillance,,car,"Bessie Dover,Dover's Father",121A Hull Street,13:00,23:30,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,10:30,,,,,2/11/2026 10:44am
+,Reports_4,WLC4,2/23/36,W.L.C.,,,,Shadowing,Follows sister and unknown woman,,,1336 Herkeimer St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_5,WLC5,2/23/36,W.L.C.,,,,Surveillance,Woman remain for 20 minutes,,,1336 Herkeimer St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_6,WLC6,2/23/36,W.L.C.,,,,Shadowing,Woman briefly go into building,,,1354 Herkeimer St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_7,WLC7,2/23/36,W.L.C.,,,,Shadowing,Women go to ice cream parlor,,,2156 Fulton St,,,,,Brooklyn,NY,Ice cream parlor,,,,,,,
+,Reports_8,WLC8,2/23/36,W.L.C.,,,,Surveillance,Ice cream parlor,,,2156 Fulton St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_9,WLC9,2/23/36,W.L.C.,,,,Shadowing,Return to 2nd address,,,1354 Herkeimer St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_10,WLC10,2/23/36,W.L.C.,,,,Surveillance,,,,1354 Herkeimer St,,,,,Brooklyn,NY,,,,,,,,
+,Reports_11,WLC11,2/23/36,W.L.C.,,,,Shadowing,Return to Hull St,,,121A Hull Street,,,,,Brooklyn,NY,Residence,,,,,,,
+,Reports_12,WLC12,2/23/36,W.L.C.,,,,Surveillance,,,,121A Hull Street,,,,,Brooklyn,NY,Residence,,,,,,,
+,Reports_13,WLC13,2/23/36,W.L.C.,,,,Shadowing,"Go to train station, train to Long Branch",,,CRR of NJ railroad terminal,,,,,Brooklyn,NY,Train Station,,,,,,,
+,Reports_14,WLC14,2/23/36,W.L.C.,HRM,,,Shadowing,exit train,,,[Long Branch Train Station],,,,,Long Branch,NJ,Train Station,,,,,,,
+,Reports_15,WLC15,2/23/36,W.L.C.,HRM,,,Shadowing,Walk home,,,465 Broadway,,,,,Long Branch,NJ,Residence,,,,,,,
+37,Reports_3,DWF2,2/25/36,D. W. Fox,,,,Search,Visits under pretext to identify residents,,,115 Hull Street,,,,,Brooklyn,NY,Residence,,,,,,,2/11/2026 10:49am
+,Reports_3,DWF2,2/25/36,D. W. Fox,,,,Search,Visits under pretext to identify residents,,,121A Hull Street,,,,,Brooklyn,NY,Residence,,,,,,,
+38,Reports_3,DWF2.2,2/25/36,D. W. Fox,,,checked,Informant,"Met with Informant, Minnie Carmine",,,140 Skillman St,,,,,Brooklyn,NY,Store,,,,,,,2/11/2026 11:05am
+39,Reports_3,DWF3,2/26/36,D. W. Fox,,,checked,Informant,"Met with Informant, Minnie Carmine",,Informant,140 Skillman St,19:00,22:50,,,Brooklyn,NY,Store,,,,,,,2/11/2026 11:06am
+40,Reports_3,DWF3,2/26/36,D. W. Fox,,,,Surveillance,"At suggestion of informant, sat in rear of store so could watch customers, says should come back at night so could put in touch with another informant",car,Informant,140 Skillman St,19:00,22:50,,,Brooklyn,NY,Store,,,,,,,2/11/2026 11:09am
+41,Reports_3,DWF4,2/27/36,D. W. Fox,,,,Search,To see if Dover had visited Mrs Cavallo (info from client 2/27),car,Mrs. Cavallo,342 West 25th Street,,,,"-residence of Mrs. Cavallo
+-notes from DWF4: ""This is a 4-story building, located in the sout side of West 25th Street, b etween 8th Avenue. Htis building contains 16 apartments of which no apartment contains more than three rooms and the rental is $30:00 and $35:00 per month"" ",New York City,NY,Residence,,,,,,,2/11/2026 11:09am
+,Reports_3,DWF4,2/27/36,D. W. Fox,,,,Contact,"Spoke to Contact, janitor",,Mrs. Cavallo,342 West 25th Street,,,,,New York City,NY,Residence,,,,,,,
+42,Reports_3,DWF4,2/27/36,D. W. Fox,,,,Surveillance,Waiting for informant before inquiry at address - Frances Tompkins  (info from client 2/27),car,,382 State Street,,,,"-residence of []
+-Notes form DWF4 ""This is a 6-story rooming house, located int he center of a disorderly house section of Brooklyn. It was suggested not to make any inquiry until an Informant could be located."" ",Brooklyn,NY,Residence,,,,,,,2/11/2026 11:33am
+44,Reports_3,DWF4,2/27/36,D. W. Fox,,,,Surveillance,"Watches from informant Carmine's store, restaurant frequented by Long Branch Italians
+",,,674 Myrtle Avenue,20:30,,Olde Tavern,restaurant across the street from Informant [Minnie Carmine]  M.C.'s business (667 Myrtle approx).,`,NY,Bar,,,,,,,2/11/2026 12:34pm
+46,Reports_3,DWF5,2/28/36,D. W. Fox,,,,Surveillance,"In Carmine's store, nothing of interest learned",,,674 Myrtle Avenue,15:00,21:00,,Watching 674 Myrtle,Brooklyn,NY,Store,,6:00,,,,,2/11/2026 12:40pm
+47,Reports_4,DWF6,2/29/36,D. W. Fox,Detective Fox,,,Informant,Meet informant  #2  [James Piacente]identified by police detective - later gets call from him,,,Myrtle Ave and Franklin Avenue,,,,,Brooklyn,NY,Street,,,,,,,
+49,Reports_3,JHS1,2/28/36,J.H.S.,R.C.,,,Search,Seeking Rennee Martin  (info from client 2/27),,Rennee Martin,331 S. 13th Street,,,,#NAME?,New York City,NY,Residence,,,,,,,2/11/2026 12:55pm
+50,Reports_3,AA3,2/29/36,A.A.,Detective Tate and Sacco,,,Informant,Detectives intro to Red Annunizio,,,,,,,,,,,,,,,,,2/11/2026 2:37pm
+52,Reports_3,AA3,2/29/36,A.A.,"""""""Red"""" Annunisio""",,,Search,"Visited local pool rooms, Bova bar, Pine Tree",,,,,,,,,,,,,,,,,2/12/2026 11:05am
+55,Reports_3,DWF6,2/29/36,D. W. Fox,Detective Geiger,checked,,Interview,asking landlady about the wherabouts of Tompkins,,,382 State Street,,,,0,Brooklyn,NY,Rooming House,,,,,,,2/12/2026 11:10am
+56,Reports_3,DWF6,2/29/36,D. W. Fox,Detective Fox,checked,checked,Informant,"Met with Informant, Minnie Carmine, who is in touch with informant #2, searching for Dover Contacts",,,Broadway,20:00,23:00,Luger's Restaurant,#NAME?,Brooklyn,NY,Restauraunt,,3:00,,,,,2/12/2026 11:10am
+57,Reports_3,AA4,3/1/36,A.A.,,,,Informant,Met with Red Annunzio,,,[vicinity of Broadway and Pearl St.],,23:00,,"-""the vicinity of Broadway and Pearl St.",Long Branch,NJ,Road,,,,,,,2/12/2026 11:37am
+59,Reports_3,DWF7,3/1/36,D. W. Fox,Detective Fox,checked,,Informant,Met with George Crosi,,,87th Precinct,,,87th Precinct,,Brooklyn,NY,Police Station,,,,,,,2/12/2026 12:24pm
+61,Reports_3,AA5,3/2/36,A.A.,"""""""Red"""" Annunisio""",,,Roping,"Introduced by Red - already has boyfriend, don’t succeed in making Contact",,Bessie Dover,565 Broadway,20:00,23:00,,on street,Long Branch,NJ,Factory,,3:00,,,,,2/16/2026 9:29am
+62,Reports_3,AA6,3/2/36,A.A.,,,,Contact,"Info from coworker
+",,"""""""Sam""""""",,7:55,12:30,A.Hollander Fur Plant,"- the place the suspects wife works at
+-",Long Branch,NJ,Factory,,4:35,,,,,2/16/2026 9:29am
+63,Reports_3,SGJ1,3/2/36,S.G.J.,,,,Interview,"[Client requests investigation in West boro, MA, of Dover's married sister, Mrs Rescigno] Asked about man  named Rescigno at 32 Elm St, some fit with Dover - sends to post office for info",,Chief Humphrey,"""[Westboro, Mass. Town Hall]""",10:00,,"Townhall
+",#NAME?,Westboro,MA,Town Hall,,,,,,,2/16/2026 9:29am
+64,Reports_3,SGJ1,3/2/36,S.G.J.,Chief Humphrey,checked,checked,Informant,"Info about package [post office?] to Rescigno, fits Dover description
+",,Post Office Informant,[Westboro Post Office],,,[Westboro Post Office],"-Westboro Informant's office, no address",Westboro,MA,Post Office,,,,,,,2/16/2026 9:29am
+65,Reports_3,SGJ1,3/2/36,S.G.J.,Chief Humphrey,checked,,Interview,Route man - more details of Rescigno,,Archie Potter,[Westboro Post Office],,,[Westboro Post Office],"-Westboro Informant's office, no address",Westboro,MA,Post Office,,,,,,,2/16/2026 9:29am
+66,Reports_3,SGJ1,3/2/36,S.G.J.,Chief Humphrey,checked,,Interview,,,Chief Humphrey,"""[Westboro, Mass. Town Hall]""",,,"Townhall
+",#NAME?,Westboro,MA,Town Hall,,,,,,,2/16/2026 9:29am
+67,Reports_3,SGJ1,3/2/36,S.G.J.,,,,Surveillance,With clerk from post office?,,Rescigno,[Westboro Informant's Office],,,,"-Westboro Informant's office, no address",Westboro,MA,Office,,,,,,,2/16/2026 9:29am
+69,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,,,Anna Dunn,"""[Westboro, Mass. Town Hall]""",,,"Townhall
+",#NAME?,Westboro,MA,Town Hall,,,,,,,2/16/2026 9:29am
+70,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,,,Chief Humphrey,"""[Westboro, Mass. Town Hall]""",,,"Townhall
+",#NAME?,Westboro,MA,Town Hall,,,,,,,2/16/2026 9:29am
+71,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,,,Mr. Sweet,Assessor's Office,,,,,Westboro,MA,Office,,,,,,,2/16/2026 9:29am
+72,Reports_3,SGJ2,3/3/36,S.G.J.,,,checked,Informant,,,Post Office Informant,[Westboro Post Office],,,,"-Westboro Informant's office, no address",Westboro,MA,Office,,,,,,,2/16/2026 9:29am
+73,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,Insurance agent,,Rufus Shaw,,,,,,,,,"no location listed, definintely in westboro though
+",,,,,,2/16/2026 9:29am
+74,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,Suggested by police chief,,Ed Bradley,[Ed Bradley's House],,,Ed Bradley's House,#NAME?,Westboro,MA,Residence,,,,,,,2/16/2026 10:52am
+76,Reports_3,SGJ2,3/3/36,S.G.J.,,,checked,Informant,"Saw no one around Elm St
+",,Westboro Informant #2,,,,,,,,,"no location listed, definintely in westboro though",,,,,,2/16/2026 10:55am
+77,Reports_3,SGJ2,3/3/36,S.G.J.,,,,Interview,Would keep an eye on Elm St,,Chief Humphrey,[Westboro Police Department],,,Westboro Police Department,,Westboro,MA,Police Station,,,,,,,2/16/2026 10:55am
+78,Reports_3,DWF8,3/3/36,D. W. Fox,"B.F.C. ,Detective Fox",checked,checked,Informant,"Provided info about Tom Callahan, 521 E16, friend of Dover - had visited 6m ago - agreed to see if still there - saw family - did not encounter him",,Informant #3,,13:00,16:00,,,,,,"went ot meet him but does not give location
+",3:00,,,,,2/16/2026 10:55am
+79,Reports_3,BostonOffice,3/4/36,,,,,mail,"from Catheraine Rega, 309 Moore Ave, Long Branch",,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/16/2026 10:55am
+80,Reports_3,AA7,3/4/36,A.A.,,,,Contact,Talk About Robbery,,Marty Marianio,,,,,,Long Branch,Nj,,#NAME?,,,,,,2/16/2026 10:55am
+81,Reports_3,AA7,3/4/36,A.A.,,,,Contact,Talk About Robbery,,Willie Santelli,,,,,,Long Branch,Nj,,,,,,,,2/16/2026 10:55am
+82,Reports_3,AA7,3/4/36,A.A.,,,,Contact,NB Dover's sister did not show for meeting with AA,,"""""""Keefe""""""",,,,,,Long Branch,Nj,,,,,,,,2/17/2026 11:01am
+84,Reports_3,AA8,3/5/36,A.A.,,,,Contact,,,Willie Santelli,,,,,,Long Branch,Nj,,,,,,,,2/17/2026 11:02am
+85,Reports_3,AA8,3/5/36,A.A.,,,,Contact,,,[pool bar owner for broadway and pearl],Broadway & Pearl,,,,,Long Branch,Nj,Pool Room,,,,,,,2/17/2026 11:02am
+86,Reports_3,DWF10,3/6/36,D. W. Fox,,,,Search,Following up leads - Louis Adamo lives on 3rd flr - police have informant they offer to have investigate  and 342 West 25th for Cavallo - [Informant is woman who does not like tenants],,,117 15th St,,,,,West New York,NJ,Residence,,,,,,,2/17/2026 11:02am
+90,Reports_3,DWF10,3/6/36,D. W. Fox,Detective Fox,checked,checked,Informant,"Reports from Long Branch - Dover's wife in weekly contact, not sure how, others not saying much",,Informant #2,[Myrtle Ave and Franklin Avenue],,,,,Brooklyn,NY,Street,,,,,,,2/17/2026 11:02am
+91,Reports_3,AA9,3/7/36,A.A.,,,,Contact,,,Sam Herra,555 Broadway,,,Cossentino's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/17/2026 11:02am
+93,Reports_3,DWF11,3/7/36,D. W. Fox,,,checked,Informant,List of info,,Informant #3,,10:00,,,,,,,#NAME?,,,,,,2/17/2026 11:02am
+96,Reports_3,DWF11.2,3/7/36,D. W. Fox,Informant3,,,Surveillance,cruised around while informant showed hangouts of Dover,car,Informant #3,[East 14th Street and 3rd Ave],19:00,12:30,,"cafe is here
+-",New York City,NY,Street,,17:30,,,,,2/17/2026 12:38pm
+,Reports_3,DWF11.2,3/7/36,D. W. Fox,Informant3,,,Surveillance,"Watched dance hall for several hours to see if informant recognized any of Dover's friends
+",,,,,,Diana Ball Room,,,,,,,,,,,
+94,Reports_3,JWH1,3/7/36,J.W.H.,,,,Interview,Report on Callahan arrest - not with Italian - with another member of Boston gang of jewl thieves,,Callhan,[Boston Police Headquarters],,,"Boston Police Headquarters
+",,Boston,MA,,,,,,,,2/17/2026 11:02am
+95,Reports_3,AA10,3/8/36,A.A.,,,,Surveillance,,,,555 Broadway,13:00,1:00,Cossentino's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,12:00,,,,,2/17/2026 11:02am
+98,Reports_3,AA10,3/8/36,A.A.,,,,Contact,,,Sam Herra,555 Broadway,,,Cossentino's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/17/2026 12:53pm
+97,Reports_3,AA10,3/8/36,A.A.,,,,Contact,,,Willie Santelli,555 Broadway,,,Cossentino's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/17/2026 12:50pm
+99,Reports_3,AA11,3/9/36,A.A.,,,,Surveillance,,,,[A.Hollander Fur Plant],8:00,12:00,A.Hollander Fur Plant,"-place that AA goes undercover, but never talks about what infromation he gets there
+-https://commons.wikimedia.org/wiki/Category:A._Hollander_%26_Sons
+",New York City,NY,Factory,,4:00,,,,,2/17/2026 12:56pm
+100,Reports_3,AA11,3/9/36,A.A.,,,,Contact,"Went with Willie, Santa & Tom to Beergarden",,Willie Santelli,,,,,,Ashbury Park,NJ,Beer garden,#NAME?,,,,,,2/17/2026 12:57pm
+101,Reports_3,AA11,3/9/36,A.A.,,,,Contact,"Went with Willie, Santa & Tom to Beergarden",,Santa DiSantis,,,,,,Ashbury Park,NJ,Beer garden,#NAME?,,,,,,2/17/2026 12:57pm
+102,Reports_3,AA11,3/9/36,A.A.,,,,Contact,"Went with Willie, Santa & Tom to Beergarden",,Tom,,,,,,Ashbury Park,NJ,Beer garden,#NAME?,,,,,,2/17/2026 12:57pm
+103,Reports_3,DWF12,3/9/36,D. W. Fox,,,,Search,"Visit, don't investigate cos is 'Sicilian district' - get informant to visit",,,103 Knickerbocker Ave ,,,,"-listed in WFW #1, but not reference berfore this",Brooklyn,NY,Stationery and Confectionery Story,,,,,,,2/17/2026 12:57pm
+104,Reports_3,DWF12,3/9/36,D. W. Fox,Detective Fox,checked,checked,Informant,,,Informant #3,[East 14th and 3rd Avenue],,,,,New York City,NY,Street,,,,,,,2/17/2026 12:57pm
+104,Reports_3,DWF12,3/9/36,D. W. Fox,Informant #3 & Fox's police detective brother,checked,checked,Surveillance,"Visited vicinity, found no one from Long Branch",,,[East 14th and 3rd Avenue],,,,,,,,,,,,,,
+105,Reports_3,AA11,3/10/36,A.A.,,,,Contact,,,Willie Santelli,Cedar St & Norwood Ave,,,Norwood Pool Room,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/17/2026 12:57pm
+106,Reports_3,DWF13,3/10/36,D. W. Fox,,,checked,Informant,Dover's sister[in-law?] works in barber shop,,Informant #3,,,,,,,,,,,,,,,2/17/2026 12:57pm
+107,Reports_3,DWF13,3/10/36,D. W. Fox,,,,Surveillance,"visits at business's new location, no manicurist",,Dover's sister,Bedford Ave & Atlantic Ave,,,New Palace Barber Shop,,Brooklyn,NY,Barber,,,,,,,2/17/2026 1:28pm
+108,Reports_3,DWF13,3/10/36,D. W. Fox,,,checked,Informant,"At informant's home, Informant#3's wife volunteers to work as visits Dover's wife, try to learn how is contacting Dover",,Informant #3's Wife,Myrtle Ave,,,,,Brooklyn,NY,Residence,,,,,,,2/19/2026 9:23am
+109,Reports_3,AA12,3/11/36,A.A.,,,,Surveillance,At poolroom,,Willie Santelli,555 Broadway,,1:30,Cossentino's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/19/2026 9:23am
+110,Reports_3,AA12,3/11/36,A.A.,,,,Contact,"Went with Willie and 3 other men, met poolroom owner, Clarence",,Clarance,,,1:30,Baker's Poolroom,#NAME?,Long Branch,NJ,Poolroom,,,,,,,2/19/2026 9:23am
+115,Reports_3,DWF14,3/12/36,D. W. Fox,,,checked,Search,Seek info about residentsusing pretext,,Mrs. Mary Conti,1336 Herkeimer St,,,,#NAME?,Brooklyn,NY,Residence,,,,,,,2/19/2026 9:23am
+116,Reports_3,DWF14,3/12/36,D. W. Fox,,,,Search,Canvassing for Francis Vise,,Francis Vise,7 Essex Street,,,,#NAME?,New York City,NY,Store,,,,,,,2/19/2026 9:23am
+118,Reports_3,DWF14,3/12/36,D. W. Fox,,,,Surveillance,"Informant said 2 Italian men had visited his wife, wanted to talk to her - concerned that there was a leak in Long Branch - watched home in case they returned",,Informant #3,Myrtle Ave,,3:00,,,New York City,NY,Residence,,,,,,,2/19/2026 9:23am
+119,Reports_3,BostonOffice2,3/12/36,,,,,mail,#NAME?,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/19/2026 9:23am
+120,Reports_3,BostonOffice2,3/12/36,,,,,mail,#NAME?,,Mrs. Bessi Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/19/2026 9:23am
+121,Reports_3,BostonOffice2,3/12/36,,,,,mail,#NAME?,,Mrs. Nobel Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/19/2026 9:23am
+,Reports_3,AA13,3/13/36,A.A.,,,,Search,Visiting unspecific 'places where it would be possible for me to contact sources of information',,,,,,,,Long Branch,NJ,,,,,,,,
+122,Reports_3,AA13,3/13/36,A.A.,,,,Contact,Visiting unspecific 'places where it would be possible for me to contact sources of information',,Marty Marianio,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/19/2026 9:23am
+123,Reports_3,AA13,3/13/36,A.A.,,,,Contact,Visiting unspecific 'places where it would be possible for me to contact sources of information',,Santa DiSantis,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/19/2026 9:23am
+124,Reports_3,AA13,3/13/36,A.A.,,,,Contact,Visiting unspecific 'places where it would be possible for me to contact sources of information',,Blondy Alberti,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/19/2026 9:23am
+125,Reports_3,AA13,3/13/36,A.A.,,,,Contact,Visiting unspecific 'places where it would be possible for me to contact sources of information',,"""""""Red"""" Annunisio""",,,,,,Long Branch,NJ,,#NAME?,,,,,,2/19/2026 9:23am
+126,Reports_3,BFC1,3/13/36,B.F.C.,,,checked,Informant,"""conferred with two Informants who are in a position to secure confidential infromation..."" --these are Western Union staff re sending $ and messages",,Mr. Staub,,,,,,New York City,NY,,#VALUE!,,,,,,2/19/2026 9:23am
+127,Reports_3,BFC1,3/13/36,B.F.C.,,,checked,Informant,"""conferred with two Informants who are in a position to secure confidential infromation..."" --these are Western Union staff re sending $ and messages",,Mr. Salute,,,,,,New York City,NY,,#VALUE!,,,,,,2/19/2026 9:23am
+128,Reports_3,DWF15,3/13/36,D. W. Fox,,,checked,Informant,,,Informant,East 28th Street and Fifth Ave,,,Building at East 28th Street and Fifth Ave,"-Dover worked here 2 years ago as a elevator operator
+from DWF15",New York City,NY,,,,,,,,2/19/2026 9:23am
+129,Reports_3,DWF15,3/13/36,D. W. Fox,,,,,,,,,,,,,,,,,,,,,,2/19/2026 9:23am
+130,Reports_3,DWF15,3/13/36,D. W. Fox,,,,Interview,Landlady at previous address of Dover,,Lexington Ave Land Lady,100 Lexington Avenue,,,,"-old residence of Dover
+-""This is a three story, furnished room house operated by a Hungarian. the landlady stated she has had so many boarders she cannot remember Dover. Form the actions of landlady I do not believe she would give any information if she could. 
+^ notes from DWF 15",New York City,NY,,,,,,,,2/19/2026 9:23am
+132,Reports_3,DWF15,3/13/36,D. W. Fox,,,,Search,Possible address of Mike Cavallo - did not investigate cos elevator operators on strike,,,150 West 29th Street,,,,"-work that Mike Cavallo may have went to 
+-""This is a large dress building and the elevator men are on strike. I did not press any inquiry here regarding Mike Cavallo""
+-notes from DWF 15
+",New York City,NY,,,,,,,,2/19/2026 11:12am
+133,Reports_3,DWF15,3/13/36,D. W. Fox,,,,Search,ID informant who confirms Santo Doville (b-in-law) lives here,,Santo Doville,121A Hull Street,,,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,,,,,,2/19/2026 11:12am
+134,Reports_3,DWF15,3/13/36,D. W. Fox,,,checked,Informant,#NAME?,,Informant #2,,,,,,,,,,,,,,,2/19/2026 11:12am
+135,Reports_2,AA14,3/14/36,A.A.,,,,Search,"-""several places wehre it would be possible for me to Contact sources of information",,,,10:00,16:00,,,Long Branch,NJ,,,6:00,,,,,2/19/2026 11:12am
+136,Reports_2,AA14,3/14/36,A.A.,,,,Contact,,,Santa DiSantis,,,,,,Long Branch,NJ,,,,,,,,2/19/2026 11:12am
+137,Reports_2,AA14,3/14/36,A.A.,,,,Contact,Still trying to get him appointment with Bessie Dover,,"""""""Red"""" Annunisio""",,,,,,,,,,,,,,,2/23/2026 11:05am
+138,Reports_2,DWF16,3/14/36,D. W. Fox,,,checked,Informant,,,Informant #2,[Myrtle Ave and Franklin Avenue],,,,,Brooklyn,NY,Street,,,,,,,2/23/2026 11:05am
+139,Reports_2,DWF16,3/14/36,D. W. Fox,,,,Search,Looking for 'young Italian girl' contact who can visit Diana Ball Room,,,,,,,,,,,,,,,,,2/23/2026 11:06am
+140,Reports_2,DWF16,3/14/36,D. W. Fox,,,checked,Informant,phone call - reversed charges to get informants location,,Informant #3,357 Brodway,,,J & J Welcome Cigar Store,,Long Branch,NJ,Cigar store,,,,,,,2/23/2026 11:09am
+141,Reports_2,WJR1,3/15/36,W.J.R,,,,Surveillance,DWF and BFC decide to put Mike Cavallo under surveillance - not seen all day,,Mike Cavallo,342 West 25th Street,7:15,14:40,,,New York City,NY,,,7:25,,,,,2/23/2026 11:33am
+142,Reports_2,WJR1,3/15/36,W.J.R,,,,Surveillance,DWF and BFC decide to put Mike Cavallo under surveillance - not seen all day,,Mike Cavallo,342 West 25th Street,15:00,22:00,,,New York City,NY,,,7:00,,,,,2/24/2026 10:07am
+143,Reports_2,UNKNOWN1,3/16/36,,,,,Interview,,,Chief Humphrey,[Westboro Police Department],,,Westboro Police Department,,Westboro,MA,Police Station,,,,,,,2/24/2026 10:07am
+144,Reports_2,UNKNOWN1,3/16/36,,,,checked,Informant,,,Informant #1,[Westboro Police Department],,,Westboro Police Department,,Westboro,MA,Police Station,,,,,,,2/24/2026 10:07am
+145,Reports_2,UNKNOWN1,3/16/36,,,,checked,Informant,,,Police Informant,[Westboro Police Department],,,Westboro Police Department,,Westboro,MA,Police Station,,,,,,,2/24/2026 10:07am
+146,Reports_2,UNKNOWN1.2,3/16/36,,,,,Search,"toured factory under pretext - saw Noble Resigno, lacked tattoos",,Noble Rescigno,[Burnet Hat Factory],,,Burnet Hat Factory,#VALUE!,Westboro,MA,Factory,,,,,,,2/24/2026 10:07am
+147,Reports_2,UNKNOWN1.2,3/16/36,,,,,Interview,,,Chief Humphrey,,,,,,,,,,,,,,,2/24/2026 10:07am
+148,Reports_2,UNKNOWN1.2,3/16/36,,,,,Interview,,,Mrs. Dunn,Westboro Town Hall,,,Westboro Town Hall,,Westboro,MA,Office,,,,,,,2/24/2026 10:07am
+149,Reports_2,UNKNOWN1.3,3/16/36,,,,,Surveillance,,car,Rescigno,[Burnet Hat Factory],17:00,18:00,Burnet Hat Factory,#VALUE!,Westboro,MA,Factory,,1:00,,,,,2/24/2026 10:07am
+,Reports_2,UNKNOWN1.3,3/16/36,,,,,Shadowing,"After work walked to Courtney's Diner, stayed 40 minutes, drove away",,Noble Rescigno,Nearby Burnet factory,,,Courtney's Diner,,Westboro,MA,Diner,,,,,,,
+150,Reports_2,AA15,3/16/36,A.A.,,,,Search,"-""several places wehre it would be possible for me to Contact sources of information",,,,11:00,13:00,,,Long Branch,NJ,,#NAME?,2:00,,,,,2/24/2026 10:07am
+151,Reports_2,AA15,3/16/36,A.A.,,,,Contact,,,Willie Santelli,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/24/2026 10:07am
+152,Reports_2,AA15,3/16/36,A.A.,,,,Contact,,,Marty Marianio,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/24/2026 10:07am
+153,Reports_2,AA16,3/17/36,A.A.,,,,Search,"-""several places wehre it would be possible for me to Contact sources of information",,,,10:00,2:00,,,Long Branch,NJ,,#NAME?,16:00,,,,,2/24/2026 10:07am
+154,Reports_2,AA16,3/17/36,A.A.,,,,Contact,,,Willie Santelli,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/24/2026 10:07am
+155,Reports_2,AA16,3/17/36,A.A.,,,,Contact,,,Tom,,,,,,Long Branch,NJ,,#NAME?,,,,,,2/24/2026 10:07am
+156,Reports_2,DWF17,3/17/36,D. W. Fox,B.F.C. ,,,Interview,,,Prosecutor Bazley,[freehold NJ Prosecutor's Office],,,,,Freehold,NJ,Office,,,,,,,2/24/2026 10:07am
+157,Reports_2,DWF17,3/17/36,D. W. Fox,,,checked,Informant,#NAME?,,Informant #3,,,,,,,,,,,,,,,2/24/2026 10:07am
+158,Reports_2,DWF18,3/18/36,D. W. Fox,,,,Interview,,,Inspector Underwood,[Jersey City Inspector's Office],,,,,Jersey City,NJ,Office,,,,,,,2/24/2026 10:07am
+159,Reports_2,DWF18,3/18/36,D. W. Fox,,,checked,Informant,For possible local contacts with Dover,,Grocery Informant,755 Bergenline Ave,,,West New York Grocery Co.,#NAME?,Union City,NJ,Strore,,,,,,,2/24/2026 10:28am
+160,Reports_2,DWF18,3/18/36,D. W. Fox,,,checked,Informant,,,Informant #2,,,,,,,,,"in brooklyn somewhere, not listed",,,,,,2/24/2026 10:28am
+161,Reports_2,DWF18,3/18/36,D. W. Fox,,,checked,Informant,,,Informant M.C.,,,,,,,,,"in brooklyn somewhere, not listed",,,,,,2/24/2026 10:28am
+162,Reports_2,NewYorkOffice1,3/18/36,,,,,mail,#NAME?,,Louis Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+163,Reports_2,NewYorkOffice1,3/18/36,,,,,mail,#NAME?,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+164,Reports_2,NewYorkOffice1,3/18/36,,,,,mail,#NAME?,,Mrs. Bessi Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+165,Reports_2,NewYorkOffice,3/18/36,,,,,mail,#NAME?,,Mrs. Bessi Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+166,Reports_2,DWF19,3/20/36,D. W. Fox,,,checked,Informant,-Informant is going to a lot of different places but the actual pinkerton's dont go to those places,,Informant #3,,,,,,,,,in new york city,,,,,,2/24/2026 10:28am
+168,Reports_2,DWF20,3/21/36,D. W. Fox,,,checked,Informant,"Reports meeting with Nick Juliano, b-in-law of Dover, went riding with him, reactions make him think Dover is in NYC, reported Juliano suspicious there are 'rats' in Long Branch looking for Dover, thinks only police are investigating",,Informant #3,,19:00,23:00,,,,,,in new york city,4:00,,,,,2/24/2026 10:28am
+169,Reports_2,NewYorkOffice2,3/24/36,,,,,mail,#NAME?,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+170,Reports_2,NewYorkOffice2,3/24/36,,,,,mail,#NAME?,,Mrs. Bessi Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+171,Reports_2,NewYorkOffice3,3/31/36,,,,,mail,#NAME?,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+172,Reports_2,NewYorkOffice4,3/31/36,,,,,mail,#NAME?,,Mrs. Bessi Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 10:28am
+173,Reports_2,NewYorkOffice4,3/31/36,,,,,mail,#NAME?,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/24/2026 11:00am
+174,Reports_2,HR1,4/1/36,H.R.,,,,Surveillance,#NAME?,car,Charles Dover,277 North 12th Street,5:00,24:00:00,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,19:00,,,,,2/24/2026 11:01am
+175,Reports_2,HR2,4/2/36,H.R.,,,,Surveillance,#NAME?,car,Charles Dover,277 North 12th Street,:00 ?,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,,,,,,2/24/2026 11:01am
+176,Reports_2,HR2,4/2/36,H.R.,,,,Interview,"working on same case, had conducted surveillance of address for a few days after contact from Mr Sacco",car,Detective State,[Newark Police Headquarters],,,,,Newark,NJ,Police Station,,,,,,,2/24/2026 11:01am
+,Reports_2,HR2,4/2/36,H.R.,,,,Surveillance,#NAME?,car,Charles Dover,277 North 12th Street,:00 ?,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,,,,,,
+,Reports_2,HR2,4/2/36,H.R.,,,,Shadowing,Followed car from address until could ID drivers,,,,,,,,,,,,,,,,,
+,Reports_2,HR2,4/2/36,H.R.,,,,Surveillance,#NAME?,car,Charles Dover,277 North 12th Street,:00 ?,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,,,,,,
+,Reports_2,HR2,4/2/36,H.R.,,,,Shadowing,Followed car from address until could ID drivers,,,,,,,,,,,,,,,,,
+,Reports_2,HR2,4/2/36,H.R.,,,,Surveillance,#NAME?,car,Charles Dover,277 North 12th Street,:00 ?,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,,,,,,
+177,Reports_2,HR3,4/3/36,H.R.,,,,Surveillance,,car,Charles Dover,277 North 12th Street,14:30,23:00,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,8:30,,,,,2/24/2026 11:01am
+178,Reports_2,DWF21,4/3/36,D. W. Fox,,,,Informant,Found House House Dover living in until 1 week ago,,Informant #1,,,,,,,,,,,,,,,2/24/2026 11:01am
+179,Reports_2,DWF21,4/3/36,D. W. Fox,,,,Surveillance,Informant had interview her - her husband Bill good friend of Dover - thought Dover still in neighborhood after moving out,,Mrs Wharton,550 1st Ave,1:00,6:00,,"-apartment of Bill Wharton, a friend ofDover
+-an old residence of Dover's
+-apartment 1A",New York City,NY,Residence,,5:00,,,,,2/24/2026 11:01am
+180,Reports_2,HR4,4/4/36,H.R.,H.S.,,,Surveillance,,car,Charles Dover,277 North 13th Street,14:25,24:00:00,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,9:35,,,,,2/24/2026 11:01am
+181,Reports_2,HR4,4/4/36,H.R.,H.S.,,,Shadowing,Followed car from address until could ID drivers,car,Sedan E73414,,,,,,,,,,,,,,,2/24/2026 11:01am
+180,Reports_2,HR4,4/4/36,H.R.,H.S.,,,Surveillance,,car,Charles Dover,277 North 13th Street,,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,9:35,,,,,2/24/2026 11:01am
+182,Reports_2,HR4,4/4/36,H.R.,H.S.,,,Shadowing,Followed car from address until could ID drivers,car,"""Party of 5, 3 women and 2 men""",[Bloomfield Ave],,,,,Newark,NJ,Street,,,,,,,2/24/2026 11:01am
+180,Reports_2,HR4,4/4/36,H.R.,H.S.,,,Surveillance,,car,Charles Dover,277 North 13th Street,,,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,9:35,,,,,2/24/2026 11:01am
+183,Reports_2,HR5,4/5/36,H.R.,H.S.,,,Surveillance,,car,Charles Dover,277 North 13th Street,13:00,23:00,,"-three story, frame dwelling, very large has a front porch of 40 feet depth of about 75 feet and all stories are occupied",Newark,NJ,Residence,,10:00,,,,,2/24/2026 11:01am
+184,Reports_2,HR6,4/6/36,H.R.,,,,Surveillance,,,Charles Dover,550 1st Ave,12:30,20:00,,"-apartment of Bill Wharton, a friend ofDover
+-an old residence of Dover's
+-apartment 1A",New York City,NY,Residence,,7:30,,,,,2/24/2026 11:01am
+185,Reports_2,HR7,4/7/36,H.R.,,,,Surveillance,,,Charles Dover,550 1st Ave,10:30,,,"-apartment of Bill Wharton, a friend ofDover
+-an old residence of Dover's
+-apartment 1A",New York City,NY,Residence,,,,,,,2/24/2026 11:01am
+186,Reports_2,HR7,4/7/36,H.R.,,,,Shadowing,Followed man passing address who looked like Dover,,"""""""Charles Dover"""" """,439 1st Ave,17:25,17:45,,#NAME?,New York City,NY,"Bar,Restauraunt",,0:20,,,,,2/24/2026 11:01am
+187,Reports_2,HR7,4/7/36,H.R.,,,,Shadowing,,,"""""""Charles Dover"""" """,1st Ave and E 34.th Street,17:45,18:20,,#NAME?,New York City,NY,Street,,0:35,,,,,2/24/2026 11:01am
+188,Reports_2,HR7,4/7/36,H.R.,,,,Shadowing,,,"""""""Charles Dover"""" """,[Picadilly Hotel],18:20,18:40,Picadilly Hotel,-on W 45th Street,New York City,NY,Hotel,,0:20,,,,,2/24/2026 11:01am
+189,Reports_2,HR7,4/7/36,H.R.,,,,Shadowing,,,"""""""Charles Dover"""" """,210 W. 54th Street,18:40,19:45,,#NAME?,New York City,NY,Store,,1:05,,,,,2/24/2026 11:01am
+199,Reports_2,HR7,4/7/36,H.R.,,,,Shadowing,"-this is where he lost sight of ""subject"" ",,"""""""Charles Dover"""" """,W 53rd Street,19:45,,,,New York City,NY,Street,,,,,,,2/26/2026 10:17am
+200,Reports_2,BostonOffice3,4/14/36,,,,,mail,,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/26/2026 10:21am
+201,Reports_2,BostonOffice4,4/14/36,,,,,mail,,,Rescigno,32 Elm Street,,,,#NAME?,Westboro,MA,Residence,,,,,,,2/26/2026 10:21am
+202,Reports_2,BostonOffice5,4/14/36,,,,,mail,,,"Catherine Raga,Catherine Raga",319 Morris Avenue,,,,,Long Branch,NJ,Residence,,,,,,,2/26/2026 10:22am
+203,Reports_2,BostonOffice6,4/14/36,,,,,mail,,,Treesa Dover,506 Bathe Avenue,,,,,Long Branch,NJ,Residence,,,,,,,2/26/2026 10:22am
+204,Reports_2,AA15,4/15/36,A.A.,,,,Surveillance,,,Tom Callahan,521 East 16th Street,14:30,21:45,Tom Callahan's residence,,New York City,NY,Residence,,7:15,,,,,2/26/2026 10:22am
+205,Reports_2,AA16,4/16/36,A.A.,,,,Surveillance,,,Tom Callahan,521 East 16th Street,13:30,16:00,Tom Callahan's residence,,New York City,NY,Residence,,2:30,,,,,2/26/2026 10:22am
+206,Reports_2,AA16,4/16/36,A.A.,,,,Shadowing,,,Tom Callahan,433 East 15th Street,16:00,20:15,White Cider House,#NAME?,New York City,NY,"Bar,Restauraunt",,4:15,,,,,2/26/2026 10:22am
+206,Reports_2,AA16,4/16/36,A.A.,,,,Surveillance,,,Tom Callahan,433 East 15th Street,16:00,20:15,White Cider House,#NAME?,New York City,NY,"Bar,Restauraunt",,4:15,,,,,2/26/2026 10:22am
+207,Reports_2,AA16,4/16/36,A.A.,,,,Surveillance,,,Tom Callahan,521 East 16th Street,20:15,1:00,Tom Callahan's residence,,New York City,NY,Residence,,4:45,,,,,2/26/2026 10:22am
+208,Reports_2,AA17,4/17/36,A.A.,,,,Surveillance,,,Tom Callahan,521 East 16th Street,13:00,16:55,Tom Callahan's residence,,New York City,NY,Residence,,3:55,,,,,2/26/2026 10:22am
+209,Reports_2,AA17,4/17/36,A.A.,,,,Shadowing,,,Tom Callahan,433 East 15th Street,16:55,21:45,White Cider House,#NAME?,New York City,NY,"Bar,Restauraunt",,4:50,,,,,2/26/2026 10:22am
+209,Reports_2,AA17,4/17/36,A.A.,,,,Surveillance,,,Tom Callahan,433 East 15th Street,16:55,21:45,White Cider House,#NAME?,New York City,NY,"Bar,Restauraunt",,4:50,,,,,2/26/2026 10:22am
+210,Reports_2,AA17,4/17/36,A.A.,,,,Surveillance,Taken home drunk,,Tom Callahan,521 East 16th Street,21:45,1:30,Tom Callahan's residence,,New York City,NY,Residence,,3:45,,,,,2/26/2026 10:22am
+211,Reports_2,AA18,4/18/36,A.A.,,,,Surveillance,Group left in car - AA remained at address,,Tom Callahan,521 East 16th Street,13:30,3:00,Tom Callahan's residence,,New York City,NY,Residence,,13:30,,,,,2/26/2026 10:22am
+213,Reports_2,AA19,4/19/36,A.A.,,,checked,Informant,"Info on Dover in city, at cafeteria last week, not staying with Callahan",,Informant,,,,,,,,,,,,,,,2/26/2026 10:22am
+214,Reports_2,AA20,4/19/36,A.A.,,,,Surveillance,,,Tom Callahan,521 East 16th Street,17:00,18:30,Tom Callahan's residence,,New York City,NY,Residence,,1:30,,,,,2/26/2026 10:22am
+215,Reports_2,AA20,4/19/36,A.A.,,,,Surveillance,"reassigned on instructions from HR,",,Charles Dover,109 Delancey Street,18:30,,Queens Cafeteria,-sometimes listed as 100 delancey street? ,New York City,NY,Cafeteria,,,,,,,2/26/2026 10:22am
+,,HR,4/19/36,A.A.,H.R.,,checked,Informant," informant went in, came out with sightings of Dover - then toured those locations",,Charles Dover,109 Delancey Street,18:30,,Queens Cafeteria,-sometimes listed as 100 delancey street? ,New York City,NY,Cafeteria,,,,,,,
+217,Reports_2,AA20,4/19/36,A.A.,H.R.,,checked,Search,"With informant #3, made a tour of  the East Side looking for Dover",,Charles Dover,165 East Broadway,10:30,,Ray Cafeteria,,New York City,NY,Cafeteria,,,,,,,2/26/2026 11:06am
+218,Reports_2,AA20,4/19/36,A.A.,H.R.,,checked,Search,"With informant #3, made a tour of  the East Side looking for Dover",,Charles Dover,550 1st Ave,,1:00,,"-apartment of Bill Wharton, a friend ofDover
+-an old residence of Dover's
+-apartment 1A",New York City,NY,Residence,,,,,,,2/26/2026 11:07am
+,,AA20,4/19/36,A.A.,H.R.,,checked,Search,"With informant #3, made a tour of  the East Side looking for Dover",,Charles Dover,131 Bowery,,,Dumas Restaurant,,New York City,NY,Restauraunt,,,,,,,
+,,AA20,4/19/36,A.A.,H.R.,,checked,Search,"With informant #3, made a tour of  the East Side looking for Dover",,Charles Dover,521 East 16th Street,,,Tom Callahan's residence,,New York City,NY,Residence,,,,,,,
+220,Reports_2,NewYorkOffice5,4/20/36,,,,,mail,,,Santo Doville,121A Hull Street,,,,"-residence
+-notes from DWF2: 
+""Is a three-story, fame house occupied by three families: Groundfloor-DePasqualli, Second floor - Ginccine, Third Floor -geguecle""
+-notes from DWF15: ""A further invesitigation here disclosed that Santo Doville resided on the second floor of this address and is employed by the PWA. Doville has resided at this address since June 4 1930. Informant will contnue check on Doville and the persons who enter dovilles aparment"" ",Brooklyn,NY,Residence,,,,,,,2/26/2026 11:08am
+221,Reports_2,NewYorkOffice5,4/20/36,,,,,mail,,,Rescigno,319 Morris Avenue,,,,,Long Branch,NJ,Residence,,,,,,,2/26/2026 11:08am
+222,Reports_2,AA21,4/21/36,A.A.,,,,Surveillance,,,Charles Dover,165 East Broadway,13:00,16:30,Ray Cafeteria,,New York City,NY,Cafeteria,,3:30,,,,,2/26/2026 11:08am
+223,Reports_2,AA21,4/21/36,A.A.,,,,Search,,,Charles Dover,131 Bowery,,,Dumas Restaurant,,New York City,NY,Restauraunt,,,,,,,2/26/2026 11:08am
+224,Reports_2,AA21,4/21/36,A.A.,,,,Surveillance,Until Detective Fox and another detective arrived and said would take over,,Charles Dover,165 East Broadway,16:30,23:00,Ray Cafeteria,,New York City,NY,Cafeteria,,6:30,,,,,2/26/2026 11:08am
+226,Reports_2,AA21,4/21/36,A.A.,,,,Search,,,Charles Dover,109 Delancey Street,23:00,12:30,Queens Cafeteria,-sometimes listed as 100 delancey street? ,New York City,NY,Cafeteria,,13:30,,,,,2/26/2026 11:08am
+223,Reports_2,AA21,4/21/36,A.A.,,,,Search,,,Charles Dover,131 Bowery,,,Dumas Restaurant,,New York City,NY,Restauraunt,,,,,,,2/26/2026 11:08am
+228,Reports_2,AA22,4/21/36,A.A.,,checked,,Surveillance,Rejoined police detectives,,Charles Dover,165 East Broadway,12:00,15:00,Ray Cafeteria,,New York City,NY,Cafeteria,,3:00,,,,,2/26/2026 11:08am
+222,Reports_2,AA21,4/22/36,A.A.,,,,Surveillance,with informant   ,,Charles Dover,165 East Broadway,13:00,16:30,Ray Cafeteria,,New York City,NY,Cafeteria,,3:30,,,,,2/26/2026 11:08am
+229,Reports_2,AA22,4/22/36,A.A.,Informant,,checked,Informant,,,Informant,165 East Broadway,,,,#NAME?,New York City,NY,Work,,,,,,,2/26/2026 11:08am
+230,Reports_2,AA22,4/22/36,A.A.,Informant,,checked,Search,,,Charles Dover,245 5th Avenue,,,,#NAME?,New York City,NY,Work,,,,,,,2/26/2026 11:08am
+231,Reports_2,AA22,4/22/36,A.A.,Informant,,checked,Informant,"Informant Interviewed him, Dover had visited several days ago",,Mike Cavallo,150 West 29th Street,,,,might be 50 West 129th?,New York City,NY,Residence,,,,,,,2/26/2026 11:08am
+232,Reports_2,AA22,4/22/36,A.A.,Informant,,checked,Search,Told Dover had not been back since moved years ago,,Charles Dover,100 Lexington Avenue,,,,"-old residence of Dover
+-""This is a three story, furnished room house operated by a Hungarian. the landlady stated she has had so many boarders she cannot remember Dover. Form the actions of landlady I do not believe she would give any information if she could. 
+^ notes from DWF 15",New York City,NY,Residence,,,,,,,2/26/2026 11:08am
+,,,4/22/36,A.A. ,,,,Search,Dover not known,,Charles Dover,Lexington Ave & 26th St,,,Columbian Restaurant,,New York City,NY,Restauraunt,,,,,,,
+233,Reports_2,AA22,4/22/36,A.A.,,,,Surveillance,,,Charles Dover,165 East Broadway,17:00,24:00:00,Ray Cafeteria,,New York City,NY,Cafeteria,,7:00,,,,,2/26/2026 11:08am
+,,AA22,4/22/36,A.A.,,,,Informant,"Informant met Callahan and went with him to meetWharton - last saw Dover on 3/17, gives some tips - would not do more",,Bill Wharton,550 1st Ave,,,,,New York City,NY,Residence,,,,,,,
+234,Reports_2,AA23,4/25/36,A.A.,,,,Surveillance,,,Charles Dover,165 East Broadway,11:30,,Ray Cafeteria,,New York City,NY,Cafeteria,,,,,,,2/26/2026 11:08am
+235,Reports_2,AA23,4/25/36,A.A.,Informant,,checked,Search,,,Charles Dover,Lexington Ave and East 26th Street,,,,,New York City,NY,Street,,,,,,,2/26/2026 11:08am
+236,Reports_2,AA23,4/25/36,A.A.,Informant,,checked,Informant,"Went to Callhan, later to Wharton, then back to Callahan",,Charles Dover,,,,,,,,,,,,,,,2/26/2026 11:08am
+237,Reports_2,AA23,4/25/36,A.A.,Informant,,checked,Search,,,Charles Dover,Broadway and 51st Street,,,Roseland Dance Hall,,New York City,NY,Dance Hall,,,,,,,2/26/2026 11:08am
+238,Reports_2,AA23,4/25/36,A.A.,Informant,,checked,Search,,,Charles Dover,Lexington Ave and East 26th Street,,,,,New York City,NY,Street,,,,,,,2/26/2026 11:08am
+239,Reports_2,AA24,4/27/36,A.A.,,,,Surveillance,,,Charles Dover,131 Bowery,10:00,1:00,Dumas Restaurant,,New York City,NY,Restauraunt,,15:00,,,,,2/26/2026 11:08am
+240,Reports_2,AA25,4/27/36,A.A.,,,,Informant,met with Wharton - Said Dover calling himself Charles Russo,,,,,,,,,,,,14:30,,,,,2/26/2026 11:08am
+,,AA26,4/28/36,A.A.,,,,Surveillance,,,"Charles Dover,Bessie Dover",122/128 Allen Street,11:30,2:00,,#NAME?,New York City,NY,Residence,,,,,,,
+241,Reports_2,DWF22,4/29/36,A.A.,,,,Informant,met informant for help covering Scilian district,,,,,,,,,,,,,,,,,2/26/2026 11:08am
+242,Reports_2,DWF22,4/29/36,A.A.,Informant,,checked,Search,,,Charles Dover,Delancey & Essex Streets,,,,,New York City,NY,Street,,,,,,,2/26/2026 11:08am
+250,Reports_1,AA26,5/1/36,A.A.,Informant,,checked,Informant,"Met with Wharton, went with him to severa addresses, followed by A.A.",,Informant,550 1st Ave,15:00,,,"-apartment of Bill Wharton, a friend ofDover
+-an old residence of Dover's
+-apartment 1A",New York City,NY,Residence,,,,,,,2/26/2026 11:56am
+252,Reports_1,AA26,5/1/36,A.A.,Informant,,checked,Shadowing,"To see Dover's sister, but Wharton refused as would be suspicious",,Bill Wharton,109 Essex Street,,,,"'-Home of Charles Dover's Sister
+-unsure of city (possibly Long Branch)
+
+",New York City,NY,Residence,,,,,,,3/2/2026 10:17am
+254,Reports_1,AA26,5/1/36,A.A.,Informant,,checked,Shadowing,Followed as informant and Wharton as searched bars looking for Dover,,Bill Wharton,[East 14th Street and 3rd Ave],,,,"cafe is here
+-",New York City,NY,Bars,,,,,,,3/2/2026 10:17am
+256,Reports_1,AA26,5/1/36,A.A.,Informant,,checked,Search,"After meeting with DFW and detectives, went with informant to look for Dover in bars",,Charles Dover,[East 14th and 3rd Avenue],,,,,New York City,NY,Bars,canvasing the whole neighbordhood,,,,,,3/2/2026 10:17am
+258,Reports_1,DWF23,5/1/36,D. W. Fox,Detective Geiger,,,Search,"After meeting with AA and informant, covered various East Side hangouts looking for Dover",,Charles Dover,East Side,,,,,New York City,NY,Bars,,,,,,,3/2/2026 10:17am
+260,Reports_1,AA27,5/2/36,A.A.,Informant,,checked,Contact,Went with Informant to meet Cavallo,,Mike Cavallo,150 West 29th Street,,,50 West 29th St in later reports,"-work that Mike Cavallo may have went to 
+-""This is a large dress building and the elevator men are on strike. I did not press any inquiry here regarding Mike Cavallo""
+-notes from DWF 15
+",New York City,NY,,,,,,,,3/2/2026 10:17am
+261,Reports_1,AA27,5/2/36,A.A.,Informant,,checked,Contact,Went with Informant to meet Callahan - who does not believe Wharton,,Tom Callahan,521 East 16th Street,,,Tom Callahan's residence,,New York City,NY,Residence,,,,,,,3/2/2026 10:17am
+262,Reports_1,AA27,5/2/36,A.A.,Informant,,checked,Search,Learned Dover had been there 2 weeks ago,,Charles Dover,109 Delancey Street,,,Queens Cafeteria,-sometimes listed as 100 delancey street? ,New York City,NY,Cafeteria,,,,,,,3/2/2026 10:17am
+263,Reports_1,AA27,5/2/36,A.A.,Informant,,checked,Search,"AA decides to canvas poolrooms - told at this one that Dover had been in an hour ago, could be found at Cafeteria Restaurant",,Charles Dover,125 Elisabeth Street,,,,#NAME?,New York City,NY,Poolroom,,,,,,,3/2/2026 10:17am
+264,Reports_1,AA27,5/2/36,A.A.,Informant,,checked,Search,"Counterman said Dover did come, usually 3-4 PM",,Charles Dover,[Broome Street and Bowery],,,,"a cafeteria, ""owned by a greek or hebrew"".",New York City,NY,Cafeteria,,,,,,,3/2/2026 10:17am
+265,Reports_1,AA28,5/2/36,A.A.,Informant,,checked,Surveillance,Did not see him,,Charles Dover,[Broome Street and Bowery],10:30,23:30,,"a cafeteria, ""owned by a greek or hebrew"".",New York City,NY,Cafeteria,,13:00,,,,,3/2/2026 10:17am
+265,Reports_1,AA28,5/3/36,A.A.,Informant,,checked,Surveillance,"After day of watching, sent in informant - counterman said Dover had been in car while friend came in for phone call - not seen",,Charles Dover,[Broome Street and Bowery],10:30,23:30,,"a cafeteria, ""owned by a greek or hebrew"".",New York City,NY,Cafeteria,,13:00,,,,,3/2/2026 10:17am
+266,Reports_1,AA29,5/4/36,A.A.,Informant,,checked,Surveillance,"During surveillance several men came over to informant's car and asked who he ws looking for - told Dover, got mixed info on whether around",car,Charles Dover,[Broome Street and Bowery],11:30,19:00,,"a cafeteria, ""owned by a greek or hebrew"".",New York City,NY,Cafeteria,,7:30,,,,,3/2/2026 10:17am
+267,Reports_1,AA29,5/4/36,A.A.,Informant,,checked,Search,"Went to see, no info",,Tom Callahan,521 East 16th Street,,,Tom Callahan's residence,,New York City,NY,Residence,,,,,,,3/2/2026 10:17am
+,,AA29,5/4/36,A.A.,Informant,,checked,Search,"Went to see, no info",,Bill Wharton,550 1st Ave,,,,,New York City,NY,Residence,,,,,,,
+270,Reports_1,HR9,5/4/36,H.R.,,,,Surveillance,"Inside restaurant, loitered, assesed patrons",,Charles Dover,[Broome Street and Bowery],15:00,14:00,,"a cafeteria, ""owned by a greek or hebrew"".",,,Cafeteria,,4:00,,,,,3/2/2026 10:17am
+270,Reports_1,HR9,5/4/36,H.R.,,,,Surveillance,Returned - phone call for Charles Dover - man who took it does not fit description of suspect,,Charles Dover,[Broome Street and Bowery],18:45,19:00,,"a cafeteria, ""owned by a greek or hebrew"".",,,Cafeteria,,4:00,,,,,3/2/2026 10:17am
+271,Reports_1,AA30,5/5/36,A.A.,Informant,,checked,Surveillance,See Bessie Dover,,Charles Dover,109 Essex Street,12:00,,,"'-Home of Charles Dover's Sister
+-unsure of city (possibly Long Branch)
+
+",New York City,NY,Residence,,,,,,,3/2/2026 10:17am
+272,Reports_1,AA30,5/5/36,A.A.,Informant,,checked,Contact,,,Tom Callahan,521 East 16th Street,,,Tom Callahan's residence,,New York City,NY,Residence,,,,,,,3/2/2026 10:17am
+273,Reports_1,AA30,5/5/36,A.A.,Informant,,,Contact,Counterman ,,,[Broome Street and Bowery],,,,"a cafeteria, ""owned by a greek or hebrew"".",,,Cafeteria,,,,,,,3/2/2026 10:17am
+273,Reports_1,AA30,5/5/36,A.A.,Informant,,,Contact,"Went to see, no info",,Bill Wharton,550 1st Ave,,,,,New York City,,,,,,,,,
+273,Reports_1,AA30,5/5/36,A.A.,,,,Search,Visited several other places,,,East Side,,,,,,,,,,,,,,
+274,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Interview,,,Lieutenant Hanley,19 Elisabeth Street,,,5th Precinct (Elisabeth Street Police Station),"-on elisabeth street 
+-possibly the 5th precinct",New York City,NY,Police Station,,,,,,,3/2/2026 10:17am
+275,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Interview,,,,327 East 22nd Street,,,13th Precinct,,New York City,NY,Police Station,,,,,,,3/2/2026 10:17am
+276,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Interview,,,,East 51st Street,,,17th Precinct,,New York City,NY,Police Station,,,,,,,3/2/2026 10:17am
+277,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Interview,,,,153 East 67th Street ,,,19th Precinct,,New York City,NY,Police Station,,,,,,,3/3/2026 11:10am
+278,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Interview,,,,118 Clinton Street,,,7th Precinct,,New York City,NY,Police Station,,,,,,,3/3/2026 11:10am
+279,Reports_1,DWF26,5/7/36,D. W. Fox,,,,Informant,,,Informant #2,[Myrtle Ave],,,,,Brooklyn,NY,Street,,,,,,,3/3/2026 11:10am
+280,Reports_1,DWF26,5/7/36,D. W. Fox,Informant,,checked,Search,Can't cover at night cos working,,Charles Dover,Delancey Street ,,,,,New York City,NY,Street,,,,,,,3/3/2026 11:10am
+281,Reports_1,DWF26,5/7/36,D. W. Fox,Informant,,checked,Search,,,Charles Dover,East 14th,,,,cafe is here,New York City,NY,Street,,,,,,,3/3/2026 11:10am
+282,Reports_1,DWF26,5/7/36,D. W. Fox,Informant,,checked,Search,,,Charles Dover,East 23rd Street,,,,,New York City,NY,Street,,,,,,,3/3/2026 11:10am
+283,Reports_1,DWF27,5/8/36,D. W. Fox,,,,Informant,,,Theater Informant,[City Theater],,,City Theater,14th Street,New York City,NY,Theater,,,,,,,3/3/2026 11:14am
+285,Reports_1,DWF27,5/8/36,D. W. Fox,Detective Lane,checked,,Surveillance,with police detectives newly assigned to case - address is one that sends letters to relations of Dover in Long Branch,,Charles Dover,2334 1st Ave,,,Apt 25 where mail has been mailed to dover from,,New York City,NY,Residence,,,,,,,3/3/2026 11:14am
+286,Reports_1,DWF27,5/8/36,D. W. Fox,"Detective Fox,Informant",checked,checked,Surveillance,,,Charles Dover,[Broome Street and Bowery],,,,"a cafeteria, ""owned by a greek or hebrew"".",,,Cafeteria,,,,,,,3/3/2026 11:14am
+288,Reports_1,DWF28,5/9/36,D. W. Fox,"Detective Fox,Informant",checked,checked,Surveillance,Saw Wharton visit - sent informant to ask him about - said sister had not been home - informant then went to party at Wharton's,,Charles Dover,109 Essex Street,,,,"'-Home of Charles Dover's Sister
+-unsure of city (possibly Long Branch)
+
+",New York City,NY,Residence,,,,,,,3/3/2026 11:14am
+289,Reports_1,DWF29,5/10/36,D. W. Fox,"Detective Fox,Detective Kenny,Informant",checked,checked,Interview,Wanted $ to turn over Dover,,Bill Wharton,Brooklyn,,,,,Brooklyn,NY,,,,,,,,3/3/2026 11:14am
+290,Reports_1,DWF29,5/10/36,D. W. Fox,Informant,,checked,Surveillance,Bessie Dover visited,,Charles Dover,109 Essex Street,,,,"'-Home of Charles Dover's Sister
+-unsure of city (possibly Long Branch)
+
+",New York City,NY,Residence,,,,,,,3/3/2026 11:14am
+291,Reports_1,DWF30,5/11/36,D. W. Fox,Informant,,checked,Surveillance,Informant thinks Dover will contact sister for $,,Charles Dover,109 Essex Street,,,,"'-Home of Charles Dover's Sister
+-unsure of city (possibly Long Branch)
+
+",New York City,NY,Residence,,,,,,,3/3/2026 11:14am
+292,Reports_1,DWF31,5/12/36,D. W. Fox,,,,Interview,Looking for info if Dover involved in drugs,,Detective Fidele,Marcotie Police Squad,,,,,New York City,NY,,,,,,,,3/3/2026 11:14am
+293,Reports_1,DWF31,5/12/36,D. W. Fox,Informant1,,checked,Search,Follow up tip from client - Dover's brother lives here opposite pastry store - is Sicilian neighborhood,,Charles Dover,Union Street and Columbia Street,,,,,Brooklyn,NY,"Street,Neighborhood",,,,,,,3/3/2026 11:14am
+294,Reports_1,DWF31,5/12/36,D. W. Fox,Informant1,,checked,Search,,,Charles Dover,94 Union Street,,,,"-3 story building, ground floor pastry shop, with the name Barbero
+-usually paired with 11 union street",Brooklyn,NY,Residence,,,,,,,3/3/2026 11:14am
+295,Reports_1,DWF31,5/12/36,D. W. Fox,Informant1,,checked,Search,,,Charles Dover,111 Union Street,,,,#NAME?,Brooklyn,NY,Residence,,,,,,,3/3/2026 12:20pm
+296,Reports_1,DWF32,5/13/36,D. W. Fox,,,,Informant,doing surveillance of DWF,,Charles Dover,Union Street and Columbia Street,14:00,19:00,,,Brooklyn,NY,"Street,Neighborhood",,5:00,,,,,3/3/2026 12:22pm
+297,Reports_1,DWF32,5/13/36,D. W. Fox,,,,Informant,Said Dover's wife said he was in vicinity - East Side,,Informant #3,,,,,,,,,,,,,,,3/3/2026 12:22pm
+298,Reports_1,DWF33,5/14/36,D. W. Fox,"Informant1,Informant Warden",checked,checked,Surveillance,,,Charles Dover,[East 18th Street and 3rd Ave],,,,"cafe is here
+-",New York City,NY,Street,,,,,,,3/3/2026 12:22pm
+299,Reports_1,DWF33,5/14/36,D. W. Fox,Informant1,,checked,Surveillance,,,Charles Dover,[East 18th Street and 3rd Ave],,,,,,,,,,,,,,3/3/2026 12:22pm
+300,Reports_1,DWF34,5/15/36,D. W. Fox,,,,Informant,"Info that Joe Barrett, 469 4th Ave, friend of Dover, writing to him in Boston - letter had been returned to Jefferson Lunch Room, 208 3rd Ave, where Barrett gets mail, being held",,Bill Wharton,,,,,,,,,,,,,,,3/3/2026 12:22pm
+301,Reports_1,DWF35,5/16/36,D. W. Fox,Informant,,,Informant,,,Charles Dover,94 Union Street,,,,"-3 story building, ground floor pastry shop, with the name Barbero
+-usually paired with 11 union street",Brooklyn,NY,Residence,,,,,,,3/3/2026 12:22pm
+302,Reports_1,DWF35,5/16/36,D. W. Fox,Informant,,checked,Surveillance,,,Charles Dover,94 Union Street,18:00,1:00,,"-3 story building, ground floor pastry shop, with the name Barbero
+-usually paired with 11 union street",Brooklyn,NY,Residence,,7:00,,,,,3/3/2026 12:22pm
+303,Reports_1,DWF36,5/17/36,D. W. Fox,,,,Informant,"Wharton reports that Dover receiving mail as John Massa, General Delivery, Newton, MA - and had a letter",,Bill Wharton,,,,,,,,,,,,,,,3/3/2026 12:22pm
+304,Reports_1,DWF37,5/18/36,D. W. Fox,,,,Informant,"Gives letter - is asking him to help communicate with Petie Blue Eyes, gives MA address - but is 2/10 - Barrett still thinks is at same place",,Bill Wharton,,,,,,,,,,,,,,,3/3/2026 12:22pm
+305,Reports_1,DWF37,5/18/36,D. W. Fox,,,,Informant,Seeking info on Petie Blue Eyes,,Informant,,,,,,,,,,,,,,,3/3/2026 12:22pm
+306,Reports_1,DWF37,5/18/36,D. W. Fox,,,,Informant,Confirming handwriting; covering 109 Essex,,Informant #1,,,,,,,,,,,,,,,3/3/2026 12:22pm
+307,Reports_1,DOS1,5/19/36,D.O'S.,,,,Surveillance,"Post office - parcel comes in addressed to John Mazza, 145 Galen St, Watertown - clothes from Brooklyn - will be delivered next morning - Mazza not listed in city directory at that address",,,,,,Newton Corner Post Office,,Newton,MA,Post Office,Sent from Boston to Newton Corner,,,,,,3/3/2026 12:22pm
+307,Reports_1,DOS1,5/18/36,D.O'S.,,,,Interview,"Remembes earlier mail for Mazza month earlier, when Italian man at address - has not seen since",,Mail Deliverer Watertown,,,,,,,,,Sent from Boston to Newton Corner,,,,,,3/3/2026 12:22pm
+,,DOS1,5/18/36,D.O'S.,,,,Search,Visits 145 Galen St,,,145 Galen St,,,,,Watertown,MA,Residence,,,,,,,
+308,Reports_1,DOS2,5/18/36,D.O'S.,"G.A.K.,S.G.J.",,,Surveillance,"1 in post office where can see counter, one outside - no one",,Charles Dover,Newton Corner,10:15,18:10,Newton Corner Post Office,,Newton,MA,Post Office,,7:55,,,,,3/3/2026 12:22pm
+309,Reports_1,DOS2,5/18/36,D.O'S.,,,,Informant,Agreed to surveillance - clerk?,,,,,,,,,,,,,,,,,3/3/2026 12:22pm
+311,Reports_1,SGJ4,5/19/36,D.O'S.,",S.G.J.",,,Surveillance,No one,car,James Dover,Newton Corner,6:45,18:00,Newton Corner Post Office,,Newton,MA,Post OfficOffice,,11:15,,,,,3/5/2026 10:02am
+312,Reports_1,DOS3,5/20/36,D.O'S.,,,,Surveillance,Mail delivered - accepted - said Mazza was at address - man appeared who fitted Dover description,,John Mazza,145 Galen Street,5:30,21:15,Mr. Gallo's Italian Restaurant,"'-probably John Mazzo/Chalres Russo's address
+-long list of residents other than Charles Russo at this address in DOS 1 (reports 1)
+-also an Italian restaurant? a rooming house above the restaurant DOS1.2",Watertown,MA,,,15:45,,,,,3/5/2026 10:02am
+313,Reports_1,DOS4,5/21/36,D.O'S.,S.G.J.,,,Surveillance,,car,Charles Dorville,145 Galen Street,6:00,6:30,Mr. Gallo's Italian Restaurant,"'-probably John Mazzo/Chalres Russo's address
+-long list of residents other than Charles Russo at this address in DOS 1 (reports 1)
+-also an Italian restaurant? a rooming house above the restaurant DOS1.2",Watertown,MA,,,0-330:30,,,,,3/5/2026 10:02am
+,,DOS4,5/21/36,D.O'S.,S.G.J.,,,Shadowing,Stops for breakfast,,,Morse & Galen St,,,,,,,,,,,,,,
+314,Reports_1,DOS4,5/21/36,D.O'S.,S.G.J.,,,Shadowing,,,Charles Dorville,151 Watertown Street,6:30,17:10,Brae Burn Nurseries,also listed as 161 Watertown Street,Watertown,MA,,,10:40,,,,,3/5/2026 10:02am
+,,,5/21/36,D.O'S.,S.G.J.,,,Surveillance,,,Charles Dorville,151 Watertown Street,6:30,17:10,Brae Burn Nurseries,also listed as 161 Watertown Street,Watertown,MA,,,,,,,,
+316,Reports_1,GAK2,5/21/36,G.A.K.,,,,Interview,"GAK contacts employer, arrange for him to come to office when returns from gardeing job",,Nursery Owner,151 Watertown Street,,,Brae Burn Nurseries,also listed as 161 Watertown Street,Watertown,MA,,,,,,,,3/5/2026 10:02am
+320,This is where AA is looking at people even though Dover is arrest? ,,,,,,,,,,,,,,,,,,,,,,,,,3/5/2026 10:02am
+321,Reports_1,AA31,7/3/36,A.A.,,,,Interview,,,William Sertine,220 Broadway,,,,#NAME?,Long Branch,NJ,Office,,,,,,,3/5/2026 10:02am
+322,Reports_1,AA31,7/3/36,A.A.,,,,Search,,,Tom Tober,[Ashbury Park],,,,a park where they thought they would find Tom Tober,Long Branch,NJ,,,,,,,,3/5/2026 10:02am
+323,Reports_1,AA31,7/3/36,A.A.,,,,Shadowing,,,Tom Tober,,17:50,10:00,,,,,,,16:10,,,,,3/5/2026 10:02am
+324,Reports_1,AA31,7/3/36,A.A.,,,,Shadowing,,,Tom Tober,[Long Branch Police Headquarters],17:50,18:10,,,Long Branch,NJ,Police Station,,0:20,,,,,3/5/2026 10:02am
+325,Reports_1,AA31,7/3/36,A.A.,,,,Shadowing,,,Tom Tober,175 Broadway ,18:10,18:35,Clark Drug Store,,Long Branch,NJ,Store,,0:25,,,,,3/5/2026 11:30am
+326,Reports_1,AA31,7/3/36,A.A.,,,,Shadowing,,,Tom Tober,224 Rockwell Ave,18:35,19:40,,,Long Branch,NJ,Residence,,1:05,,,,,3/5/2026 11:30am
+327,Reports_1,AA31,7/3/36,A.A.,,,,Shadowing,,,Tom Tober,180 Fifth Ave,19:40,20:00,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,0:20,,,,,3/5/2026 11:30am
+328,Reports_1,AA32,7/4/36,A.A.,,,,Surveillance,,,Tom Tober,180 Fifth Ave,8:00,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 11:30am
+329,Reports_1,AA32,7/4/36,A.A.,,,,Search,,,Tom Tober,1508 Bangs Ave,,,,J. F. Mattice's Residence,Ashbury,NJ,Residence,,,,,,,3/5/2026 11:30am
+330,Reports_1,AA32,7/4/36,A.A.,,,,Search,,,Tom Tober,702 Madison Ave,,,,J.F. Mattive's Office,Ashbury,NJ,Office,,,,,,,3/5/2026 12:00pm
+331,Reports_1,AA32,7/4/36,A.A.,,,,Search,,,Tom Tober,[Beach Street and Riverdale Ave] ,,,,,Monmouth,NJ,Residence,,,,,,,3/5/2026 12:00pm
+332,Reports_1,AA32,7/4/36,A.A.,,,,Surveillance,,,Tom Tober,180 Fifth Ave,16:40,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:00pm
+333,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,the whole time Shadowing,,Tom Tober,,17:45,23:25,,,,,,,5:40,,,,,3/5/2026 12:00pm
+342,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,175 Broadway ,17:45,,Clark Drug Store,,Long Branch,NJ,Store,,,,,,,3/5/2026 12:18pm
+334,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,[Beach Street and Riverdale Ave] ,,,,,Monmouth,NJ,Residence,,,,,,,3/5/2026 12:00pm
+336,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,711 Bangs Ave,18:00,,Millies restaurant,,Ashbury,NJ,Restauraunt,,,,,,,3/5/2026 12:12pm
+337,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,[Grand Ave and Lake Ave],19:20,,,,Ashbury,NJ,Road,,,,,,,3/5/2026 12:14pm
+338,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,[Third Ave and Pavilion Ave],22:05,,,a confectionery store also a Real Estate Office,Long Branch,NJ,Store,,,,,,,3/5/2026 12:14pm
+339,Reports_1,AA32,7/4/36,A.A.,,,,Shadowing,,,Tom Tober,180 Fifth Ave,23:00,23:25,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,0:25,,,,,3/5/2026 12:14pm
+340,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Surveillance,,,Tom Tober,180 Fifth Ave,7:00,10:15,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,3:15,,,,,3/5/2026 12:14pm
+341,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,the whole time shadowin ,,Tom Tober,,10:15,22:20,,,,,,,12:05,,,,,3/5/2026 12:14pm
+343,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,"
+
+
+
+
+",,Tom Tober,[Beach Street and Riverdale Ave] ,10:50,,,,Monmouth,NJ,Residence,,,,,,,3/5/2026 12:26pm
+344,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,15 Jessica Place,,,,,Monmouth ,NJ,,,,,,,,3/5/2026 12:26pm
+345,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Third Ave and Pavilion Ave],,,,a confectionery store also a Real Estate Office,Long Branch,NJ,Store,,,,,,,3/5/2026 12:26pm
+346,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Ocean Ave and Third Ave],,,,,Long Branch,NJ,,,,,,,,3/5/2026 12:26pm
+347,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,711 Bangs Ave,12:35,,Millies restaurant,,Ashbury,NJ,Restauraunt,,,,,,,3/5/2026 12:26pm
+348,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Convention Center on Board Walk Ave] ,13:15,,,,,,,,,,,,,3/5/2026 12:26pm
+349,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Ocean Avenue and West],15:50,,,,,,,,,,,,,3/5/2026 12:26pm
+350,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,180 Fifth Ave,17:10,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:26pm
+351,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,5 West Street,18:30,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:26pm
+352,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,15 Jessica Place,20:15,,,,Monmouth ,NJ,,,,,,,,3/5/2026 12:26pm
+353,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,292 Chelsea Ave,,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:26pm
+354,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,Liquor Store at Broadway and Rockwell Avenue,22:05,,,liquor store,Long Branch,NJ,Store,,,,,,,3/5/2026 12:26pm
+355,Reports_1,AA33,7/5/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,180 Fifth Ave,22:10,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:26pm
+356,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Surveillance,,,Tom Tober,180 Fifth Ave,7:00,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:26pm
+357,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,whole Shadowing event,,Tom Tober,,7:30,12:35,,,,,,,5:05,,,,,3/5/2026 12:26pm
+358,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[A.P. Store on Norwood Ave],,,,,Deal,N.J.,Street,,,,,,,3/5/2026 12:40pm
+359,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,512 Third Ave,,,,,Ashbury,NJ,Residence,,,,,,,3/5/2026 12:40pm
+360,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,408 Third Ave,12:00,,,,Ashbury,NJ,,,,,,,,3/5/2026 12:40pm
+361,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,513 Third Ave,12:35,,,,Ashbury,NJ,,,,,,,,3/5/2026 12:40pm
+376,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,new ammount of Shadowing after leaving for a bit,,Tom Tober,,16:50,22:45,,,,,,,5:55,,,,,3/5/2026 12:47pm
+362,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,"this is after AA left, this is soeone working for AA to surveil. ",,Tom Tober,180 Fifth Ave,16:50,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+363,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Beach Street and Riverdale Ave] ,17:50,,,,Monmouth,NJ,Residence,,,,,,,3/5/2026 12:40pm
+364,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,292 Chelsea Ave,,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+365,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,[Broadway Street],19:40,,,,Long Branch,NJ,,,,,,,,3/5/2026 12:40pm
+366,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,292 Chelsea Ave,,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+367,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,349 Morris Ave,22:20,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+368,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,292 Chelsea Ave,,,,,Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+369,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,180 Fifth Ave,22:45,,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,,,,,,3/5/2026 12:40pm
+370,Reports_1,AA34,7/6/36,A.A.,W.Sterin,,,Contact,,,Willie Santelli,555 Broadway,,,[Cossintino Pool Room],,Long Branch,NJ,Poolroom,,,,,,,3/5/2026 12:40pm
+371,Reports_1,AA35,7/9/36,A.A.,W.Sterin,,,Surveillance,,,Tom Tober,180 Fifth Ave,7:00,7:20,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,0:20,,,,,3/5/2026 12:40pm
+372,Reports_1,AA35,7/9/36,A.A.,,,,Surveillance,,,Tom Tober,513 Third Ave,7:20,8:00,,,Ashbury,NJ,,,0:40,,,,,3/5/2026 12:40pm
+373,Reports_1,AA35,7/9/36,A.A.,,,,,delivers Willie Santelli to a trial and sits there,,Willie Santelli,[Monmouth County Court House],,,,,Freehold,NJ,,Somewhere in Freehold  where they would hold a criminal trial NJ,,,,,,3/5/2026 12:40pm
+374,Reports_1,AA35,7/9/36,A.A.,,,,Contact,,,Tom,Cedar St & Norwood Ave,,,Norwood Pool Room,#NAME?,Long Branch,NJ,Poolroom,,,,,,,3/5/2026 12:40pm
+375,Reports_1,AA36,7/8/36,A.A.,W.Sterin,,,Surveillance,,,Tom Tober,180 Fifth Ave,7:00,7:20,,"Tom Tober's House
+-sometimea listed as 150 fifth ave, but this is the most used",Long Branch,NJ,Residence,,0:20,,,,,3/5/2026 12:40pm
+378,Reports_1,AA36,7/8/36,A.A.,W.Sterin,,,Shadowing,,,Tom Tober,513 Third Ave,7:20,7:45,,,Ashbury,NJ,,,0:25,,,,,3/5/2026 1:03pm
+379,Reports_1,AA36,7/8/36,A.A.,W.Sterin,,,,delivers Willie Santelli to a trial and sits there,,Willie Santelli,[Monmouth County Court House],,,,,Freehold,NJ,,Somewhere in Freehold  where they would hold a criminal trial NJ,,,,,,3/5/2026 1:03pm
+380,Reports_1,AA37,7/10/36,A.A.,W.Sterin,,,Surveillance,"attending trials in Long Branch and bringing people to trials
+",,,[Monmouth County Court House],,,,,Freehold,NJ,,,,,,,,3/5/2026 1:03pm
+381,Reports_1,AA37,7/10/36,A.A.,W.Sterin,,,Contact,"talks to many people at the bar about Al and John  Tormani 
+",,George Cole,[pool room across the street],,,,acorss the street from where these trials are being held in long branch,,,,,,,,,,3/5/2026 1:03pm
+382,Reports_1,AA37,7/10/36,A.A.,W.Sterin,,,Contact,talks to many people at the bar about Al and John  Tormani ,,Tom Shickatano,,,,,,,,,,,,,,,3/5/2026 1:03pm

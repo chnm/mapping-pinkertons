@@ -10,6 +10,7 @@ hugo_stats.json
 
 # Data backups and working files
 data/*_bak.csv
+data/*.xlsx
 detectives-website/feedback/
 
 # Environment variables
