@@ -597,8 +597,62 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
             # Detect whether this CSV has a "Specific Location Type" column
             has_specific_location_type = "Specific Location Type" in reader.fieldnames
 
+            # Pre-flight check: detect if this file's data has already been loaded.
+            # Peek at all rows to check if any lack IDs, and if so, sample the first
+            # data row to see if it already exists in the database.
+            rows = list(reader)
+            has_any_ids = any(r.get("ID", "").strip() for r in rows)
+
+            if not has_any_ids and rows:
+                # Find a row with substantive data to use as a fingerprint
+                sample = None
+                for candidate in rows:
+                    if (
+                        candidate.get("Operative", "").strip()
+                        and candidate.get("Date", "").strip()
+                        and candidate.get("Activity Notes", "").strip()
+                    ):
+                        sample = candidate
+                        break
+                if sample is None:
+                    sample = rows[0]
+
+                sample_operative = sample["Operative"] or None
+                sample_date = parse_date(sample["Date"])
+                sample_subject = sample["Subject"] or None
+                sample_activity = sample.get("Activity") or sample.get("Roping") or None
+                sample_notes = sample.get("Activity Notes") or None
+                cursor.execute(
+                    f"""
+                    SELECT COUNT(*) FROM {SCHEMA_NAME}.activities
+                    WHERE operative IS NOT DISTINCT FROM %s
+                    AND date IS NOT DISTINCT FROM %s
+                    AND subject IS NOT DISTINCT FROM %s
+                    AND activity IS NOT DISTINCT FROM %s
+                    AND activity_notes IS NOT DISTINCT FROM %s
+                """,
+                    (
+                        sample_operative,
+                        sample_date,
+                        sample_subject,
+                        sample_activity,
+                        sample_notes,
+                    ),
+                )
+                existing_count = cursor.fetchone()[0]
+                if existing_count > 0:
+                    logging.warning(
+                        f"Data from this file appears to already be loaded "
+                        f"(found {existing_count} matching activities for first row). "
+                        f"Skipping to avoid duplicates. To force reload, delete existing data first."
+                    )
+                    print("\nSkipped: Data already loaded. See log for details.")
+                    if conn:
+                        conn.close()
+                    return
+
             row_num = 1  # Start at 1 for header
-            for row in reader:
+            for row in rows:
                 row_num += 1
 
                 # Handle ID: use provided ID or auto-generate

@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     {{- partial "head.html" . -}}
     <body class="bg-grit-bg-light min-h-screen flex flex-col font-body text-grit-text-dark {{ if eq .Layout "map" }}overflow-hidden{{ end }}">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[9999] focus:bg-white focus:text-grit-text-dark focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg">Skip to main content</a>
         {{ if .IsHome }}
         {{- partial "hero-with-nav.html" . -}}
         {{ else }}
         {{- partial "header.html" . -}}
         {{- end }}
         {{ if eq .Layout "map" }}
+        <main id="main-content">
         {{- block "main" . }}{{- end }}
+        </main>
         {{ else }}
-        <div class="bg-grit-bg-light flex-grow" id="content">
+        <main id="main-content" class="bg-grit-bg-light flex-grow">
         {{- block "main" . }}{{- end }}
-        </div>
+        </main>
         {{- partial "footer.html" . -}}
         {{ end }}
         <script src="https://unpkg.com/littlefoot/dist/littlefoot.js"></script>

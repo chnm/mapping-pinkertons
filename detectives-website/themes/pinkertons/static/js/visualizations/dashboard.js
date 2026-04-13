@@ -6,7 +6,7 @@ import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm"
 // ─── Color Palette ────────────────────────────────────────────────────────────
 
 const ACCENT = "#b5381e"; // grit-accent rust/brick
-const GOLD   = "#c8a04a"; // grit-gold amber
+const GOLD   = "#8a6d2f"; // darkened gold for WCAG contrast on white
 const STEEL  = "#5d7a6b"; // grit-steel sage
 const GREEN  = "#15803d"; // green-700
 const GRAY   = "#6b7280"; // gray-500
@@ -352,6 +352,7 @@ function buildFilterBar(allData, minDate, totalDays) {
   minSlider.max = totalDays;
   minSlider.value = 0;
   minSlider.style.zIndex = 2;
+  minSlider.setAttribute("aria-label", "Date range start");
 
   const maxSlider = document.createElement("input");
   maxSlider.type = "range";
@@ -360,6 +361,7 @@ function buildFilterBar(allData, minDate, totalDays) {
   maxSlider.max = totalDays;
   maxSlider.value = totalDays;
   maxSlider.style.zIndex = 3;
+  maxSlider.setAttribute("aria-label", "Date range end");
 
   trackWrap.appendChild(minSlider);
   trackWrap.appendChild(maxSlider);
