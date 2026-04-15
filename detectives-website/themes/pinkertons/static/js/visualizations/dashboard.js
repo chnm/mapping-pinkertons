@@ -203,7 +203,7 @@ function preprocess(raw) {
       hour,
       locationType,
       infoNorm: normalizeInfo(d.information),
-      investigation: getInvestigation(d),
+      investigation: d.investigation,
     };
   });
 }
@@ -211,21 +211,11 @@ function preprocess(raw) {
 // ─── Investigation (Case) Mapping ─────────────────────────────────────────────
 
 const INVESTIGATIONS = {
-  'el-paso':  { label: 'El Paso, Texas',   localities: new Set(['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']) },
-  'atlanta':  { label: 'Atlanta, Georgia', localities: new Set(['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']) },
-  'nyc':      { label: 'New York City',    localities: new Set(['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']) },
+  'el-paso':  { label: 'El Paso Labor Disputes' },
+  'nyc':      { label: 'Robbery of the Corn Exchange Bank' },
+  'hobart':   { label: 'Murder of William Hobart' },
+  'atlanta':  { label: 'Atlanta Laundry Thefts' },
 };
-
-function getInvestigation(activity) {
-  const locality = activity.locations && activity.locations.length > 0
-    ? activity.locations[0].locality
-    : null;
-  if (!locality) return null;
-  for (const [key, inv] of Object.entries(INVESTIGATIONS)) {
-    if (inv.localities.has(locality)) return key;
-  }
-  return null;
-}
 
 // ─── Filter Bar ───────────────────────────────────────────────────────────────
 

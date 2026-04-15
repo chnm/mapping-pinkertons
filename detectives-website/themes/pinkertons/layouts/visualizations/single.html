@@ -40,22 +40,9 @@
   const vizType = '{{ .Params.vizType }}';
   const investigation = '{{ .Params.investigation | default "" }}';
 
-  // Investigation locality mapping (must match dashboard.js)
-  const INVESTIGATIONS = {
-    'el-paso':  new Set(['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']),
-    'atlanta':  new Set(['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']),
-    'nyc':      new Set(['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']),
-  };
-
   function filterByInvestigation(data, invKey) {
-    if (!invKey || !INVESTIGATIONS[invKey]) return data;
-    const localities = INVESTIGATIONS[invKey];
-    return data.filter(d => {
-      if (d.locations && d.locations.length > 0) {
-        return localities.has(d.locations[0].locality);
-      }
-      return false;
-    });
+    if (!invKey) return data;
+    return data.filter(d => d.investigation === invKey);
   }
 
   // Fetch data from API

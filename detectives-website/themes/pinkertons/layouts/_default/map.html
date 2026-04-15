@@ -43,13 +43,13 @@
       </svg>
     </button>
 
-    <!-- Locations Icon -->
+    <!-- Investigations Icon -->
     <button
-      @click="togglePanel('locations')"
-      :class="activePanel === 'locations' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
+      @click="togglePanel('investigations')"
+      :class="activePanel === 'investigations' ? 'bg-grit-accent text-white' : 'text-grit-gold hover:bg-grit-steel/30'"
       class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-colors"
-      title="Locations"
-      aria-label="Locations">
+      title="Investigations"
+      aria-label="Investigations">
       <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -162,7 +162,7 @@
             </div>
             <div class="flex space-x-4 items-center">
               <img class="h-14 w-auto opacity-80 hover:opacity-100 transition-opacity"
-                   src="/images/gmu-logo.png"
+                   src="/images/gmu-logo-light.png"
                    alt="George Mason University" />
             </div>
           </div>
@@ -218,68 +218,20 @@
             </div>
           </button>
 
-          <!-- Activity Type Mode -->
-          <button
-            @click="setViewMode('activities')"
-            :class="viewMode === 'activities' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
-            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
-            <div class="flex items-center justify-between mb-1.5 md:mb-2">
-              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Activity Type</h3>
-              <svg x-show="viewMode === 'activities'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-            </div>
-            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed mb-2 md:mb-3">
-              Color-coded view showing different types of detective activities. Each color represents an investigation method such as surveillance, shadowing, interviews, and more.
-            </p>
-
-            <!-- Legend (visible in activities mode) -->
-            <div x-show="viewMode === 'activities'" class="pt-3 border-t border-grit-steel/50">
-              <div class="text-sm font-medium text-grit-gold mb-2">Legend:</div>
-              <div class="grid grid-cols-1 gap-1.5 text-sm">
-                <template x-for="category in activityCategories" :key="category.type">
-                  <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full flex-shrink-0" :style="`background-color: ${category.color}`"></div>
-                    <span class="text-grit-text/90" x-text="category.label"></span>
-                  </div>
-                </template>
-              </div>
-            </div>
-          </button>
-
         </div>
       </div>
 
-      <!-- Locations Panel -->
-      <div x-show="activePanel === 'locations'" style="display: none;">
+      <!-- Investigations Panel -->
+      <div x-show="activePanel === 'investigations'" style="display: none;">
         <div class="space-y-2 md:space-y-3">
 
-          <!-- All Locations -->
-          <button
-            @click="setLocation('all')"
-            :class="selectedLocation === 'all' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
-            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
-            <div class="flex items-center justify-between mb-1.5 md:mb-2">
-              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">All Locations</h3>
-              <svg x-show="selectedLocation === 'all'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-            </div>
-            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
-              View all Pinkerton surveillance activities across all locations.
-            </p>
-            <div class="mt-2 text-sm text-grit-text/60">
-              <span x-text="activityCount"></span> activities recorded
-            </div>
-          </button>
-
-          <!-- Location: El Paso -->
+          <!-- Investigation: El Paso -->
           <button
             @click="setLocation('el-paso')"
             :class="selectedLocation === 'el-paso' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
             class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
             <div class="flex items-center justify-between mb-1.5 md:mb-2">
-              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">El Paso, Texas</h3>
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">El Paso Labor Disputes</h3>
               <svg x-show="selectedLocation === 'el-paso'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
@@ -292,32 +244,13 @@
             </div>
           </button>
 
-          <!-- Location: Atlanta -->
-          <button
-            @click="setLocation('atlanta')"
-            :class="selectedLocation === 'atlanta' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
-            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
-            <div class="flex items-center justify-between mb-1.5 md:mb-2">
-              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Atlanta, Georgia</h3>
-              <svg x-show="selectedLocation === 'atlanta'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-            </div>
-            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
-              Investigations into laundry industry theft and labor issues in Atlanta and surrounding areas.
-            </p>
-            <div class="mt-2 text-sm text-grit-text/60">
-              <span x-text="locationCounts['atlanta'] || 0"></span> activities recorded
-            </div>
-          </button>
-
-          <!-- Location: New York City -->
+          <!-- Investigation: Robbery of the Corn Exchange Bank -->
           <button
             @click="setLocation('nyc')"
             :class="selectedLocation === 'nyc' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
             class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
             <div class="flex items-center justify-between mb-1.5 md:mb-2">
-              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">New York City</h3>
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Robbery of the Corn Exchange Bank</h3>
               <svg x-show="selectedLocation === 'nyc'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
@@ -327,6 +260,44 @@
             </p>
             <div class="mt-2 text-sm text-grit-text/60">
               <span x-text="locationCounts['nyc'] || 0"></span> activities recorded
+            </div>
+          </button>
+
+          <!-- Investigation: Murder of William Hobart -->
+          <button
+            @click="setLocation('hobart')"
+            :class="selectedLocation === 'hobart' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Murder of William Hobart</h3>
+              <svg x-show="selectedLocation === 'hobart'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              Investigation into the murder of William Hobart across New Jersey, New York, and Massachusetts.
+            </p>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="locationCounts['hobart'] || 0"></span> activities recorded
+            </div>
+          </button>
+
+          <!-- Investigation: Atlanta Laundries -->
+          <button
+            @click="setLocation('atlanta')"
+            :class="selectedLocation === 'atlanta' ? 'bg-grit-accent/20 border-grit-accent' : 'border-grit-steel/50 hover:border-grit-steel'"
+            class="w-full text-left p-3 md:p-4 rounded-lg border-2 transition-all group">
+            <div class="flex items-center justify-between mb-1.5 md:mb-2">
+              <h3 class="text-sm md:text-base font-semibold text-grit-gold group-hover:text-white transition-colors">Atlanta Laundry Thefts</h3>
+              <svg x-show="selectedLocation === 'atlanta'" class="w-4 h-4 md:w-5 md:h-5 text-grit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="text-sm md:text-base text-grit-text/80 leading-relaxed">
+              Investigations into laundry industry theft and labor issues in Atlanta and surrounding areas.
+            </p>
+            <div class="mt-2 text-sm text-grit-text/60">
+              <span x-text="locationCounts['atlanta'] || 0"></span> activities recorded
             </div>
           </button>
 
@@ -679,7 +650,7 @@
 
 <script>
   // Initialize the map
-  const map = L.map('map').setView([38.5, -96], 5); // Start with US-wide view
+  const map = L.map('map').setView([31.7619, -106.4850], 12); // Start on El Paso
 
   // Define basemap layers
   const basemaps = {
@@ -893,8 +864,8 @@
   function mapInterface() {
     return {
       // Left panel controls
-      activePanel: null,
-      panelTitle: '',
+      activePanel: 'investigations',
+      panelTitle: 'Select Investigation',
 
       // Activity sidebar controls
       sidebarOpen: false,
@@ -913,35 +884,15 @@
       locationCategories: [], // Dynamic categories from location type data
       activityCategories: [], // Dynamic categories from activity type data
 
-      // Location selection
-      selectedLocation: 'all',
+      // Investigation selection
+      selectedLocation: 'el-paso',
       activityCount: 0,
       locationCounts: {},
       locations: {
-        'all': {
-          name: 'All Locations',
-          center: [38.5, -96],
-          zoom: 5,
-          localities: null // null means show all
-        },
-        'el-paso': {
-          name: 'El Paso, Texas',
-          center: [31.7619, -106.4850],
-          zoom: 12,
-          localities: ['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']
-        },
-        'atlanta': {
-          name: 'Atlanta, Georgia',
-          center: [33.749, -84.388],
-          zoom: 13,
-          localities: ['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']
-        },
-        'nyc': {
-          name: 'New York City',
-          center: [40.730, -73.975],
-          zoom: 12,
-          localities: ['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']
-        }
+        'el-paso': { name: 'El Paso Labor Disputes' },
+        'nyc':     { name: 'Robbery of the Corn Exchange Bank' },
+        'hobart':  { name: 'Murder of William Hobart' },
+        'atlanta': { name: 'Atlanta Laundry Thefts' },
       },
 
       // Basemap selection
@@ -951,6 +902,12 @@
         // Watch for viewMode changes and toggle marker sets
         this.$watch('viewMode', (newMode) => {
           this.toggleMarkerSets(newMode);
+        });
+        // Filter to default investigation after data loads
+        this.$nextTick(() => {
+          if (this.groupedMarkers.length > 0) {
+            this.filterMarkersByLocation(this.selectedLocation);
+          }
         });
       },
 
@@ -964,8 +921,8 @@
             this.panelTitle = 'Mapping Surveillance';
           } else if (panel === 'viewMode') {
             this.panelTitle = 'View Modes';
-          } else if (panel === 'locations') {
-            this.panelTitle = 'Select Location';
+          } else if (panel === 'investigations') {
+            this.panelTitle = 'Select Investigation';
           } else if (panel === 'basemap') {
             this.panelTitle = 'Map Layers';
           }
@@ -984,42 +941,22 @@
 
       setLocation(locationKey) {
         this.selectedLocation = locationKey;
-        const location = this.locations[locationKey];
-        if (location) {
-          map.setView(location.center, location.zoom);
-          this.filterMarkersByLocation(locationKey);
-        }
+        this.filterMarkersByLocation(locationKey);
       },
 
-      // Get locality from an activity object
-      getActivityLocality(activity) {
-        if (activity.locations) {
-          if (Array.isArray(activity.locations) && activity.locations.length > 0) {
-            return activity.locations[0].locality;
-          } else if (typeof activity.locations === 'object') {
-            return activity.locations.locality;
-          }
-        }
-        return null;
-      },
-
-      // Check if an activity belongs to a location filter
+      // Check if an activity belongs to a selected investigation
       activityMatchesLocation(activity, locationKey) {
-        const locDef = this.locations[locationKey];
-        if (!locDef || !locDef.localities) return true; // 'all' or no filter
-        const locality = this.getActivityLocality(activity);
-        return locDef.localities.includes(locality);
+        return activity.investigation === locationKey;
       },
 
       // Filter all marker sets by the selected location
       filterMarkersByLocation(locationKey) {
         const locDef = this.locations[locationKey];
-        const showAll = !locDef || !locDef.localities;
 
         // Filter grouped markers
         this.groupedMarkers.forEach(m => {
           const activities = m.locationData.activities;
-          const match = showAll || activities.some(a => this.activityMatchesLocation(a, locationKey));
+          const match = activities.some(a => this.activityMatchesLocation(a, locationKey));
           if (this.viewMode === 'all') {
             if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
           }
@@ -1028,7 +965,7 @@
 
         // Filter individual markers (location type view)
         this.individualMarkers.forEach(m => {
-          const match = showAll || this.activityMatchesLocation(m.activity, locationKey);
+          const match = this.activityMatchesLocation(m.activity, locationKey);
           if (this.viewMode === 'types') {
             if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
           }
@@ -1037,12 +974,22 @@
 
         // Filter activity markers (activity type view)
         this.activityMarkers.forEach(m => {
-          const match = showAll || this.activityMatchesLocation(m.activity, locationKey);
+          const match = this.activityMatchesLocation(m.activity, locationKey);
           if (this.viewMode === 'activities') {
             if (match) { m.marker.addTo(map); } else { map.removeLayer(m.marker); }
           }
           m._hidden = !match;
         });
+
+        // Fit map to bounds of visible markers
+        const visibleLatLngs = [];
+        this.groupedMarkers.forEach(m => {
+          if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+        });
+        if (visibleLatLngs.length > 0) {
+          const bounds = L.latLngBounds(visibleLatLngs);
+          map.fitBounds(bounds, { padding: [40, 40] });
+        }
 
         // Update activity count for selected location
         this.updateActivityCount();
@@ -1253,7 +1200,7 @@
 
   // Wait for Alpine to be fully initialized before fetching data
   document.addEventListener('alpine:init', () => {
-    fetch('https://data.chnm.org/pinkertons/activities')
+    fetch('http://localhost:8090/pinkertons/activities')
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1503,25 +1450,13 @@
       alpineData.buildLocationCategories();
       alpineData.buildActivityCategories();
 
-      // Compute per-location activity counts
-      const locKeys = Object.keys(alpineData.locations);
-      locKeys.forEach(key => {
-        const locDef = alpineData.locations[key];
-        if (!locDef.localities) {
-          // 'all' — count everything
-          alpineData.locationCounts[key] = data.length;
-        } else {
-          alpineData.locationCounts[key] = data.filter(a => {
-            if (a.locations && Array.isArray(a.locations) && a.locations.length > 0) {
-              return locDef.localities.includes(a.locations[0].locality);
-            }
-            return false;
-          }).length;
-        }
+      // Compute per-investigation activity counts
+      Object.keys(alpineData.locations).forEach(key => {
+        alpineData.locationCounts[key] = data.filter(a => a.investigation === key).length;
       });
 
-      // Set activity count for current location
-      alpineData.activityCount = data.length;
+      // Filter to the default investigation (El Paso) on load
+      alpineData.filterMarkersByLocation(alpineData.selectedLocation);
     })
     .catch(error => {
       loadingEl.classList.add('hidden');
