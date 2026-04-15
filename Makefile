@@ -1,7 +1,7 @@
 .PHONY: help migrate-up migrate-down migrate-reset load-data clean db-create db-drop db-check
 
 # Load environment variables from .env file
-include .env
+include utils/.env
 export
 
 # Database URL constructed from individual variables
