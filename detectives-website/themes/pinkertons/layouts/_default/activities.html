@@ -207,7 +207,7 @@
       async loadActivities() {
         try {
           // Build API URL with location_id filter if present
-          let apiUrl = 'https://data.chnm.org/pinkertons/activities';
+          let apiUrl = 'http://localhost:8090/pinkertons/activities';
           if (this.locationIdFilter) {
             apiUrl += `?location_id=${this.locationIdFilter}`;
           }
