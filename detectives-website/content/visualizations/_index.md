@@ -1,6 +1,6 @@
 ---
-title: "Data Visualizations"
-description: "Explore visual analyses of Pinkerton detective activities"
+title: "Views"
+description: "Comparative visualizations across all Pinkerton investigations"
 ---
 
-Explore patterns in Pinkerton detective operations through interactive visualizations and data analysis. 
+Explore and compare patterns across Pinkerton detective investigations through interactive visualizations.
