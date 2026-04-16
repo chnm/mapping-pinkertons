@@ -30,7 +30,7 @@
 
 ## Project Overview
 
-**Mapping the Pinkertons** is a digital history project by the Roy Rosenzweig Center for History and New Media (RRCHNM) that maps Pinkerton Detective Agency surveillance activities in El Paso, Texas and surrounding regions during the late 1930s labor disputes.
+**Mapping Private Investigations** is a digital history project by the Roy Rosenzweig Center for History and New Media (RRCHNM) that maps Pinkerton Detective Agency surveillance activities in El Paso, Texas and surrounding regions during the late 1930s labor disputes.
 
 The project digitizes and structures historical records of surveillance — who was watching, who was watched, when, where, and what was observed — and presents them as an interactive public-facing website. Target audiences are historians, researchers, and the general public interested in labor history, surveillance history, and Southwest regional history.
 

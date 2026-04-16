@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Mapping the Pinkertons** is a digital history project (RRCHNM) that maps Pinkerton Detective Agency surveillance activities in El Paso, Texas. It consists of three parts: a PostgreSQL database, a Python data-loading pipeline, and a Hugo static website.
+**Mapping Private Investigations** is a digital history project (RRCHNM) that maps Pinkerton Detective Agency surveillance activities in El Paso, Texas. It consists of three parts: a PostgreSQL database, a Python data-loading pipeline, and a Hugo static website.
 
 Comprehensive documentation is in `AGENTS.md`. Refer to it for detailed schema descriptions, data format specs, and troubleshooting.
 

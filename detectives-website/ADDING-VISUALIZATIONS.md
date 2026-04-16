@@ -1,6 +1,6 @@
 # Adding Visualizations to the Site
 
-This guide explains how to add new data visualizations to the Mapping the Pinkertons website.
+This guide explains how to add new data visualizations to the Mapping Private Investigations website.
 
 ## Overview
 
