@@ -1,0 +1,89 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+      <div class="text-xl text-grit-text-dark/80 mb-12 prose prose-lg max-w-none">{{ .Content }}</div>
+
+      {{ range .Pages.ByWeight }}
+      <div class="mb-16">
+        <h2 class="text-3xl font-heading font-bold text-grit-text-dark mb-2 pb-2 border-b-2 border-grit-accent">
+          {{ .Title }}
+        </h2>
+        <p class="text-base text-grit-text-dark/70 mb-6">{{ .Params.location }}</p>
+
+        <!-- Tiles -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Narrative of the Case -->
+          <a href="{{ .Permalink }}" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-accent transition-colors shadow-sm group">
+            <div class="w-12 h-12 bg-grit-accent/10 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-grit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-2 group-hover:text-grit-accent transition-colors">
+              Narrative
+            </h3>
+            <p class="text-sm text-grit-text-dark/80 leading-relaxed">
+              {{ .Params.description }}
+            </p>
+            <div class="mt-3 flex items-center text-grit-steel text-sm font-medium">
+              Read the case narrative
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+
+          <!-- Map -->
+          <a href="/map/?investigation={{ .Params.investigation }}" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-steel transition-colors shadow-sm group">
+            <div class="w-12 h-12 bg-grit-steel/10 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-grit-steel" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-2 group-hover:text-grit-steel transition-colors">
+              Map
+            </h3>
+            <p class="text-sm text-grit-text-dark/80 leading-relaxed">
+              Explore the locations of surveillance activities on an interactive map.
+            </p>
+            <div class="mt-3 flex items-center text-grit-steel text-sm font-medium">
+              View on map
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+
+          <!-- Dashboard -->
+          <a href="/visualizations/dashboard/?investigation={{ .Params.investigation }}" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-gold/50 transition-colors shadow-sm group">
+            <div class="w-12 h-12 bg-grit-gold/10 rounded-lg flex items-center justify-center mb-4">
+              <svg class="w-6 h-6 text-grit-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-2 group-hover:text-grit-gold transition-colors">
+              Dashboard
+            </h3>
+            <p class="text-sm text-grit-text-dark/80 leading-relaxed">
+              Filter and explore patterns in the investigation data.
+            </p>
+            <div class="mt-3 flex items-center text-grit-steel text-sm font-medium">
+              Open dashboard
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+
+        </div>
+      </div>
+      {{ end }}
+
+    </div>
+  </div>
+</section>
+{{ end }}
