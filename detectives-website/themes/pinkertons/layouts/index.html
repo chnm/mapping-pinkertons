@@ -10,53 +10,58 @@
 
       <!-- Feature cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        <a href="/map/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-steel/50 transition-colors shadow-sm">
-          <div class="w-12 h-12 bg-grit-accent/10 rounded-lg flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-grit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <a href="/map/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-accent transition-colors shadow-sm group">
+          <div class="w-12 h-12 bg-grit-steel/10 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-grit-steel" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
           </div>
-          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3">Interactive Mapping</h3>
-          <p class="text-base text-grit-text-dark/80 leading-relaxed">Explore Pinkerton operations across America with our interactive map showing detective locations, cases, and historical movements.</p>
+          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3 group-hover:text-grit-accent transition-colors">Map</h3>
+          <p class="text-sm text-grit-text-dark/80 leading-relaxed">Explore Pinkerton surveillance locations on an interactive map with timeline animation and activity filtering.</p>
         </a>
 
-        <a href="/activities/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-steel/50 transition-colors shadow-sm">
-          <div class="w-12 h-12 bg-grit-accent/10 rounded-lg flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-grit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3">Activities Database</h3>
-          <p class="text-base text-grit-text-dark/80 leading-relaxed">Explore the surveillance activities of the Pinkerton detectives, with the ability to filter by various facets of the data.</p>
-        </a>
-
-        <a href="/visualizations/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-steel/50 transition-colors shadow-sm">
+        <a href="/visualizations/dashboard/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-accent transition-colors shadow-sm group">
           <div class="w-12 h-12 bg-grit-accent/10 rounded-lg flex items-center justify-center mb-4">
             <svg class="w-6 h-6 text-grit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
             </svg>
           </div>
-          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3">Data Analysis</h3>
-          <p class="text-base text-grit-text-dark/80 leading-relaxed">Analyze patterns in Pinkerton operations through visualizations and statistical insights drawn from historical records.</p>
+          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3 group-hover:text-grit-accent transition-colors">Activities</h3>
+          <p class="text-sm text-grit-text-dark/80 leading-relaxed">Filter and explore surveillance activity data with interactive charts, timelines, and a searchable data table.</p>
+        </a>
+
+        <a href="/visualizations/comparative/" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-accent transition-colors shadow-sm group">
+          <div class="w-12 h-12 bg-grit-gold/10 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-grit-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-heading font-semibold text-grit-text-dark mb-3 group-hover:text-grit-accent transition-colors">Insights</h3>
+          <p class="text-sm text-grit-text-dark/80 leading-relaxed">Compare patterns across investigations with stacked charts and small multiples for activity types, operatives, and more.</p>
         </a>
       </div>
 
       <!-- Investigations -->
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-5xl mx-auto">
         <h2 class="text-3xl font-heading font-bold text-grit-text-dark mb-8 text-center">Investigations</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="investigation-cards">
           {{ range (where .Site.RegularPages "Section" "narratives").ByWeight }}
-          <a href="{{ .Permalink }}" class="bg-white border border-gray-200 rounded-lg p-6 hover:border-grit-accent transition-colors shadow-sm group">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 bg-grit-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                <svg class="w-5 h-5 text-grit-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                </svg>
+          <a href="{{ .Permalink }}" class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-grit-accent transition-colors shadow-sm group" data-investigation="{{ .Params.investigation }}">
+            <div class="flex">
+              <!-- Left: dot map + sparkline + stats -->
+              <div class="w-1/3 bg-gray-50 border-r border-gray-100 p-3 flex flex-col items-center justify-center self-stretch">
+                <svg class="inv-dotmap w-full flex-1 min-h-[48px]" data-inv="{{ .Params.investigation }}"></svg>
+                <svg class="inv-sparkline w-full h-5 mt-1" data-inv="{{ .Params.investigation }}"></svg>
+                <div class="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-1">
+                  <span class="text-[10px] text-grit-text-dark/50 inv-stat-count" data-inv="{{ .Params.investigation }}"></span>
+                  <span class="text-[10px] text-grit-text-dark/50 inv-stat-dates" data-inv="{{ .Params.investigation }}"></span>
+                </div>
               </div>
-              <div>
+              <!-- Right: text -->
+              <div class="w-2/3 p-5">
                 <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-1 group-hover:text-grit-accent transition-colors">{{ .Title }}</h3>
-                <p class="text-sm text-grit-text-dark/60 mb-1">{{ .Params.location }}</p>
+                <p class="text-xs text-grit-text-dark/50 mb-2">{{ .Params.location }}</p>
                 <p class="text-sm text-grit-text-dark/80 leading-relaxed">{{ .Params.description }}</p>
               </div>
             </div>
@@ -64,6 +69,125 @@
           {{ end }}
         </div>
       </div>
+
+      <!-- Sparkline rendering -->
+      <script type="module">
+        const ACCENT = '#b5381e';
+        const GOLD = '#c8a04a';
+
+        async function renderInvestigationPreviews() {
+          try {
+            const res = await fetch('http://localhost:8090/pinkertons/activities');
+            if (!res.ok) return;
+            const data = await res.json();
+
+            // Group by investigation
+            const byInv = {};
+            data.forEach(d => {
+              if (!d.investigation) return;
+              if (!byInv[d.investigation]) byInv[d.investigation] = [];
+              byInv[d.investigation].push(d);
+            });
+
+            for (const [inv, activities] of Object.entries(byInv)) {
+              // Stats
+              const countEl = document.querySelector(`.inv-stat-count[data-inv="${inv}"]`);
+              const datesEl = document.querySelector(`.inv-stat-dates[data-inv="${inv}"]`);
+              if (countEl) countEl.textContent = `${activities.length} activities`;
+
+              const dates = activities
+                .map(a => a.date ? new Date(a.date.substring(0, 10)) : null)
+                .filter(Boolean)
+                .sort((a, b) => a - b);
+
+              if (datesEl && dates.length > 0) {
+                const fmt = d => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                datesEl.textContent = `${fmt(dates[0])} – ${fmt(dates[dates.length - 1])}`;
+              }
+
+              // Dot map: plot lat/lon as circles
+              const svgEl = document.querySelector(`.inv-dotmap[data-inv="${inv}"]`);
+              if (!svgEl) continue;
+
+              // Collect unique coordinates with visit counts
+              const coordMap = {};
+              activities.forEach(a => {
+                if (!a.locations || a.locations.length === 0) return;
+                const loc = a.locations[0];
+                if (!loc.latitude || !loc.longitude) return;
+                const key = `${parseFloat(loc.latitude).toFixed(3)},${parseFloat(loc.longitude).toFixed(3)}`;
+                if (!coordMap[key]) coordMap[key] = { lat: loc.latitude, lon: loc.longitude, count: 0 };
+                coordMap[key].count++;
+              });
+
+              const coords = Object.values(coordMap);
+              if (coords.length === 0) continue;
+
+              const lats = coords.map(c => c.lat);
+              const lons = coords.map(c => c.lon);
+              const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+              const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+              const latRange = maxLat - minLat || 0.01;
+              const lonRange = maxLon - minLon || 0.01;
+
+              const w = 120;
+              const h = 80;
+              const pad = 6;
+              const usableW = w - pad * 2;
+              const usableH = h - pad * 2;
+              const maxCount = Math.max(...coords.map(c => c.count));
+
+              let svg = '';
+              coords.forEach(c => {
+                const x = pad + ((c.lon - minLon) / lonRange) * usableW;
+                const y = pad + ((maxLat - c.lat) / latRange) * usableH; // flip Y
+                const r = Math.max(1.5, Math.min(5, 1 + Math.sqrt(c.count / maxCount) * 4));
+                svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="${ACCENT}" opacity="0.6"/>`;
+              });
+
+              svgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
+              svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+              svgEl.innerHTML = svg;
+
+              // Sparkline: bin by week
+              const sparkEl = document.querySelector(`.inv-sparkline[data-inv="${inv}"]`);
+              if (sparkEl && dates.length > 0) {
+                const minTime = dates[0].getTime();
+                const maxTime = dates[dates.length - 1].getTime();
+                const timeRange = maxTime - minTime || 1;
+                const WEEK = 7 * 86400000;
+                const numBins = Math.max(1, Math.ceil(timeRange / WEEK));
+                const bins = new Array(numBins).fill(0);
+
+                dates.forEach(d => {
+                  const idx = Math.min(Math.floor((d.getTime() - minTime) / WEEK), numBins - 1);
+                  bins[idx]++;
+                });
+
+                const maxBin = Math.max(...bins);
+                const sw = 120, sh = 16;
+                const barW = Math.max(1, (sw / numBins) - 0.5);
+
+                let sparkSvg = '';
+                bins.forEach((count, i) => {
+                  const x = (i / numBins) * sw;
+                  const barH = maxBin > 0 ? (count / maxBin) * sh : 0;
+                  const y = sh - barH;
+                  sparkSvg += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${GOLD}" opacity="0.7" rx="0.5"/>`;
+                });
+
+                sparkEl.setAttribute('viewBox', `0 0 ${sw} ${sh}`);
+                sparkEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                sparkEl.innerHTML = sparkSvg;
+              }
+            }
+          } catch (e) {
+            console.error('Failed to load investigation previews:', e);
+          }
+        }
+
+        renderInvestigationPreviews();
+      </script>
     </div>
   </section>
 {{ end }}
