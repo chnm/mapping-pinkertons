@@ -73,7 +73,7 @@
     const container = document.getElementById('dashboard-container');
     const loading = document.getElementById('dashboard-loading');
     try {
-      const res = await fetch('http://localhost:8090/pinkertons/activities');
+      const res = await fetch('https://data.chnm.org/pinkertons/activities');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       loading.remove();
