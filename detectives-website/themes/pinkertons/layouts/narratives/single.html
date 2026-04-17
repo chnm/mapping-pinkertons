@@ -1,0 +1,48 @@
+{{ define "main" }}
+<section class="py-16 px-6">
+  <div class="container mx-auto">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-6 text-sm">
+        <a href="/narratives" class="text-grit-text-dark/70 hover:text-grit-accent transition-colors">← Back to Investigations</a>
+      </nav>
+
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-grit-text-dark mb-4">{{ .Title }}</h1>
+        {{ if .Params.location }}
+        <p class="text-lg text-grit-text-dark/60">{{ .Params.location }}</p>
+        {{ end }}
+        {{ if .Params.description }}
+        <p class="text-xl text-grit-text-dark/80 leading-relaxed mt-2">{{ .Params.description }}</p>
+        {{ end }}
+      </div>
+
+      <!-- Quick links -->
+      <div class="flex flex-wrap gap-3 mb-10">
+        <a href="/map/?investigation={{ .Params.investigation }}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-grit-steel/10 text-grit-steel hover:bg-grit-steel/20 transition-colors text-sm font-medium">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          </svg>
+          View on Map
+        </a>
+        <a href="/visualizations/dashboard/?investigation={{ .Params.investigation }}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-grit-gold/10 text-grit-gold hover:bg-grit-gold/20 transition-colors text-sm font-medium">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          Open Dashboard
+        </a>
+      </div>
+
+      <!-- Narrative content -->
+      <div class="prose prose-lg max-w-none">
+        {{ .Content }}
+      </div>
+
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -59,6 +59,13 @@
     font-size: 0.8rem;
     line-height: 1.4;
   }
+  #dashboard-map .leaflet-top,
+  #dashboard-map .leaflet-bottom {
+    z-index: 0 !important;
+  }
+  #dashboard-map .leaflet-pane {
+    z-index: 0 !important;
+  }
 </style>
 
 <script type="module">
@@ -66,7 +73,7 @@
     const container = document.getElementById('dashboard-container');
     const loading = document.getElementById('dashboard-loading');
     try {
-      const res = await fetch('https://data.chnm.org/pinkertons/activities');
+      const res = await fetch('http://localhost:8090/pinkertons/activities');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       loading.remove();

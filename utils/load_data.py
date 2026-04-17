@@ -151,7 +151,9 @@ def parse_date(date_str, row_id=None):
         return None
 
     try:
-        return datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
+        # Strip any trailing time component (e.g., "1939-09-03 0:00:00")
+        date_clean = date_str.strip().split(" ")[0]
+        return datetime.strptime(date_clean, "%Y-%m-%d").date()
     except ValueError as e:
         logging.warning(f"Row {row_id}: Could not parse date '{date_str}': {e}")
         return None
@@ -551,13 +553,16 @@ def get_or_create_operatives(cursor, operative_list):
     return operative_ids
 
 
-def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
+def load_data(
+    csv_file, crosswalk_file=None, enable_geocoding=False, investigation=None
+):
     """
     Load data from CSV file into Postgres database.
     Optionally uses a crosswalk file to enrich location data with coordinates and visits.
     Geocoding is disabled by default and can be enabled with enable_geocoding parameter.
     """
     log_path = setup_logging()
+    source_file = os.path.basename(csv_file)
     logging.info(f"Starting data import from {csv_file}")
     logging.info(f"Log file: {log_path}")
     logging.info(
@@ -630,6 +635,7 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     AND subject IS NOT DISTINCT FROM %s
                     AND activity IS NOT DISTINCT FROM %s
                     AND activity_notes IS NOT DISTINCT FROM %s
+                    AND investigation IS NOT DISTINCT FROM %s
                 """,
                     (
                         sample_operative,
@@ -637,6 +643,7 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                         sample_subject,
                         sample_activity,
                         sample_notes,
+                        investigation,
                     ),
                 )
                 existing_count = cursor.fetchone()[0]
@@ -655,21 +662,12 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
             for row in rows:
                 row_num += 1
 
-                # Handle ID: use provided ID or auto-generate
-                has_id = row.get("ID") and row["ID"].strip() != ""
                 activity_id = None
-                if has_id:
-                    try:
-                        activity_id = int(row["ID"])
-                    except ValueError as e:
-                        logging.error(f"Row {row_num}: Invalid ID '{row['ID']}': {e}")
-                        stats["errors"] += 1
-                        continue
 
                 stats["activities_processed"] += 1
 
                 # Parse activity data
-                row_label = activity_id if activity_id else f"row {row_num}"
+                row_label = f"row {row_num}"
                 activity_data = {
                     "source": row["Source"] or None,
                     "operative": row["Operative"] or None,
@@ -686,9 +684,9 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     "information_type": row["Information Type"] or None,
                     "edited": parse_boolean(row["Edited"]),
                     "edit_type": row["Edit Type"] or None,
+                    "investigation": investigation,
+                    "source_file": source_file,
                 }
-                if activity_id is not None:
-                    activity_data["id"] = activity_id
 
                 # Validate required fields
                 if not activity_data["mode"]:
@@ -697,52 +695,22 @@ def load_data(csv_file, crosswalk_file=None, enable_geocoding=False):
                     )
 
                 try:
-                    if activity_id is not None:
-                        # Insert or update activity with explicit ID
-                        cursor.execute(
-                            f"""
-                            INSERT INTO {SCHEMA_NAME}.activities (
-                                id, source, operative, date, time, duration, activity, mode,
-                                activity_notes, subject, information, information_type, edited, edit_type
-                            ) VALUES (
-                                %(id)s, %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
-                                %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
-                                %(information_type)s, %(edited)s, %(edit_type)s
-                            )
-                            ON CONFLICT (id) DO UPDATE SET
-                                source = EXCLUDED.source,
-                                operative = EXCLUDED.operative,
-                                date = EXCLUDED.date,
-                                time = EXCLUDED.time,
-                                duration = EXCLUDED.duration,
-                                activity = EXCLUDED.activity,
-                                mode = EXCLUDED.mode,
-                                activity_notes = EXCLUDED.activity_notes,
-                                subject = EXCLUDED.subject,
-                                information = EXCLUDED.information,
-                                information_type = EXCLUDED.information_type,
-                                edited = EXCLUDED.edited,
-                                edit_type = EXCLUDED.edit_type
-                        """,
-                            activity_data,
+                    # Insert activity with auto-generated ID
+                    cursor.execute(
+                        f"""
+                        INSERT INTO {SCHEMA_NAME}.activities (
+                            source, operative, date, time, duration, activity, mode,
+                            activity_notes, subject, information, information_type, edited, edit_type, investigation, source_file
+                        ) VALUES (
+                            %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
+                            %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
+                            %(information_type)s, %(edited)s, %(edit_type)s, %(investigation)s, %(source_file)s
                         )
-                    else:
-                        # Insert activity with auto-generated ID
-                        cursor.execute(
-                            f"""
-                            INSERT INTO {SCHEMA_NAME}.activities (
-                                source, operative, date, time, duration, activity, mode,
-                                activity_notes, subject, information, information_type, edited, edit_type
-                            ) VALUES (
-                                %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
-                                %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
-                                %(information_type)s, %(edited)s, %(edit_type)s
-                            )
-                            RETURNING id
-                        """,
-                            activity_data,
-                        )
-                        activity_id = cursor.fetchone()[0]
+                        RETURNING id
+                    """,
+                        activity_data,
+                    )
+                    activity_id = cursor.fetchone()[0]
 
                     if cursor.rowcount > 0:
                         stats["activities_inserted"] += 1
@@ -969,6 +937,12 @@ Examples:
         help="Enable geocoding for locations without coordinates (default: disabled)",
     )
 
+    parser.add_argument(
+        "--investigation",
+        dest="investigation",
+        help="Investigation identifier to tag all activities (e.g., el-paso, nyc, hobart, atlanta)",
+    )
+
     args = parser.parse_args()
 
-    load_data(args.csv_file, args.crosswalk_file, args.geocode)
+    load_data(args.csv_file, args.crosswalk_file, args.geocode, args.investigation)

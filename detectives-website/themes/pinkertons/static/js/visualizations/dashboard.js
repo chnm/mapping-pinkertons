@@ -203,7 +203,7 @@ function preprocess(raw) {
       hour,
       locationType,
       infoNorm: normalizeInfo(d.information),
-      investigation: getInvestigation(d),
+      investigation: d.investigation,
     };
   });
 }
@@ -211,21 +211,11 @@ function preprocess(raw) {
 // ─── Investigation (Case) Mapping ─────────────────────────────────────────────
 
 const INVESTIGATIONS = {
-  'el-paso':  { label: 'El Paso, Texas',   localities: new Set(['El Paso', 'El Paso ', 'Smeltertown', 'Smeltertown_Lower', 'Smeltertown_Upper', 'Smelter', 'Canutillo, TX', 'Vinton, TX', 'Upper Valley', '7 miles north of El Paso', 'La Mesa, NM', 'Las Cruces, NM', 'Lordsburg, NM', 'Mesquite, NM', 'San Miguel, NM', 'Deming, NM', 'Dusty, NM', 'Silver City, NM', 'Winston, NM', 'Hachita, NM', 'Monahans, TX', 'Odessa, TX', 'Globe, AZ', 'Central Heights, AZ', 'Superior, AZ', 'Highway 80', 'Juarez']) },
-  'atlanta':  { label: 'Atlanta, Georgia', localities: new Set(['Atlanta', 'Griffin, GA', 'Marietta, GA', 'Smyrna, GA', 'Hammond, IN']) },
-  'nyc':      { label: 'New York City',    localities: new Set(['Manhattan, NYC', 'Brooklyn, NYC', 'Bronx, NYC', 'Queens, NYC', 'Auburndale, LI', 'Sunnyside, LI', 'Carlton Hill, NJ', 'Newark, NJ', 'Union City', 'White Township']) },
+  'el-paso':  { label: 'El Paso Labor Disputes' },
+  'nyc':      { label: 'Robbery of the Corn Exchange Bank' },
+  'hobart':   { label: 'Murder of William Hobart' },
+  'atlanta':  { label: 'Atlanta Laundry Thefts' },
 };
-
-function getInvestigation(activity) {
-  const locality = activity.locations && activity.locations.length > 0
-    ? activity.locations[0].locality
-    : null;
-  if (!locality) return null;
-  for (const [key, inv] of Object.entries(INVESTIGATIONS)) {
-    if (inv.localities.has(locality)) return key;
-  }
-  return null;
-}
 
 // ─── Filter Bar ───────────────────────────────────────────────────────────────
 
@@ -236,7 +226,7 @@ function buildFilterBar(allData, minDate, totalDays) {
 
   const bar = document.createElement("div");
   bar.className =
-    "bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-md sticky top-0 z-40";
+    "bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-md sticky top-0 z-[1000]";
 
   // ── Row 1: dropdowns + toggles + reset + count
   const row1 = document.createElement("div");
@@ -733,6 +723,93 @@ function renderMap(container, data, investigation) {
   setTimeout(() => dashboardMap.invalidateSize(), 100);
 }
 
+// ─── Activities Data Table ────────────────────────────────────────────────────
+
+function renderDataTable(container, data) {
+  container.innerHTML = "";
+  if (data.length === 0) {
+    container.textContent = "No activities match the current filters.";
+    return;
+  }
+
+  const PAGE_SIZE = 20;
+  let page = 0;
+  const totalPages = () => Math.ceil(data.length / PAGE_SIZE);
+
+  function fmtDate(d) {
+    if (!d) return "";
+    const m = d.match(/(\d{4}-\d{2}-\d{2})/);
+    return m ? m[1] : d;
+  }
+
+  function fmtTime(t) {
+    if (!t) return "";
+    const m = t.match(/(\d{2}):(\d{2})/);
+    if (!m) return t;
+    let h = parseInt(m[1], 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${h}:${m[2]} ${ampm}`;
+  }
+
+  function render() {
+    const start = page * PAGE_SIZE;
+    const slice = data.slice(start, start + PAGE_SIZE);
+
+    let html = `
+      <div class="flex justify-between items-center mb-3 text-sm text-gray-500">
+        <span>Showing ${start + 1}–${Math.min(start + PAGE_SIZE, data.length)} of ${data.length} activities</span>
+        <div class="flex gap-2">
+          <button class="db-table-prev px-3 py-1 rounded border border-gray-300 text-sm ${page === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}"
+            ${page === 0 ? 'disabled' : ''}>Previous</button>
+          <button class="db-table-next px-3 py-1 rounded border border-gray-300 text-sm ${page >= totalPages() - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}"
+            ${page >= totalPages() - 1 ? 'disabled' : ''}>Next</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-300 bg-gray-50">
+              <th class="px-3 py-2 font-semibold text-gray-600">Date</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Time</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Activity</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Subject</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Notes</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Operative</th>
+              <th class="px-3 py-2 font-semibold text-gray-600">Location</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+    slice.forEach(a => {
+      const locName = a.locations && a.locations.length > 0
+        ? (a.locations[0].location_name || a.locations[0].street_address || a.locations[0].locality || "")
+        : "";
+      html += `
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="px-3 py-2 whitespace-nowrap">${fmtDate(a.date)}</td>
+              <td class="px-3 py-2 whitespace-nowrap">${fmtTime(a.time)}</td>
+              <td class="px-3 py-2">${a.activity || ""}</td>
+              <td class="px-3 py-2">${a.subject || ""}</td>
+              <td class="px-3 py-2">${a.activity_notes || ""}</td>
+              <td class="px-3 py-2">${a.operative || ""}</td>
+              <td class="px-3 py-2">${locName}</td>
+            </tr>`;
+    });
+
+    html += `</tbody></table></div>`;
+    container.innerHTML = html;
+
+    // Wire pagination
+    const prev = container.querySelector('.db-table-prev');
+    const next = container.querySelector('.db-table-next');
+    if (prev) prev.addEventListener('click', () => { if (page > 0) { page--; render(); } });
+    if (next) next.addEventListener('click', () => { if (page < totalPages() - 1) { page++; render(); } });
+  }
+
+  render();
+}
+
 // ─── Main Export ──────────────────────────────────────────────────────────────
 
 export async function createVisualization(rawData, opts = {}) {
@@ -752,7 +829,10 @@ export async function createVisualization(rawData, opts = {}) {
   const totalDays = Math.round((maxDate - minDate) / DAY_MS);
 
   // ── Filter state
-  const defaultInvestigation = Object.keys(INVESTIGATIONS)[0];
+  const urlInvestigation = new URLSearchParams(window.location.search).get('investigation');
+  const defaultInvestigation = (urlInvestigation && INVESTIGATIONS[urlInvestigation])
+    ? urlInvestigation
+    : Object.keys(INVESTIGATIONS)[0];
   let state = {
     investigation: defaultInvestigation,
     operative:    "all",
@@ -834,6 +914,10 @@ export async function createVisualization(rawData, opts = {}) {
   const { card: mapCard, body: mapBody } = section("Locations");
   subMapRow.appendChild(mapCard);
 
+  // Activities data table — full width
+  const { card: tableCard, body: tableBody } = section("Activities");
+  chartsWrapper.appendChild(tableCard);
+
   // ── Render all panels from current filter state
   function renderAll() {
     const data = filtered();
@@ -845,6 +929,7 @@ export async function createVisualization(rawData, opts = {}) {
     renderLocationTypes(locBody, data);
     renderSubjects(subjectsBody, data);
     renderMap(mapBody, data, state.investigation);
+    renderDataTable(tableBody, data);
   }
 
   // ── Helper: update info-toggle button styles
@@ -952,6 +1037,9 @@ export async function createVisualization(rawData, opts = {}) {
       `${fmtShort(minDate)} – ${fmtShort(dayToDate(totalDays, minDate))}`;
     renderAll();
   });
+
+  // Set investigation dropdown to match default (may be from URL param)
+  invSel.value = defaultInvestigation;
 
   // Scope dropdowns to default investigation
   updateDropdownsForInvestigation();

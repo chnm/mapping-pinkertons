@@ -1,0 +1,24 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $title := .Get "title" | default "" -}}
+{{- $align := .Get "align" | default "center" -}}
+{{- $width := .Get "width" | default "" -}}
+
+{{- $alignClass := "mx-auto" -}}
+{{- if eq $align "left" -}}
+  {{- $alignClass = "float-left mr-6 mb-4" -}}
+{{- else if eq $align "right" -}}
+  {{- $alignClass = "float-right ml-6 mb-4" -}}
+{{- end -}}
+
+{{- $widthStyle := "" -}}
+{{- if $width -}}
+  {{- $widthStyle = printf "max-width: %s;" $width | safeCSS -}}
+{{- end -}}
+
+<figure class="{{ $alignClass }} my-6" {{ with $widthStyle }}style="{{ . }}"{{ end }}>
+  <img src="{{ $src }}" alt="{{ $alt }}" class="rounded-lg shadow-md w-full" />
+  {{- if $title }}
+  <figcaption class="mt-2 text-sm text-grit-text-dark/60 text-center italic">{{ $title }}</figcaption>
+  {{- end }}
+</figure>

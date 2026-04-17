@@ -18,7 +18,7 @@
 
 ## Overview
 
-**Mapping the Pinkertons** is a digital scholarly research project that documents and visualizes the surveillance activities of the Pinkerton Detective Agency in El Paso, Texas and surrounding regions during the late 1930s labor disputes.
+**Mapping Private Investigations** is a digital scholarly research project that documents and visualizes the surveillance activities of the Pinkerton Detective Agency in El Paso, Texas and surrounding regions during the late 1930s labor disputes.
 
 The project transforms historical records from Pinkerton agency reports into a structured, searchable, and mappable dataset. It makes visible the geography, patterns, and scale of private surveillance directed at labor organizers, workers, and their communities — information that was previously inaccessible outside archival research.
 

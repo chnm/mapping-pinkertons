@@ -2,7 +2,7 @@
 
 ![Pinkerton Detective Agency](https://cdn.britannica.com/86/178186-004-5FC5A55E.jpg)
 
-Website, database schema, and data loading scripts for Mapping the Pinkertons.
+Website, database schema, and data loading scripts for Mapping Private Investigations.
 
 ## Database Schema Overview
 

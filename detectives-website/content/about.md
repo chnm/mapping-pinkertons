@@ -1,6 +1,6 @@
 ---
 title: "About the Project"
-description: "Learn about the Mapping the Pinkertons digital history project and the research behind it."
+description: "Learn about the Mapping Private Investigations digital history project and the research behind it."
 ---
 
 ## Project Overview
