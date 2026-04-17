@@ -151,7 +151,9 @@ def parse_date(date_str, row_id=None):
         return None
 
     try:
-        return datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
+        # Strip any trailing time component (e.g., "1939-09-03 0:00:00")
+        date_clean = date_str.strip().split(" ")[0]
+        return datetime.strptime(date_clean, "%Y-%m-%d").date()
     except ValueError as e:
         logging.warning(f"Row {row_id}: Could not parse date '{date_str}': {e}")
         return None
@@ -560,6 +562,7 @@ def load_data(
     Geocoding is disabled by default and can be enabled with enable_geocoding parameter.
     """
     log_path = setup_logging()
+    source_file = os.path.basename(csv_file)
     logging.info(f"Starting data import from {csv_file}")
     logging.info(f"Log file: {log_path}")
     logging.info(
@@ -682,6 +685,7 @@ def load_data(
                     "edited": parse_boolean(row["Edited"]),
                     "edit_type": row["Edit Type"] or None,
                     "investigation": investigation,
+                    "source_file": source_file,
                 }
 
                 # Validate required fields
@@ -696,11 +700,11 @@ def load_data(
                         f"""
                         INSERT INTO {SCHEMA_NAME}.activities (
                             source, operative, date, time, duration, activity, mode,
-                            activity_notes, subject, information, information_type, edited, edit_type, investigation
+                            activity_notes, subject, information, information_type, edited, edit_type, investigation, source_file
                         ) VALUES (
                             %(source)s, %(operative)s, %(date)s, %(time)s, %(duration)s,
                             %(activity)s, %(mode)s, %(activity_notes)s, %(subject)s, %(information)s,
-                            %(information_type)s, %(edited)s, %(edit_type)s, %(investigation)s
+                            %(information_type)s, %(edited)s, %(edit_type)s, %(investigation)s, %(source_file)s
                         )
                         RETURNING id
                     """,
