@@ -940,6 +940,7 @@
         this.selectedLocation = locationKey;
         this.activeActivityFilter = null;
         this.resetAnimation();
+        this.animationDays = [];  // Clear cached days so they rebuild for the new investigation
         this.filterMarkersByLocation(locationKey);
         this.buildTimelineData();
       },
