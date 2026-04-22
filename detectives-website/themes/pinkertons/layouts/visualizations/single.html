@@ -34,7 +34,7 @@
   const vizType = '{{ .Params.vizType }}';
 
   const INVESTIGATIONS = {
-    'el-paso':  'El Paso Labor Disputes',
+    'el-paso':  'El Paso Smelter Fraud',
     'nyc':      'Robbery of the Corn Exchange Bank',
     'hobart':   'Murder of William Hobart',
     'atlanta':  'Atlanta Laundry Thefts',
@@ -77,15 +77,29 @@
     },
 
     'daily-activity': (data) => {
-      const withDates = data.filter(d => d.date).map(d => ({ ...d, dateObj: new Date(d.date.substring(0, 10)) }));
+      const withDates = data.filter(d => d.date).map(d => ({
+        ...d,
+        dateObj: new Date(d.date.substring(0, 10)),
+        activityType: d.activity_type || d.activity || "Unknown"
+      }));
       if (withDates.length === 0) return null;
+      const activityTypes = [...new Set(withDates.map(d => d.activityType))].sort();
+      const ACTIVITY_COLORS = {
+        "Surveillance": "#b5381e", "Shadowing": "#c8a04a", "Interview": "#5d7a6b",
+        "Contact": "#6b7280", "Search": "#7c3aed", "Informant": "#0369a1", "Roping": "#d97706",
+      };
       return Plot.plot({
         marginLeft: 50, marginBottom: 60,
         width: chartWidth(), height: 250,
-        x: { type: "time", label: "Date", tickFormat: "%b %Y", tickRotate: -30 },
+        x: { type: "time", label: "Date", tickFormat: "%b %d", tickRotate: -30 },
         y: { grid: true, label: "Activities" },
+        color: {
+          domain: activityTypes,
+          range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
+          legend: true
+        },
         marks: [
-          Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "month", fill: ACCENT, tip: true })),
+          Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })),
           Plot.ruleY([0]),
         ],
       });

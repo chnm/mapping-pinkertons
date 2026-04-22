@@ -12,7 +12,7 @@ const PALETTE = [
 ];
 
 const INVESTIGATIONS = {
-  'el-paso':  'El Paso Labor Disputes',
+  'el-paso':  'El Paso Smelter Fraud',
   'nyc':      'Corn Exchange Bank',
   'hobart':   'William Hobart',
   'atlanta':  'Atlanta Laundries',
@@ -176,6 +176,11 @@ function renderMultiples(container, allData, fieldFn, invKeys) {
   container.appendChild(grid);
 }
 
+const ACTIVITY_COLORS = {
+  "Surveillance": "#b5381e", "Shadowing": "#c8a04a", "Interview": "#5d7a6b",
+  "Contact": "#6b7280", "Search": "#7c3aed", "Informant": "#0369a1", "Roping": "#d97706",
+};
+
 function renderTimelineMultiples(container, allData, invKeys) {
   const grid = document.createElement("div");
   grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
@@ -184,7 +189,12 @@ function renderTimelineMultiples(container, allData, invKeys) {
     const invData = allData.filter(d => d.investigation === invKey && d.date);
     if (invData.length === 0) return;
 
-    const withDates = invData.map(d => ({ ...d, dateObj: new Date(d.date.substring(0, 10)) }));
+    const withDates = invData.map(d => ({
+      ...d,
+      dateObj: new Date(d.date.substring(0, 10)),
+      activityType: d.activity_type || d.activity || "Unknown"
+    }));
+    const activityTypes = [...new Set(withDates.map(d => d.activityType))].sort();
 
     const card = document.createElement("div");
     card.className = "bg-gray-50 border border-gray-200 rounded-lg p-4";
@@ -204,10 +214,15 @@ function renderTimelineMultiples(container, allData, invKeys) {
         marginLeft: 40, marginBottom: 50,
         width: smallW(),
         height: 200,
-        x: { type: "time", label: null, tickFormat: "%b %Y", tickRotate: -30 },
+        x: { type: "time", label: null, tickFormat: "%b %d", tickRotate: -30 },
         y: { grid: true, label: null },
+        color: {
+          domain: activityTypes,
+          range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
+          legend: true
+        },
         marks: [
-          Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "month", fill: PALETTE[i % PALETTE.length], tip: true })),
+          Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })),
           Plot.ruleY([0]),
         ],
       })
