@@ -9,7 +9,7 @@ Narrative pages live in `content/narratives/`. Each investigation has its own ma
 ```
 content/narratives/
 ├── _index.md              # Investigations list page
-├── el-paso.md             # El Paso Labor Disputes
+├── el-paso.md             # El Paso Smelter Fraud
 ├── nyc.md                 # Robbery of the Corn Exchange Bank
 ├── hobart.md              # Murder of William Hobart
 └── atlanta.md             # Atlanta Laundry Thefts
@@ -39,15 +39,15 @@ Write the narrative body in standard Markdown below the frontmatter. Hugo proces
 
 ```markdown
 ---
-title: "El Paso Labor Disputes"
+title: "El Paso Smelter Fraud"
 ...
 ---
 
-## Background
+## Overview
 
 The Pinkerton National Detective Agency was hired to investigate...
 
-## The Investigation
+## Investigation
 
 Operative #43 arrived in El Paso on July 27, 1939...
 ```

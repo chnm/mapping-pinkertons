@@ -12,7 +12,7 @@ const PALETTE = [
 ];
 
 const INVESTIGATIONS = {
-  'el-paso':  'El Paso Labor Disputes',
+  'el-paso':  'El Paso Smelter Fraud',
   'nyc':      'Corn Exchange Bank',
   'hobart':   'William Hobart',
   'atlanta':  'Atlanta Laundries',

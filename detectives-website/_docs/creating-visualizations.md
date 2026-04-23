@@ -107,7 +107,7 @@ To add a new investigation, add it to the `INVESTIGATIONS` object at the top of 
 
 ```javascript
 const INVESTIGATIONS = {
-  'el-paso':  'El Paso Labor Disputes',
+  'el-paso':  'El Paso Smelter Fraud',
   'nyc':      'Robbery of the Corn Exchange Bank',
   'hobart':   'Murder of William Hobart',
   'atlanta':  'Atlanta Laundry Thefts',

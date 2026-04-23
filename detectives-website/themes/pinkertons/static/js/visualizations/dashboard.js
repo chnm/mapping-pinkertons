@@ -211,7 +211,7 @@ function preprocess(raw) {
 // ─── Investigation (Case) Mapping ─────────────────────────────────────────────
 
 const INVESTIGATIONS = {
-  'el-paso':  { label: 'El Paso Labor Disputes' },
+  'el-paso':  { label: 'El Paso Smelter Fraud' },
   'nyc':      { label: 'Robbery of the Corn Exchange Bank' },
   'hobart':   { label: 'Murder of William Hobart' },
   'atlanta':  { label: 'Atlanta Laundry Thefts' },
@@ -458,25 +458,39 @@ function renderKPIs(container, data) {
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
+const ACTIVITY_COLORS = {
+  "Surveillance": "#b5381e", "Shadowing": "#c8a04a", "Interview": "#5d7a6b",
+  "Contact": "#6b7280", "Search": "#7c3aed", "Informant": "#0369a1", "Roping": "#d97706",
+};
+
 function renderTimeline(container, data) {
   container.innerHTML = "";
-  const withDates = data.filter(d => d.dateObj);
+  const withDates = data.filter(d => d.dateObj).map(d => ({
+    ...d,
+    activityType: d.activity_type || d.activity || "Unknown"
+  }));
   if (withDates.length === 0) {
     container.textContent = "No dated records match the current filters.";
     return;
   }
+  const activityTypes = [...new Set(withDates.map(d => d.activityType))].sort();
   container.appendChild(
     Plot.plot({
       marginLeft: 50,
       marginBottom: 70,
-      width: halfW(),
+      width: fullW(),
       height: 280,
-      x: { type: "time", label: "Date", tickFormat: "%b %Y", tickRotate: -30 },
+      x: { type: "time", label: "Date", tickFormat: "%b %d", tickRotate: -30 },
       y: { grid: true, label: "Activities" },
+      color: {
+        domain: activityTypes,
+        range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
+        legend: true
+      },
       marks: [
         Plot.rectY(
           withDates,
-          Plot.binX({ y: "count" }, { x: "dateObj", interval: "month", fill: ACCENT, tip: true })
+          Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })
         ),
         Plot.ruleY([0]),
       ],
@@ -881,38 +895,35 @@ export async function createVisualization(rawData, opts = {}) {
   chartsWrapper.className = "space-y-6";
   root.appendChild(chartsWrapper);
 
-  // Top row: timeline + activity types side by side
+  // Daily Activity Timeline — full width
+  const { card: timelineCard, body: timelineBody } = section("Daily Activity Timeline");
+  chartsWrapper.appendChild(timelineCard);
+
+  // Activity types row
   const topRow = document.createElement("div");
   topRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
   chartsWrapper.appendChild(topRow);
 
-  const { card: timelineCard, body: timelineBody } = section("Daily Activity Timeline");
-  topRow.appendChild(timelineCard);
-
   const { card: actTypeCard, body: actTypeBody } = section("Activity Type Breakdown");
   topRow.appendChild(actTypeCard);
 
-  // Bottom row: operatives + location types
+  const { card: opCard,  body: opBody  } = section("Operative Workload");
+  topRow.appendChild(opCard);
+
+  // Next row: location types + subjects
   const botRow = document.createElement("div");
   botRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
   chartsWrapper.appendChild(botRow);
 
-  const { card: opCard,  body: opBody  } = section("Operative Workload");
-  botRow.appendChild(opCard);
-
   const { card: locCard, body: locBody } = section("Location Types Surveilled");
   botRow.appendChild(locCard);
 
-  // Bottom row: subjects + map
-  const subMapRow = document.createElement("div");
-  subMapRow.className = "grid grid-cols-1 md:grid-cols-2 gap-6";
-  chartsWrapper.appendChild(subMapRow);
-
   const { card: subjectsCard, body: subjectsBody } = section("Top Subjects Watched");
-  subMapRow.appendChild(subjectsCard);
+  botRow.appendChild(subjectsCard);
 
+  // Locations map — full width
   const { card: mapCard, body: mapBody } = section("Locations");
-  subMapRow.appendChild(mapCard);
+  chartsWrapper.appendChild(mapCard);
 
   // Activities data table — full width
   const { card: tableCard, body: tableBody } = section("Activities");

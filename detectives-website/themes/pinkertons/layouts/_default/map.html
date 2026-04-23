@@ -44,8 +44,8 @@
           x-model="selectedBasemap"
           @change="setBasemap(selectedBasemap)"
           class="text-xs bg-white border border-gray-300 rounded px-2 py-1 text-grit-text-dark">
-          <option value="dark">Dark</option>
           <option value="light">Light</option>
+          <option value="dark">Dark</option>
         </select>
       </div>
 
@@ -180,14 +180,14 @@
     <div class="timeline-panel" :class="timelineOpen ? 'open' : ''">
       <div class="flex border-t border-grit-steel/20">
         <!-- Left: controls column -->
-        <div class="flex flex-col items-center gap-1 px-2 py-2 border-r border-grit-steel/20 flex-shrink-0">
+        <div class="flex flex-col items-stretch gap-1.5 px-3 py-3 border-r border-grit-steel/20 flex-shrink-0">
           <!-- Play -->
           <button
             x-show="!animationPlaying"
             @click="startAnimation()"
-            class="w-14 flex items-center justify-center gap-1 px-2 py-1 rounded bg-grit-steel/20 text-grit-gold hover:text-white hover:bg-grit-accent/40 transition-colors text-[10px] font-medium"
+            class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded bg-grit-steel/20 text-grit-gold hover:text-white hover:bg-grit-accent/40 transition-colors text-xs font-medium"
             aria-label="Play">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/>
             </svg>
             Play
@@ -196,10 +196,10 @@
           <button
             x-show="animationPlaying"
             @click="stopAnimation()"
-            class="w-14 flex items-center justify-center gap-1 px-2 py-1 rounded bg-grit-accent/30 text-white hover:bg-grit-accent/50 transition-colors text-[10px] font-medium"
+            class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded bg-grit-accent/30 text-white hover:bg-grit-accent/50 transition-colors text-xs font-medium"
             aria-label="Pause"
             style="display:none">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/>
             </svg>
             Pause
@@ -207,12 +207,31 @@
           <!-- Reset -->
           <button
             @click="resetAnimation(); clearActivityFilter();"
-            class="w-14 flex items-center justify-center gap-1 px-2 py-1 rounded bg-grit-steel/20 text-grit-gold hover:text-white hover:bg-grit-steel/40 transition-colors text-[10px] font-medium"
+            class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded bg-grit-steel/20 text-grit-gold hover:text-white hover:bg-grit-steel/40 transition-colors text-xs font-medium"
             aria-label="Reset">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
             </svg>
             Reset
+          </button>
+          <!-- Daily mode toggle -->
+          <button
+            @click="animationDailyMode = !animationDailyMode"
+            :class="animationDailyMode ? 'bg-grit-accent/40 text-white' : 'bg-grit-steel/20 text-grit-gold'"
+            class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded hover:text-white hover:bg-grit-accent/40 transition-colors text-xs font-medium"
+            aria-label="Toggle daily mode"
+            title="Show only current day's activities">
+            Daily
+          </button>
+          <!-- Help -->
+          <button
+            @click="timelineHelpOpen = true"
+            class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded bg-grit-steel/20 text-grit-gold hover:text-white hover:bg-grit-steel/40 transition-colors text-xs font-medium"
+            aria-label="Timeline help">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Help
           </button>
         </div>
 
@@ -232,6 +251,54 @@
           <div class="px-3 pb-4 overflow-x-auto">
             <svg x-ref="timelineSvg" width="100%" preserveAspectRatio="xMinYMin meet"></svg>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Help Modal -->
+  <div x-show="timelineHelpOpen"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    @click.self="timelineHelpOpen = false"
+    @keydown.escape.window="timelineHelpOpen = false"
+    class="fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+    style="display: none;">
+    <div class="bg-grit-bg rounded-lg shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto border border-grit-steel/30"
+      @click.stop>
+      <div class="px-6 py-4 border-b border-grit-steel/30 flex items-center justify-between">
+        <h2 class="text-lg font-heading font-semibold text-grit-gold">Using the Activities Timeline</h2>
+        <button @click="timelineHelpOpen = false" class="text-grit-text hover:text-grit-gold transition-colors" aria-label="Close">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="px-6 py-4 text-grit-text space-y-4">
+        <div>
+          <h3 class="text-sm font-semibold text-grit-gold mb-1">Timeline Bars</h3>
+          <p class="text-sm leading-relaxed text-grit-text/80">
+            Each row represents an activity type (surveillance, shadowing, interviews, etc.). The bars show the specific days when that activity was recorded during the investigation. Click any bar to filter the map to only that activity type.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-grit-gold mb-1">Animation Controls</h3>
+          <ul class="text-sm space-y-1.5 text-grit-text/80">
+            <li><strong class="text-grit-gold">Play / Pause</strong> &mdash; Animate through the investigation day by day. Markers appear on the map as activities are recorded, growing in size with each new visit.</li>
+            <li><strong class="text-grit-gold">Reset</strong> &mdash; Return the map to its original state showing all activities at once.</li>
+            <li><strong class="text-grit-gold">Daily</strong> &mdash; Toggle between cumulative and daily-only view. In cumulative mode (default), markers build up over time. In daily mode, only the current day's activities are shown, making it easier to see each day's work individually.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-grit-gold mb-1">Tips</h3>
+          <ul class="text-sm space-y-1.5 text-grit-text/80">
+            <li>Combine the activity filter with animation to watch how a single activity type unfolds over time.</li>
+            <li>Switch between view modes (All, Location Types, Activity Types) in the toolbar above for different perspectives on the same data.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -584,8 +651,8 @@
     })
   };
 
-  // Add default basemap (dark)
-  let currentBasemap = basemaps.dark;
+  // Add default basemap (light)
+  let currentBasemap = basemaps.light;
   currentBasemap.addTo(map);
 
   // Helper function to format date
@@ -805,7 +872,7 @@
       activityCount: 0,
       locationCounts: {},
       locations: {
-        'el-paso': { name: 'El Paso Labor Disputes' },
+        'el-paso': { name: 'El Paso Smelter Fraud' },
         'nyc':     { name: 'Robbery of the Corn Exchange Bank' },
         'hobart':  { name: 'Murder of William Hobart' },
         'atlanta': { name: 'Atlanta Laundry Thefts' },
@@ -822,11 +889,13 @@
       animationDate: null,
       animationDateLabel: '',
       animationTimer: null,
+      animationDailyMode: false,
+      timelineHelpOpen: false,
       animationDayIndex: 0,
       animationDays: [],
 
       // Basemap selection
-      selectedBasemap: 'dark',
+      selectedBasemap: 'light',
 
       init() {
         // Watch for viewMode changes and toggle marker sets
@@ -838,6 +907,25 @@
           if (this.groupedMarkers.length > 0) {
             this.filterMarkersByLocation(this.selectedLocation);
           }
+        });
+
+        // Adjust map when timeline panel opens/closes
+        this.$watch('timelineOpen', () => {
+          // Wait for the CSS transition to finish (300ms)
+          setTimeout(() => {
+            map.invalidateSize({ animate: true });
+            const visibleLatLngs = [];
+            this.groupedMarkers.forEach(m => {
+              if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+            });
+            if (visibleLatLngs.length > 0) {
+              const bounds = L.latLngBounds(visibleLatLngs);
+              // Extra bottom padding when the panel is open (~340px for panel + toggle bar)
+              const bottomPad = this.timelineOpen ? 340 : 40;
+              const rightPad = this.sidebarOpen ? (window.innerWidth >= 768 ? 490 : Math.floor(window.innerWidth * 0.85) + 40) : 40;
+              map.fitBounds(bounds, { paddingTopLeft: [40, 40], paddingBottomRight: [rightPad, bottomPad] });
+            }
+          }, 320);
         });
       },
 
@@ -852,6 +940,7 @@
         this.selectedLocation = locationKey;
         this.activeActivityFilter = null;
         this.resetAnimation();
+        this.animationDays = [];  // Clear cached days so they rebuild for the new investigation
         this.filterMarkersByLocation(locationKey);
         this.buildTimelineData();
       },
@@ -925,10 +1014,13 @@
       buildTimelineData() {
         const typeMap = {};
         let globalMin = null, globalMax = null;
+        const selectedInv = this.selectedLocation;
 
         this.groupedMarkers.forEach(m => {
           if (m._hidden) return;
           m.locationData.activities.forEach(a => {
+            // Only include activities for the selected investigation
+            if (a.investigation !== selectedInv) return;
             const type = a.activity;
             if (!type) return;
             const d = a.date ? new Date(a.date.substring(0, 10)) : null;
@@ -944,13 +1036,18 @@
         });
 
         const order = ['Surveillance','Shadowing','Interview','Contact','Search','Informant','Roping'];
-        const result = Object.entries(typeMap).map(([type, info]) => ({
-          type,
-          color: activityTypeColors[type] || '#95a5a6',
-          minDate: new Date(Math.min(...info.dates)),
-          maxDate: new Date(Math.max(...info.dates)),
-          count: info.count
-        })).sort((a, b) => {
+        const result = Object.entries(typeMap).map(([type, info]) => {
+          // Collect unique dates for intermittent bar rendering
+          const uniqueDays = [...new Set(info.dates.map(d => d.toISOString().substring(0, 10)))].sort();
+          return {
+            type,
+            color: activityTypeColors[type] || '#95a5a6',
+            minDate: new Date(Math.min(...info.dates)),
+            maxDate: new Date(Math.max(...info.dates)),
+            activeDays: uniqueDays.map(s => new Date(s)),
+            count: info.count
+          };
+        }).sort((a, b) => {
           const ai = order.indexOf(a.type), bi = order.indexOf(b.type);
           return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
         });
@@ -979,12 +1076,13 @@
         const fmtDate = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const fmtAxis = (d) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
+        const DAY_MS = 86400000;
+        // Minimum width for a single day segment (in px)
+        const minDayW = Math.max(2, barArea / ((range / DAY_MS) || 1));
+
         let svg = '';
         this.timelineData.forEach((d, i) => {
           const y = i * rowHeight;
-          const x = labelWidth + ((d.minDate.getTime() - min.getTime()) / range) * barArea;
-          let w = ((d.maxDate.getTime() - d.minDate.getTime()) / range) * barArea;
-          if (w < 8) w = 8;
 
           const isActive = !this.activeActivityFilter || this.activeActivityFilter === d.type;
           const opacity = isActive ? 0.85 : 0.25;
@@ -994,11 +1092,26 @@
             text-anchor="end" fill="${isActive ? '#c8a04a' : '#5d7a6b'}" font-size="7"
             font-family="Oswald, sans-serif" data-type="${d.type}">${d.type}</text>`;
 
-          // Bar with tooltip
+          // Draw intermittent segments for each active day
           const tooltip = `${d.type}: ${d.count} activities (${fmtDate(d.minDate)} – ${fmtDate(d.maxDate)})`;
-          svg += `<rect x="${x}" y="${y + 1}" width="${w}" height="${barHeight}"
-            rx="2" fill="${d.color}" opacity="${opacity}" data-type="${d.type}">
-            <title>${tooltip}</title></rect>`;
+          if (d.activeDays && d.activeDays.length > 0) {
+            d.activeDays.forEach(day => {
+              const dx = labelWidth + ((day.getTime() - min.getTime()) / range) * barArea;
+              let dw = (DAY_MS / range) * barArea;
+              if (dw < 2) dw = 2;
+              svg += `<rect x="${dx}" y="${y + 1}" width="${dw}" height="${barHeight}"
+                rx="1" fill="${d.color}" opacity="${opacity}" data-type="${d.type}">
+                <title>${tooltip}</title></rect>`;
+            });
+          } else {
+            // Fallback: continuous bar
+            const x = labelWidth + ((d.minDate.getTime() - min.getTime()) / range) * barArea;
+            let w = ((d.maxDate.getTime() - d.minDate.getTime()) / range) * barArea;
+            if (w < 8) w = 8;
+            svg += `<rect x="${x}" y="${y + 1}" width="${w}" height="${barHeight}"
+              rx="2" fill="${d.color}" opacity="${opacity}" data-type="${d.type}">
+              <title>${tooltip}</title></rect>`;
+          }
         });
 
         // Date axis
@@ -1120,34 +1233,53 @@
         const currentTime = currentDay.getTime();
 
         if (this.viewMode === 'all') {
-          // Grouped markers: cumulative with growing radius
+          // Grouped markers: cumulative or daily-only mode
           this.groupedMarkers.forEach(m => {
             if (m._hidden) return;
 
             let cumulative = 0;
             let hasToday = false;
+            let todayCount = 0;
 
             m.locationData.activities.forEach(a => {
               if (a.investigation !== this.selectedLocation) return;
               if (this.activeActivityFilter && a.activity !== this.activeActivityFilter) return;
               const aDate = a.date ? new Date(a.date.substring(0, 10)).getTime() : null;
-              if (aDate && aDate <= currentTime) {
-                cumulative++;
-                if (Math.abs(aDate - currentTime) < DAY_MS) hasToday = true;
+              if (aDate) {
+                const isToday = Math.abs(aDate - currentTime) < DAY_MS;
+                if (isToday) { hasToday = true; todayCount++; }
+                if (aDate <= currentTime) cumulative++;
               }
             });
 
-            if (cumulative > 0) {
-              const radius = 2 + Math.sqrt(cumulative) * 2;
-              m.marker.addTo(map);
-              m.marker.setRadius(radius);
+            if (this.animationDailyMode) {
+              // Daily mode: show only current day, use gold color (no white flash)
               if (hasToday) {
-                m.marker.setStyle({ fillOpacity: 1, fillColor: '#ffffff', weight: 2 });
+                const radius = 2 + Math.sqrt(todayCount) * 2;
+                m.marker.addTo(map);
+                m.marker.setRadius(radius);
+                m.marker.setStyle({ fillOpacity: 0.8, fillColor: '#c8a04a', weight: 1 });
               } else {
-                m.marker.setStyle({ fillOpacity: 0.4, fillColor: '#c8a04a', weight: 1 });
+                map.removeLayer(m.marker);
               }
             } else {
-              map.removeLayer(m.marker);
+              // Cumulative mode (default)
+              if (cumulative > 0) {
+                const radius = 2 + Math.sqrt(cumulative) * 2;
+                m.marker.addTo(map);
+                m.marker.setRadius(radius);
+                if (hasToday) {
+                  // Brief white flash, then quickly fade to gold
+                  m.marker.setStyle({ fillOpacity: 1, fillColor: '#ffffff', weight: 2 });
+                  setTimeout(() => {
+                    m.marker.setStyle({ fillOpacity: 0.4, fillColor: '#c8a04a', weight: 1 });
+                  }, 100);
+                } else {
+                  m.marker.setStyle({ fillOpacity: 0.4, fillColor: '#c8a04a', weight: 1 });
+                }
+              } else {
+                map.removeLayer(m.marker);
+              }
             }
           });
         } else if (this.viewMode === 'types') {
@@ -1156,15 +1288,30 @@
             if (m._hidden) return;
             if (this.activeActivityFilter && m.activity.activity !== this.activeActivityFilter) return;
             const aDate = m.activity.date ? new Date(m.activity.date.substring(0, 10)).getTime() : null;
-            if (aDate && aDate <= currentTime) {
-              m.marker.addTo(map);
-              if (Math.abs(aDate - currentTime) < DAY_MS) {
-                m.marker.setStyle({ fillOpacity: 1, weight: 2 });
+            if (this.animationDailyMode) {
+              // Daily mode: only show current day, no flash
+              if (aDate && Math.abs(aDate - currentTime) < DAY_MS) {
+                m.marker.addTo(map);
+                m.marker.setStyle({ fillOpacity: 0.8, weight: 1 });
               } else {
-                m.marker.setStyle({ fillOpacity: 0.3, weight: 1 });
+                map.removeLayer(m.marker);
               }
             } else {
-              map.removeLayer(m.marker);
+              // Cumulative mode
+              if (aDate && aDate <= currentTime) {
+                m.marker.addTo(map);
+                if (Math.abs(aDate - currentTime) < DAY_MS) {
+                  // Brief highlight, then quickly fade
+                  m.marker.setStyle({ fillOpacity: 1, weight: 2 });
+                  setTimeout(() => {
+                    m.marker.setStyle({ fillOpacity: 0.3, weight: 1 });
+                  }, 100);
+                } else {
+                  m.marker.setStyle({ fillOpacity: 0.3, weight: 1 });
+                }
+              } else {
+                map.removeLayer(m.marker);
+              }
             }
           });
         }
@@ -1365,6 +1512,26 @@
         this.currentLocationId = locationId;
         this.currentLocationType = locationType;
         this.sidebarOpen = true;
+
+        // Adjust map view so all markers remain visible with sidebar open
+        this.$nextTick(() => {
+          const visibleLatLngs = [];
+          this.groupedMarkers.forEach(m => {
+            if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+          });
+          this.individualMarkers.forEach(m => {
+            if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+          });
+          this.activityMarkers.forEach(m => {
+            if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+          });
+          if (visibleLatLngs.length > 0) {
+            const bounds = L.latLngBounds(visibleLatLngs);
+            // Pad right side to account for the sidebar (450px)
+            const sidebarWidth = window.innerWidth >= 768 ? 450 : Math.floor(window.innerWidth * 0.85);
+            map.fitBounds(bounds, { paddingTopLeft: [40, 40], paddingBottomRight: [sidebarWidth + 40, 40] });
+          }
+        });
       },
 
       closeSidebar() {
@@ -1372,6 +1539,15 @@
         if (this.selectedMarker) {
           this.selectedMarker.getElement().classList.remove('selected');
           this.selectedMarker = null;
+        }
+        // Restore map view without sidebar padding
+        const visibleLatLngs = [];
+        this.groupedMarkers.forEach(m => {
+          if (!m._hidden) visibleLatLngs.push(m.marker.getLatLng());
+        });
+        if (visibleLatLngs.length > 0) {
+          const bounds = L.latLngBounds(visibleLatLngs);
+          map.fitBounds(bounds, { padding: [40, 40] });
         }
       },
 
