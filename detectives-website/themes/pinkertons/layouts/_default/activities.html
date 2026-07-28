@@ -206,17 +206,9 @@
 
       async loadActivities() {
         try {
-          // Build API URL with location_id filter if present
-          let apiUrl = 'https://data.chnm.org/pinkertons/activities';
-          if (this.locationIdFilter) {
-            apiUrl += `?location_id=${this.locationIdFilter}`;
-          }
-
-          const response = await fetch(apiUrl);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
+          const data = await window.fetchPinkertonActivities({
+            locationId: this.locationIdFilter,
+          });
           this.allActivities = data;
           this.filteredActivities = data;
           this.loading = false;
