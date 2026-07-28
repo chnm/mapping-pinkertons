@@ -77,9 +77,7 @@
 
         async function renderInvestigationPreviews() {
           try {
-            const res = await fetch('https://data.chnm.org/pinkertons/activities');
-            if (!res.ok) return;
-            const data = await res.json();
+            const data = await window.fetchPinkertonActivities();
 
             // Group by investigation
             const byInv = {};
