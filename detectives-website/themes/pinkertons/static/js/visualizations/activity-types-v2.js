@@ -26,6 +26,60 @@ function smallWidth() {
   return Math.min(420, Math.floor((window.innerWidth - 120) / 2));
 }
 
+// Builds a collapsible <table> as a non-visual equivalent to a chart.
+function dataTable(rows, columns) {
+  const details = document.createElement("details");
+  details.className = "mt-3";
+
+  const summary = document.createElement("summary");
+  summary.className = "text-sm text-gray-600 cursor-pointer hover:underline";
+  summary.textContent = "View data as table";
+  details.appendChild(summary);
+
+  const wrap = document.createElement("div");
+  wrap.className = "overflow-x-auto mt-2";
+  const table = document.createElement("table");
+  table.className = "w-full text-left text-sm";
+
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  columns.forEach(col => {
+    const th = document.createElement("th");
+    th.className = "px-3 py-2 font-semibold text-gray-600 border-b-2 border-gray-300 bg-gray-50";
+    th.textContent = col.label;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  rows.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.className = "border-b border-gray-200";
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      td.className = "px-3 py-2";
+      td.textContent = row[col.key];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrap.appendChild(table);
+  details.appendChild(wrap);
+  return details;
+}
+
+function chartWithTable(chart, ariaLabel, tableRows, tableColumns) {
+  const wrapper = document.createElement("div");
+  chart.setAttribute("role", "img");
+  chart.setAttribute("aria-label", ariaLabel);
+  wrapper.appendChild(chart);
+  wrapper.appendChild(dataTable(tableRows, tableColumns));
+  return wrapper;
+}
+
 export async function createVisualization(data) {
   const root = document.createElement("div");
 
@@ -112,6 +166,7 @@ export async function createVisualization(data) {
   function updateToggleStyles() {
     [stackedBtn, multiplesBtn].forEach(btn => {
       const active = btn.dataset.mode === mode;
+      btn.setAttribute("aria-pressed", String(active));
       btn.style.backgroundColor = active ? ACCENT : "white";
       btn.style.color = active ? "white" : "#374151";
       btn.style.borderColor = active ? ACCENT : "#d1d5db";
@@ -163,7 +218,18 @@ export async function createVisualization(data) {
       ],
     });
 
-    chartContainer.appendChild(plot);
+    const rows = [...chartData]
+      .sort((a, b) => a.activity.localeCompare(b.activity) || (INVESTIGATIONS[a.investigation] || "").localeCompare(INVESTIGATIONS[b.investigation] || ""))
+      .map(d => ({ 'Activity type': d.activity, Investigation: d.label, Count: d.count }));
+
+    chartContainer.appendChild(
+      chartWithTable(
+        plot,
+        `Stacked bar chart of activity type counts across investigations (${allTypes.length} types)`,
+        rows,
+        [{ key: 'Activity type', label: 'Activity type' }, { key: 'Investigation', label: 'Investigation' }, { key: 'Count', label: 'Count' }]
+      )
+    );
   }
 
   function renderMultiples() {
@@ -209,7 +275,14 @@ export async function createVisualization(data) {
         ],
       });
 
-      card.appendChild(plot);
+      card.appendChild(
+        chartWithTable(
+          plot,
+          `Bar chart of activity type counts for ${INVESTIGATIONS[invKey]} (${invData.length} types)`,
+          invData.map(d => ({ 'Activity type': d.activity, Count: d.count })),
+          [{ key: 'Activity type', label: 'Activity type' }, { key: 'Count', label: 'Count' }]
+        )
+      );
       grid.appendChild(card);
     });
 

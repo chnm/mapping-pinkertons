@@ -1,11 +1,11 @@
 <!-- Combined hero section with navigation for homepage -->
-<section id="top" class="hero relative bg-cover bg-center bg-no-repeat min-h-[70vh] flex flex-col"
+<header id="top" class="hero relative bg-cover bg-center bg-no-repeat min-h-[70vh] flex flex-col"
          style="background-image: url('/images/pinkertons.jpg')">
   <!-- Dark overlay for text readability -->
   <div class="absolute inset-0 bg-black/80"></div>
 
   <!-- Navigation bar -->
-  <nav aria-label="Primary navigation" class="relative z-20 px-6 py-4">
+  <nav aria-label="Primary navigation" class="relative z-20 px-6 py-4" x-data="{ mobileMenuOpen: false }" @keyup.escape="mobileMenuOpen = false">
     <div class="container mx-auto flex items-center justify-between">
       <div class="flex items-center">
       </div>
@@ -18,11 +18,36 @@
       </div>
       <!-- Mobile menu button -->
       <div class="md:hidden">
-        <button class="text-white hover:text-grit-gold" aria-label="Open menu">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <button
+          type="button"
+          class="text-white hover:text-grit-gold"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          :aria-expanded="mobileMenuOpen"
+          aria-controls="hero-mobile-menu"
+          :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-show="!mobileMenuOpen">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-show="mobileMenuOpen" x-cloak>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
+      </div>
+    </div>
+    <div
+      id="hero-mobile-menu"
+      class="md:hidden relative z-20"
+      x-show="mobileMenuOpen"
+      x-collapse
+      x-cloak
+    >
+      <div class="container mx-auto flex flex-col space-y-4 pt-4 pb-2">
+        <a href="/narratives" class="text-white hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Investigations</a>
+        <a href="/map" class="text-white hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Map</a>
+        <a href="/visualizations/dashboard" class="text-white hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Activities</a>
+        <a href="/visualizations/comparative" class="text-white hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Insights</a>
+        <a href="/about" class="text-white hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">About</a>
       </div>
     </div>
   </nav>
@@ -55,4 +80,4 @@
     </a>
   </div>
   -->
-</section>
+</header>
