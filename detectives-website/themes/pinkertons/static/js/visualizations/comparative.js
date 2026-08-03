@@ -106,30 +106,98 @@ const CHART_TYPES = {
   },
 };
 
+// ─── Non-visual data table equivalent ─────────────────────────────────────────
+// Builds a collapsible <table> alongside each chart so screen reader / keyboard
+// users have a text equivalent to the pointer-only chart tooltips.
+
+function dataTable(rows, columns) {
+  const details = document.createElement("details");
+  details.className = "mt-3";
+
+  const summary = document.createElement("summary");
+  summary.className = "text-sm text-gray-600 cursor-pointer hover:underline";
+  summary.textContent = "View data as table";
+  details.appendChild(summary);
+
+  const wrap = document.createElement("div");
+  wrap.className = "overflow-x-auto mt-2";
+  const table = document.createElement("table");
+  table.className = "w-full text-left text-sm";
+
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  columns.forEach(col => {
+    const th = document.createElement("th");
+    th.className = "px-3 py-2 font-semibold text-gray-600 border-b-2 border-gray-300 bg-gray-50";
+    th.textContent = col.label;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  rows.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.className = "border-b border-gray-200";
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      td.className = "px-3 py-2";
+      td.textContent = row[col.key];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrap.appendChild(table);
+  details.appendChild(wrap);
+  return details;
+}
+
+function chartWithTable(chart, ariaLabel, tableRows, tableColumns) {
+  const wrapper = document.createElement("div");
+  chart.setAttribute("role", "img");
+  chart.setAttribute("aria-label", ariaLabel);
+  wrapper.appendChild(chart);
+  wrapper.appendChild(dataTable(tableRows, tableColumns));
+  return wrapper;
+}
+
 // ─── Rendering ───────────────────────────────────────────────────────────────
 
 function renderStacked(container, chartData, invKeys) {
   const allValues = [...new Set(chartData.map(d => d.value))];
+  const chart = Plot.plot({
+    marginLeft: 160, marginBottom: 40,
+    width: fullW(),
+    height: Math.max(300, allValues.length * 30 + 60),
+    x: { grid: true, label: "Activities" },
+    y: { label: null },
+    color: {
+      domain: invKeys.map(k => INVESTIGATIONS[k]),
+      range: invKeys.map((_, i) => PALETTE[i % PALETTE.length]),
+      legend: false,
+    },
+    marks: [
+      Plot.barX(chartData, Plot.groupY(
+        { x: "sum" },
+        { y: "value", x: "count", fill: "label", sort: { y: "-x" }, tip: true }
+      )),
+      Plot.ruleX([0]),
+    ],
+  });
+
+  const rows = [...chartData]
+    .sort((a, b) => (INVESTIGATIONS[a.investigation] || "").localeCompare(INVESTIGATIONS[b.investigation] || "") || b.count - a.count)
+    .map(d => ({ Investigation: d.label, Value: d.value, Count: d.count }));
+
   container.appendChild(
-    Plot.plot({
-      marginLeft: 160, marginBottom: 40,
-      width: fullW(),
-      height: Math.max(300, allValues.length * 30 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null },
-      color: {
-        domain: invKeys.map(k => INVESTIGATIONS[k]),
-        range: invKeys.map((_, i) => PALETTE[i % PALETTE.length]),
-        legend: false,
-      },
-      marks: [
-        Plot.barX(chartData, Plot.groupY(
-          { x: "sum" },
-          { y: "value", x: "count", fill: "label", sort: { y: "-x" }, tip: true }
-        )),
-        Plot.ruleX([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Stacked bar chart comparing counts across investigations (${allValues.length} categories)`,
+      rows,
+      [{ key: "Investigation", label: "Investigation" }, { key: "Value", label: "Value" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -157,18 +225,25 @@ function renderMultiples(container, allData, fieldFn, invKeys) {
     sub.textContent = `${invData.length} activities`;
     card.appendChild(sub);
 
+    const chart = Plot.plot({
+      marginLeft: 140, marginBottom: 30,
+      width: smallW(),
+      height: Math.max(150, counts.length * 25 + 40),
+      x: { grid: true, label: null },
+      y: { label: null },
+      marks: [
+        Plot.barX(counts, { x: "count", y: "value", fill: PALETTE[i % PALETTE.length], sort: { y: "-x" }, tip: true }),
+        Plot.ruleX([0]),
+      ],
+    });
+
     card.appendChild(
-      Plot.plot({
-        marginLeft: 140, marginBottom: 30,
-        width: smallW(),
-        height: Math.max(150, counts.length * 25 + 40),
-        x: { grid: true, label: null },
-        y: { label: null },
-        marks: [
-          Plot.barX(counts, { x: "count", y: "value", fill: PALETTE[i % PALETTE.length], sort: { y: "-x" }, tip: true }),
-          Plot.ruleX([0]),
-        ],
-      })
+      chartWithTable(
+        chart,
+        `Bar chart for ${INVESTIGATIONS[invKey]} (${counts.length} categories)`,
+        counts.map(c => ({ Value: c.value, Count: c.count })),
+        [{ key: "Value", label: "Value" }, { key: "Count", label: "Count" }]
+      )
     );
     grid.appendChild(card);
   });
@@ -209,23 +284,44 @@ function renderTimelineMultiples(container, allData, invKeys) {
     sub.textContent = `${invData.length} activities`;
     card.appendChild(sub);
 
-    card.appendChild(
-      Plot.plot({
-        marginLeft: 40, marginBottom: 50,
-        width: smallW(),
-        height: 200,
-        x: { type: "time", label: null, tickFormat: "%b %d", tickRotate: -30 },
-        y: { grid: true, label: null },
-        color: {
-          domain: activityTypes,
-          range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
-          legend: true
-        },
-        marks: [
-          Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })),
-          Plot.ruleY([0]),
-        ],
+    const chart = Plot.plot({
+      marginLeft: 40, marginBottom: 50,
+      width: smallW(),
+      height: 200,
+      x: { type: "time", label: null, tickFormat: "%b %d", tickRotate: -30 },
+      y: { grid: true, label: null },
+      color: {
+        domain: activityTypes,
+        range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
+        legend: true
+      },
+      marks: [
+        Plot.rectY(withDates, Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })),
+        Plot.ruleY([0]),
+      ],
+    });
+
+    // "Date, Activity type, Count" table matching the day-by-type bins in the chart
+    const dayTypeCounts = {};
+    withDates.forEach(d => {
+      const day = d.dateObj.toISOString().substring(0, 10);
+      const key = `${day}|${d.activityType}`;
+      dayTypeCounts[key] = (dayTypeCounts[key] || 0) + 1;
+    });
+    const rows = Object.entries(dayTypeCounts)
+      .map(([key, count]) => {
+        const [date, type] = key.split("|");
+        return { Date: date, "Activity type": type, Count: count };
       })
+      .sort((a, b) => a.Date.localeCompare(b.Date) || a["Activity type"].localeCompare(b["Activity type"]));
+
+    card.appendChild(
+      chartWithTable(
+        chart,
+        `Histogram of daily activity counts for ${INVESTIGATIONS[invKey]} (${activityTypes.length} types)`,
+        rows,
+        [{ key: "Date", label: "Date" }, { key: "Activity type", label: "Activity type" }, { key: "Count", label: "Count" }]
+      )
     );
     grid.appendChild(card);
   });
@@ -286,11 +382,13 @@ export async function createVisualization(data) {
   stackedBtn.type = "button";
   stackedBtn.textContent = "Stacked";
   stackedBtn.className = "px-3 py-1 text-sm rounded border cursor-pointer transition-colors";
+  stackedBtn.setAttribute("aria-pressed", "true");
 
   const multiplesBtn = document.createElement("button");
   multiplesBtn.type = "button";
   multiplesBtn.textContent = "Small Multiples";
   multiplesBtn.className = "px-3 py-1 text-sm rounded border cursor-pointer transition-colors";
+  multiplesBtn.setAttribute("aria-pressed", "false");
 
   modeWrap.appendChild(stackedBtn);
   modeWrap.appendChild(multiplesBtn);
@@ -342,6 +440,7 @@ export async function createVisualization(data) {
     [stackedBtn, multiplesBtn].forEach(btn => {
       const val = btn === stackedBtn ? 'stacked' : 'multiples';
       const active = val === viewMode;
+      btn.setAttribute("aria-pressed", String(active));
       btn.style.backgroundColor = active ? ACCENT : "white";
       btn.style.color = active ? "white" : "#374151";
       btn.style.borderColor = active ? ACCENT : "#d1d5db";

@@ -74,6 +74,64 @@ function makeOpt(value, label) {
   return o;
 }
 
+// ─── Non-visual data table equivalent ─────────────────────────────────────────
+// Builds a collapsible <table> alongside each chart so screen reader / keyboard
+// users have a text equivalent to the pointer-only chart tooltips.
+
+function dataTable(rows, columns) {
+  const details = document.createElement("details");
+  details.className = "mt-3";
+
+  const summary = document.createElement("summary");
+  summary.className = "text-sm text-gray-600 cursor-pointer hover:underline";
+  summary.textContent = "View data as table";
+  details.appendChild(summary);
+
+  const wrap = document.createElement("div");
+  wrap.className = "overflow-x-auto mt-2";
+  const table = document.createElement("table");
+  table.className = "w-full text-left text-sm";
+
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  columns.forEach(col => {
+    const th = document.createElement("th");
+    th.className = "px-3 py-2 font-semibold text-gray-600 border-b-2 border-gray-300 bg-gray-50";
+    th.textContent = col.label;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  rows.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.className = "border-b border-gray-200";
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      td.className = "px-3 py-2";
+      td.textContent = row[col.key];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrap.appendChild(table);
+  details.appendChild(wrap);
+  return details;
+}
+
+// Wraps a Plot chart with role="img"/aria-label and an appended data table.
+function chartWithTable(chart, ariaLabel, tableRows, tableColumns) {
+  const wrapper = document.createElement("div");
+  chart.setAttribute("role", "img");
+  chart.setAttribute("aria-label", ariaLabel);
+  wrapper.appendChild(chart);
+  wrapper.appendChild(dataTable(tableRows, tableColumns));
+  return wrapper;
+}
+
 // ─── Date Slider Helpers ───────────────────────────────────────────────────────
 
 const DAY_MS = 86_400_000;
@@ -129,6 +187,19 @@ function injectSliderStyles() {
       background: ${ACCENT}; border: 2px solid white;
       box-shadow: 0 1px 4px rgba(0,0,0,0.28);
       pointer-events: all; cursor: grab;
+    }
+    /* Visible focus indicator on the thumb, since the native outline on the
+       (invisible, full-track) input itself isn't useful to sighted users.
+       Plain :focus (not :focus-visible) is used here because chaining
+       :focus-visible directly before the vendor thumb pseudo-elements isn't
+       reliably supported across browsers — the whole rule can silently fail
+       to match. Showing the ring on any focus (keyboard or pointer) is a
+       safe, well-supported fallback. */
+    .db-range:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 0 2px white, 0 0 0 4px ${ACCENT} !important;
+    }
+    .db-range:focus::-moz-range-thumb {
+      box-shadow: 0 0 0 2px white, 0 0 0 4px ${ACCENT} !important;
     }
     .db-help summary {
       list-style: none; cursor: pointer;
@@ -296,6 +367,7 @@ function buildFilterBar(allData, minDate, totalDays) {
     btn.dataset.infoVal = label.toLowerCase();
     btn.textContent = label;
     btn.className = "text-xs px-2 py-1 rounded border transition-colors cursor-pointer";
+    btn.setAttribute("aria-pressed", i === 0 ? "true" : "false");
     btn.style.backgroundColor = i === 0 ? ACCENT : "white";
     btn.style.color           = i === 0 ? "white" : "#2a1a0e";
     btn.style.borderColor     = i === 0 ? ACCENT  : "#d1d5db";
@@ -343,6 +415,7 @@ function buildFilterBar(allData, minDate, totalDays) {
   minSlider.value = 0;
   minSlider.style.zIndex = 2;
   minSlider.setAttribute("aria-label", "Date range start");
+  minSlider.setAttribute("aria-valuetext", fmtDate(minDate));
 
   const maxSlider = document.createElement("input");
   maxSlider.type = "range";
@@ -352,6 +425,7 @@ function buildFilterBar(allData, minDate, totalDays) {
   maxSlider.value = totalDays;
   maxSlider.style.zIndex = 3;
   maxSlider.setAttribute("aria-label", "Date range end");
+  maxSlider.setAttribute("aria-valuetext", fmtDate(dayToDate(totalDays, minDate)));
 
   trackWrap.appendChild(minSlider);
   trackWrap.appendChild(maxSlider);
@@ -379,6 +453,8 @@ function buildFilterBar(allData, minDate, totalDays) {
   // — Live record count
   const countBadge = document.createElement("span");
   countBadge.id = "filter-count";
+  countBadge.setAttribute("role", "status");
+  countBadge.setAttribute("aria-live", "polite");
   countBadge.className = "ml-auto text-sm text-grit-text-dark/70 font-mono tabular-nums";
   row1.appendChild(countBadge);
 
@@ -474,27 +550,48 @@ function renderTimeline(container, data) {
     return;
   }
   const activityTypes = [...new Set(withDates.map(d => d.activityType))].sort();
-  container.appendChild(
-    Plot.plot({
-      marginLeft: 50,
-      marginBottom: 70,
-      width: fullW(),
-      height: 280,
-      x: { type: "time", label: "Date", tickFormat: "%b %d", tickRotate: -30 },
-      y: { grid: true, label: "Activities" },
-      color: {
-        domain: activityTypes,
-        range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
-        legend: true
-      },
-      marks: [
-        Plot.rectY(
-          withDates,
-          Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })
-        ),
-        Plot.ruleY([0]),
-      ],
+  const chart = Plot.plot({
+    marginLeft: 50,
+    marginBottom: 70,
+    width: fullW(),
+    height: 280,
+    x: { type: "time", label: "Date", tickFormat: "%b %d", tickRotate: -30 },
+    y: { grid: true, label: "Activities" },
+    color: {
+      domain: activityTypes,
+      range: activityTypes.map(t => ACTIVITY_COLORS[t] || "#999"),
+      legend: true
+    },
+    marks: [
+      Plot.rectY(
+        withDates,
+        Plot.binX({ y: "count" }, { x: "dateObj", interval: "day", fill: "activityType", tip: true })
+      ),
+      Plot.ruleY([0]),
+    ],
+  });
+
+  // Build a "Date, Activity type, Count" table matching the day-by-type bins in the chart
+  const dayTypeCounts = {};
+  withDates.forEach(d => {
+    const day = d.dateObj.toISOString().substring(0, 10);
+    const key = `${day}|${d.activityType}`;
+    dayTypeCounts[key] = (dayTypeCounts[key] || 0) + 1;
+  });
+  const rows = Object.entries(dayTypeCounts)
+    .map(([key, count]) => {
+      const [date, type] = key.split("|");
+      return { Date: date, "Activity type": type, Count: count };
     })
+    .sort((a, b) => a.Date.localeCompare(b.Date) || a["Activity type"].localeCompare(b["Activity type"]));
+
+  container.appendChild(
+    chartWithTable(
+      chart,
+      `Histogram of daily activity counts by activity type (${activityTypes.length} types)`,
+      rows,
+      [{ key: "Date", label: "Date" }, { key: "Activity type", label: "Activity type" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -507,25 +604,31 @@ function renderActivityTypes(container, data, colorMap) {
     container.textContent = "No data for current filters.";
     return;
   }
+  const chart = Plot.plot({
+    marginLeft: 160,
+    marginBottom: 40,
+    width: halfW(),
+    height: Math.max(180, counts.length * 30 + 60),
+    x: { grid: true, label: "Activities" },
+    y: { label: null },
+    marks: [
+      pillBarX(counts, {
+        x: "count",
+        y: "value",
+        fill: d => colorMap.get(d.value) || ACCENT,
+        sort: { y: "-x" },
+        tip: true,
+      }),
+      Plot.ruleX([0]),
+    ],
+  });
   container.appendChild(
-    Plot.plot({
-      marginLeft: 160,
-      marginBottom: 40,
-      width: halfW(),
-      height: Math.max(180, counts.length * 30 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null },
-      marks: [
-        pillBarX(counts, {
-          x: "count",
-          y: "value",
-          fill: d => colorMap.get(d.value) || ACCENT,
-          sort: { y: "-x" },
-          tip: true,
-        }),
-        Plot.ruleX([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Bar chart of activity type counts (${counts.length} types)`,
+      counts.map(c => ({ Activity: c.value, Count: c.count })),
+      [{ key: "Activity", label: "Activity" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -538,22 +641,35 @@ function renderTimeOfDay(container, data) {
     container.textContent = "No timed records match the current filters.";
     return;
   }
+  const chart = Plot.plot({
+    marginLeft: 40,
+    marginBottom: 40,
+    width: halfW(),
+    height: 220,
+    x: { label: "Hour of day", domain: [0, 23], ticks: [0, 6, 12, 18, 23] },
+    y: { grid: true, label: "Activities" },
+    marks: [
+      Plot.rectY(
+        withHours,
+        Plot.binX({ y: "count" }, { x: "hour", interval: 1, fill: STEEL, tip: true })
+      ),
+      Plot.ruleY([0]),
+    ],
+  });
+
+  const hourCounts = {};
+  withHours.forEach(d => { hourCounts[d.hour] = (hourCounts[d.hour] || 0) + 1; });
+  const rows = Object.entries(hourCounts)
+    .map(([hour, count]) => ({ Hour: `${hour}:00`, Count: count }))
+    .sort((a, b) => parseInt(a.Hour, 10) - parseInt(b.Hour, 10));
+
   container.appendChild(
-    Plot.plot({
-      marginLeft: 40,
-      marginBottom: 40,
-      width: halfW(),
-      height: 220,
-      x: { label: "Hour of day", domain: [0, 23], ticks: [0, 6, 12, 18, 23] },
-      y: { grid: true, label: "Activities" },
-      marks: [
-        Plot.rectY(
-          withHours,
-          Plot.binX({ y: "count" }, { x: "hour", interval: 1, fill: STEEL, tip: true })
-        ),
-        Plot.ruleY([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Histogram of activity counts by hour of day (${rows.length} hours with activity)`,
+      rows,
+      [{ key: "Hour", label: "Hour" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -566,25 +682,31 @@ function renderOperatives(container, data) {
     container.textContent = "No data for current filters.";
     return;
   }
+  const chart = Plot.plot({
+    marginLeft: 140,
+    marginBottom: 40,
+    width: halfW(),
+    height: Math.max(180, counts.length * 30 + 60),
+    x: { grid: true, label: "Activities" },
+    y: { label: null },
+    marks: [
+      pillBarX(counts, {
+        x: "count",
+        y: "value",
+        fill: STEEL,
+        sort: { y: "-x" },
+        tip: true,
+      }),
+      Plot.ruleX([0]),
+    ],
+  });
   container.appendChild(
-    Plot.plot({
-      marginLeft: 140,
-      marginBottom: 40,
-      width: halfW(),
-      height: Math.max(180, counts.length * 30 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null },
-      marks: [
-        pillBarX(counts, {
-          x: "count",
-          y: "value",
-          fill: STEEL,
-          sort: { y: "-x" },
-          tip: true,
-        }),
-        Plot.ruleX([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Bar chart of operative workload counts (${counts.length} operatives)`,
+      counts.map(c => ({ Operative: c.value, Count: c.count })),
+      [{ key: "Operative", label: "Operative" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -597,25 +719,31 @@ function renderLocationTypes(container, data) {
     container.textContent = "No location type data for current filters.";
     return;
   }
+  const chart = Plot.plot({
+    marginLeft: 140,
+    marginBottom: 40,
+    width: halfW(),
+    height: Math.max(180, counts.length * 30 + 60),
+    x: { grid: true, label: "Activities" },
+    y: { label: null },
+    marks: [
+      pillBarX(counts, {
+        x: "count",
+        y: "value",
+        fill: GOLD,
+        sort: { y: "-x" },
+        tip: true,
+      }),
+      Plot.ruleX([0]),
+    ],
+  });
   container.appendChild(
-    Plot.plot({
-      marginLeft: 140,
-      marginBottom: 40,
-      width: halfW(),
-      height: Math.max(180, counts.length * 30 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null },
-      marks: [
-        pillBarX(counts, {
-          x: "count",
-          y: "value",
-          fill: GOLD,
-          sort: { y: "-x" },
-          tip: true,
-        }),
-        Plot.ruleX([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Bar chart of location type counts (${counts.length} types)`,
+      counts.map(c => ({ "Location type": c.value, Count: c.count })),
+      [{ key: "Location type", label: "Location type" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -628,25 +756,31 @@ function renderSubjects(container, data) {
     container.textContent = "No subject data for current filters.";
     return;
   }
+  const chart = Plot.plot({
+    marginLeft: 180,
+    marginBottom: 40,
+    width: fullW(),
+    height: Math.max(260, counts.length * 30 + 60),
+    x: { grid: true, label: "Activities" },
+    y: { label: null },
+    marks: [
+      pillBarX(counts, {
+        x: "count",
+        y: "value",
+        fill: ACCENT,
+        sort: { y: "-x" },
+        tip: true,
+      }),
+      Plot.ruleX([0]),
+    ],
+  });
   container.appendChild(
-    Plot.plot({
-      marginLeft: 180,
-      marginBottom: 40,
-      width: fullW(),
-      height: Math.max(260, counts.length * 30 + 60),
-      x: { grid: true, label: "Activities" },
-      y: { label: null },
-      marks: [
-        pillBarX(counts, {
-          x: "count",
-          y: "value",
-          fill: ACCENT,
-          sort: { y: "-x" },
-          tip: true,
-        }),
-        Plot.ruleX([0]),
-      ],
-    })
+    chartWithTable(
+      chart,
+      `Bar chart of top subjects watched (${counts.length} subjects)`,
+      counts.map(c => ({ Subject: c.value, Count: c.count })),
+      [{ key: "Subject", label: "Subject" }, { key: "Count", label: "Count" }]
+    )
   );
 }
 
@@ -766,21 +900,50 @@ function renderDataTable(container, data) {
     return `${h}:${m[2]} ${ampm}`;
   }
 
+  // Persistent header (status text + pagination buttons) — only its contents are
+  // updated in place on page change, rather than being recreated, so the
+  // aria-live region reliably announces "Showing X–Y of Z" to screen readers.
+  const header = document.createElement("div");
+  header.className = "flex justify-between items-center mb-3 text-sm text-gray-500";
+
+  const status = document.createElement("span");
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  header.appendChild(status);
+
+  const btnWrap = document.createElement("div");
+  btnWrap.className = "flex gap-2";
+  const prevBtn = document.createElement("button");
+  prevBtn.type = "button";
+  prevBtn.textContent = "Previous";
+  const nextBtn = document.createElement("button");
+  nextBtn.type = "button";
+  nextBtn.textContent = "Next";
+  btnWrap.appendChild(prevBtn);
+  btnWrap.appendChild(nextBtn);
+  header.appendChild(btnWrap);
+
+  const tableWrap = document.createElement("div");
+  tableWrap.className = "overflow-x-auto";
+
+  container.appendChild(header);
+  container.appendChild(tableWrap);
+
+  prevBtn.addEventListener('click', () => { if (page > 0) { page--; render(); } });
+  nextBtn.addEventListener('click', () => { if (page < totalPages() - 1) { page++; render(); } });
+
   function render() {
     const start = page * PAGE_SIZE;
     const slice = data.slice(start, start + PAGE_SIZE);
 
+    status.textContent = `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, data.length)} of ${data.length} activities`;
+
+    prevBtn.disabled = page === 0;
+    prevBtn.className = `px-3 py-1 rounded border border-gray-300 text-sm ${page === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}`;
+    nextBtn.disabled = page >= totalPages() - 1;
+    nextBtn.className = `px-3 py-1 rounded border border-gray-300 text-sm ${page >= totalPages() - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}`;
+
     let html = `
-      <div class="flex justify-between items-center mb-3 text-sm text-gray-500">
-        <span>Showing ${start + 1}–${Math.min(start + PAGE_SIZE, data.length)} of ${data.length} activities</span>
-        <div class="flex gap-2">
-          <button class="db-table-prev px-3 py-1 rounded border border-gray-300 text-sm ${page === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}"
-            ${page === 0 ? 'disabled' : ''}>Previous</button>
-          <button class="db-table-next px-3 py-1 rounded border border-gray-300 text-sm ${page >= totalPages() - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:border-gray-500 cursor-pointer'}"
-            ${page >= totalPages() - 1 ? 'disabled' : ''}>Next</button>
-        </div>
-      </div>
-      <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
           <thead>
             <tr class="border-b-2 border-gray-300 bg-gray-50">
@@ -811,14 +974,8 @@ function renderDataTable(container, data) {
             </tr>`;
     });
 
-    html += `</tbody></table></div>`;
-    container.innerHTML = html;
-
-    // Wire pagination
-    const prev = container.querySelector('.db-table-prev');
-    const next = container.querySelector('.db-table-next');
-    if (prev) prev.addEventListener('click', () => { if (page > 0) { page--; render(); } });
-    if (next) next.addEventListener('click', () => { if (page < totalPages() - 1) { page++; render(); } });
+    html += `</tbody></table>`;
+    tableWrap.innerHTML = html;
   }
 
   render();
@@ -947,6 +1104,7 @@ export async function createVisualization(rawData, opts = {}) {
   function setInfoActive(activeVal) {
     infoButtons.forEach(btn => {
       const active = btn.dataset.infoVal === activeVal;
+      btn.setAttribute("aria-pressed", String(active));
       btn.style.backgroundColor = active ? ACCENT  : "white";
       btn.style.color           = active ? "white" : "#2a1a0e";
       btn.style.borderColor     = active ? ACCENT  : "#d1d5db";
@@ -1023,6 +1181,8 @@ export async function createVisualization(rawData, opts = {}) {
     rangeDisplay.textContent =
       `${fmtShort(dayToDate(+minSlider.value, minDate))} – ` +
       `${fmtShort(dayToDate(+maxSlider.value, minDate))}`;
+    minSlider.setAttribute("aria-valuetext", fmtDate(dayToDate(+minSlider.value, minDate)));
+    maxSlider.setAttribute("aria-valuetext", fmtDate(dayToDate(+maxSlider.value, minDate)));
     state.dateMin = +minSlider.value;
     state.dateMax = +maxSlider.value;
     renderAll();
@@ -1046,6 +1206,8 @@ export async function createVisualization(rawData, opts = {}) {
     updateSliderFill(sliderFill, minSlider, maxSlider);
     rangeDisplay.textContent =
       `${fmtShort(minDate)} – ${fmtShort(dayToDate(totalDays, minDate))}`;
+    minSlider.setAttribute("aria-valuetext", fmtDate(minDate));
+    maxSlider.setAttribute("aria-valuetext", fmtDate(dayToDate(totalDays, minDate)));
     renderAll();
   });
 

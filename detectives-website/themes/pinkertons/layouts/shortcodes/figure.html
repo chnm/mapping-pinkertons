@@ -1,5 +1,9 @@
 {{- $src := .Get "src" -}}
-{{- $alt := .Get "alt" | default "" -}}
+{{- $alt := .Get "alt" -}}
+{{- if not $alt -}}
+  {{- warnf "figure shortcode on page %q is missing alt text for image %q — add alt=\"...\" so screen reader users know what it shows" .Page.File.Path $src -}}
+{{- end -}}
+{{- $alt = $alt | default "" -}}
 {{- $title := .Get "title" | default "" -}}
 {{- $align := .Get "align" | default "center" -}}
 {{- $width := .Get "width" | default "" -}}

@@ -51,17 +51,17 @@
             <div class="flex">
               <!-- Left: dot map + sparkline + stats -->
               <div class="w-1/3 bg-gray-50 border-r border-gray-100 p-3 flex flex-col items-center justify-center self-stretch">
-                <svg class="inv-dotmap w-full flex-1 min-h-[48px]" data-inv="{{ .Params.investigation }}"></svg>
-                <svg class="inv-sparkline w-full h-5 mt-1" data-inv="{{ .Params.investigation }}"></svg>
+                <svg class="inv-dotmap w-full flex-1 min-h-[48px]" data-inv="{{ .Params.investigation }}" aria-hidden="true"></svg>
+                <svg class="inv-sparkline w-full h-5 mt-1" data-inv="{{ .Params.investigation }}" aria-hidden="true"></svg>
                 <div class="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-1">
-                  <span class="text-[10px] text-grit-text-dark/50 inv-stat-count" data-inv="{{ .Params.investigation }}"></span>
-                  <span class="text-[10px] text-grit-text-dark/50 inv-stat-dates" data-inv="{{ .Params.investigation }}"></span>
+                  <span class="text-xs text-grit-text-dark/70 inv-stat-count" data-inv="{{ .Params.investigation }}"></span>
+                  <span class="text-xs text-grit-text-dark/70 inv-stat-dates" data-inv="{{ .Params.investigation }}"></span>
                 </div>
               </div>
               <!-- Right: text -->
               <div class="w-2/3 p-5">
                 <h3 class="text-lg font-heading font-semibold text-grit-text-dark mb-1 group-hover:text-grit-accent transition-colors">{{ .Title }}</h3>
-                <p class="text-xs text-grit-text-dark/50 mb-2">{{ .Params.location }}</p>
+                <p class="text-xs text-grit-text-dark/70 mb-2">{{ .Params.location }}</p>
                 <p class="text-sm text-grit-text-dark/80 leading-relaxed">{{ .Params.description }}</p>
               </div>
             </div>

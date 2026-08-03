@@ -1,5 +1,5 @@
 <header>
-<nav id="top" aria-label="Primary navigation" class="bg-grit-bg border-b border-grit-steel px-6 py-4">
+<nav id="top" aria-label="Primary navigation" class="bg-grit-bg border-b border-grit-steel px-6 py-4" x-data="{ mobileMenuOpen: false }" @keyup.escape="mobileMenuOpen = false">
   <div class="container mx-auto flex items-center justify-between">
     <div class="flex items-center">
       <a id="site-title" class="font-heading font-bold text-2xl text-grit-text hover:text-grit-gold transition-colors" href="/">
@@ -15,11 +15,36 @@
     </div>
     <!-- Mobile menu button -->
     <div class="md:hidden">
-      <button class="text-grit-text hover:text-grit-gold" aria-label="Open menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <button
+        type="button"
+        class="text-grit-text hover:text-grit-gold"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+        :aria-expanded="mobileMenuOpen"
+        aria-controls="mobile-menu"
+        :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-show="!mobileMenuOpen">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" x-show="mobileMenuOpen" x-cloak>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
+    </div>
+  </div>
+  <div
+    id="mobile-menu"
+    class="md:hidden"
+    x-show="mobileMenuOpen"
+    x-collapse
+    x-cloak
+  >
+    <div class="container mx-auto flex flex-col space-y-4 pt-4 pb-2">
+      <a href="/narratives" class="text-grit-text hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Investigations</a>
+      <a href="/map" class="text-grit-text hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Map</a>
+      <a href="/visualizations/dashboard" class="text-grit-text hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Activities</a>
+      <a href="/visualizations/comparative" class="text-grit-text hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">Insights</a>
+      <a href="/about" class="text-grit-text hover:text-grit-gold font-medium transition-colors" @click="mobileMenuOpen = false">About</a>
     </div>
   </div>
 </nav>
