@@ -1,0 +1,28 @@
+name: "[detectives-website] Test"
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/test--detectives-website.yml"
+      - "detectives-website/themes/pinkertons/layouts/**"
+      - "detectives-website/themes/pinkertons/package.json"
+      - "detectives-website/themes/pinkertons/static/js/**"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 20
+
+      - name: Test Pinkertons API client
+        run: npm test
+        working-directory: detectives-website/themes/pinkertons
