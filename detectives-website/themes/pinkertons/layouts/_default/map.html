@@ -12,12 +12,12 @@
         <select id="map-investigation"
           x-model="selectedLocation"
           @change="setLocation(selectedLocation)"
-          class="text-xs bg-white border border-gray-300 rounded px-2 py-1 text-grit-text-dark">
+          class="text-xs bg-white border border-gray-300 rounded px-2 py-1.5 text-grit-text-dark">
           <template x-for="(loc, key) in locations" :key="key">
             <option :value="key" x-text="loc.name"></option>
           </template>
         </select>
-        <span class="text-xs text-grit-text-dark/50" x-text="(locationCounts[selectedLocation] || 0) + ' activities'"></span>
+        <span class="text-xs text-grit-text-dark/70" role="status" aria-live="polite" x-text="(locationCounts[selectedLocation] || 0) + ' activities'"></span>
       </div>
 
       <!-- Divider -->
@@ -28,7 +28,7 @@
         <label for="map-viewmode" class="text-xs font-medium text-grit-text-dark whitespace-nowrap">View</label>
         <select id="map-viewmode"
           x-model="viewMode"
-          class="text-xs bg-white border border-gray-300 rounded px-2 py-1 text-grit-text-dark">
+          class="text-xs bg-white border border-gray-300 rounded px-2 py-1.5 text-grit-text-dark">
           <option value="all">All Activities</option>
           <option value="types">Location Type</option>
         </select>
@@ -43,7 +43,7 @@
         <select id="map-basemap"
           x-model="selectedBasemap"
           @change="setBasemap(selectedBasemap)"
-          class="text-xs bg-white border border-gray-300 rounded px-2 py-1 text-grit-text-dark">
+          class="text-xs bg-white border border-gray-300 rounded px-2 py-1.5 text-grit-text-dark">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
@@ -54,7 +54,7 @@
 
       <!-- About link -->
       <button @click="aboutModalOpen = true"
-        class="text-xs text-grit-text-dark/50 hover:text-grit-accent transition-colors flex items-center gap-1"
+        class="text-xs text-grit-text-dark/70 hover:text-grit-accent transition-colors flex items-center gap-1 p-1"
         aria-label="About this map">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -64,7 +64,7 @@
 
       <!-- Activities link -->
       <a :href="'/visualizations/dashboard/?investigation=' + selectedLocation"
-        class="text-xs text-grit-text-dark/50 hover:text-grit-accent transition-colors flex items-center gap-1">
+        class="text-xs text-grit-text-dark/70 hover:text-grit-accent transition-colors flex items-center gap-1 p-1">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
         </svg>
@@ -78,7 +78,7 @@
     class="bg-white border border-gray-200 rounded-lg px-4 py-1.5 shadow-md"
     style="display: none;">
     <div class="flex flex-wrap items-center gap-3">
-      <span class="text-[10px] font-medium text-grit-text-dark/50 uppercase tracking-wide">Legend</span>
+      <span class="text-[10px] font-medium text-grit-text-dark/70 uppercase tracking-wide">Legend</span>
       <template x-for="category in locationCategories" :key="category.type">
         <div class="flex items-center gap-1.5">
           <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="`background-color: ${category.color}`"></div>
@@ -100,13 +100,17 @@
     x-transition:leave-end="opacity-0"
     @click.self="aboutModalOpen = false"
     @keydown.escape.window="aboutModalOpen = false"
+    x-trap.noscroll="aboutModalOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="about-modal-title"
     class="fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm"
     style="display: none;">
     <div class="bg-grit-bg rounded-lg shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto border border-grit-steel/30"
       @click.stop>
       <div class="px-6 py-4 border-b border-grit-steel/30 flex items-center justify-between">
-        <h2 class="text-lg font-heading font-semibold text-grit-gold">About This Map</h2>
-        <button @click="aboutModalOpen = false" class="text-grit-text hover:text-grit-gold transition-colors" aria-label="Close">
+        <h2 id="about-modal-title" class="text-lg font-heading font-semibold text-grit-gold">About This Map</h2>
+        <button @click="aboutModalOpen = false" class="p-1 text-grit-text hover:text-grit-gold transition-colors" aria-label="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -243,7 +247,7 @@
             <span class="text-xs text-grit-text/70" x-show="activeActivityFilter && !animationPlaying">
               Filtering: <strong class="text-grit-gold" x-text="activeActivityFilter"></strong>
             </span>
-            <span class="text-xs text-grit-text/50" x-show="!activeActivityFilter && !animationPlaying && !animationDate">
+            <span class="text-xs text-grit-text/60" x-show="!activeActivityFilter && !animationPlaying && !animationDate">
               Click a bar to filter, or press play
             </span>
           </div>
@@ -266,13 +270,17 @@
     x-transition:leave-end="opacity-0"
     @click.self="timelineHelpOpen = false"
     @keydown.escape.window="timelineHelpOpen = false"
+    x-trap.noscroll="timelineHelpOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="timeline-help-title"
     class="fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm"
     style="display: none;">
     <div class="bg-grit-bg rounded-lg shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto border border-grit-steel/30"
       @click.stop>
       <div class="px-6 py-4 border-b border-grit-steel/30 flex items-center justify-between">
-        <h2 class="text-lg font-heading font-semibold text-grit-gold">Using the Activities Timeline</h2>
-        <button @click="timelineHelpOpen = false" class="text-grit-text hover:text-grit-gold transition-colors" aria-label="Close">
+        <h2 id="timeline-help-title" class="text-lg font-heading font-semibold text-grit-gold">Using the Activities Timeline</h2>
+        <button @click="timelineHelpOpen = false" class="p-1 text-grit-text hover:text-grit-gold transition-colors" aria-label="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -315,11 +323,14 @@
     x-transition:leave-end="translate-x-full"
     @keydown.escape.window="closeSidebar()"
     aria-live="polite"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="sidebar-title"
     class="sidebar-panel"
     style="display: none;">
     <div class="sidebar-header">
       <div>
-        <h2 class="text-xl md:text-2xl font-heading font-semibold text-grit-gold">
+        <h2 id="sidebar-title" tabindex="-1" x-ref="sidebarHeading" class="text-xl md:text-2xl font-heading font-semibold text-grit-gold">
           <span x-text="sidebarTitle"></span>
         </h2>
         <div class="text-sm md:text-base text-grit-text/60 mt-1" x-show="currentLocationType">
@@ -455,14 +466,14 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div id="loading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-[1050]">
+  <div id="loading" role="status" aria-live="polite" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-[1050]">
     <div class="bg-grit-bg/90 backdrop-blur-sm px-6 py-4 rounded-lg border border-grit-steel">
       <p>Loading map data...</p>
     </div>
   </div>
 
   <!-- Error Message -->
-  <div id="error" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-[1050] hidden">
+  <div id="error" role="alert" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-[1050] hidden">
     <div class="bg-grit-bg/90 backdrop-blur-sm px-6 py-4 rounded-lg border border-grit-accent">
       <p class="text-grit-accent"></p>
     </div>
@@ -605,6 +616,11 @@
   .timeline-panel svg text[data-type]:hover {
     fill: #fff;
   }
+  .timeline-panel svg text[data-type]:focus,
+  .leaflet-interactive:focus {
+    outline: 2px solid #b5381e;
+    outline-offset: 2px;
+  }
 
   /* Circle marker styles */
   .leaflet-interactive {
@@ -682,14 +698,15 @@
   }
 
   // Define activity type colors (for Activity Type view mode)
+  // Chosen so white badge text meets WCAG AA contrast (>=4.5:1) against each fill.
   const activityTypeColors = {
-    'Surveillance': '#e74c3c',    // Red
-    'Shadowing': '#9b59b6',       // Purple
-    'Interview': '#3498db',       // Blue
-    'Contact': '#2ecc71',         // Green
-    'Search': '#f39c12',          // Orange
-    'Informant': '#1abc9c',       // Turquoise
-    'Roping': '#e67e22'           // Carrot (for actual roping activities)
+    'Surveillance': '#b91c1c',    // Red
+    'Shadowing': '#6d28d9',       // Purple
+    'Interview': '#1d4ed8',       // Blue
+    'Contact': '#15803d',         // Green
+    'Search': '#c2410c',          // Orange
+    'Informant': '#0f766e',       // Turquoise
+    'Roping': '#854d0e'           // Carrot (for actual roping activities)
   };
 
   // Helper function to get color based on activity type
@@ -699,14 +716,15 @@
   }
 
   // Define category mappings and colors
+  // Chosen so white badge text meets WCAG AA contrast (>=4.5:1) against each fill.
   const categoryColors = {
-    'Entertainment & Hospitality': '#e74c3c',     // Red
-    'Businesses': '#3498db',                      // Blue
-    'Government & Organizations': '#2ecc71',      // Green
-    'Neighborhoods & Parks': '#f39c12',           // Orange
-    'Residence': '#9b59b6',                       // Purple
-    'Roadways': '#1abc9c',                        // Turquoise
-    'Transportation': '#e67e22'                   // Carrot
+    'Entertainment & Hospitality': '#b91c1c',     // Red
+    'Businesses': '#1d4ed8',                      // Blue
+    'Government & Organizations': '#15803d',      // Green
+    'Neighborhoods & Parks': '#c2410c',           // Orange
+    'Residence': '#6d28d9',                       // Purple
+    'Roadways': '#0f766e',                        // Turquoise
+    'Transportation': '#854d0e'                   // Carrot
   };
 
   // Map location types to display categories
@@ -839,6 +857,28 @@
   // Get category label for a location type
   function getCategoryLabel(locationType) {
     return categorizeLocationType(locationType);
+  }
+
+  // Make a Leaflet circle marker keyboard-operable: focusable, announced with an
+  // accessible name (including its category, so it doesn't rely on color alone),
+  // and activatable with Enter/Space in addition to click.
+  function makeMarkerAccessible(marker, getLabel, onActivate) {
+    marker.on('add', function () {
+      const el = marker.getElement();
+      if (!el) return;
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', getLabel());
+      if (!el._a11yKeydownBound) {
+        el.addEventListener('keydown', function (evt) {
+          if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+            evt.preventDefault();
+            onActivate();
+          }
+        });
+        el._a11yKeydownBound = true;
+      }
+    });
   }
 
   // Alpine.js component for map interface
@@ -1087,10 +1127,12 @@
           const isActive = !this.activeActivityFilter || this.activeActivityFilter === d.type;
           const opacity = isActive ? 0.85 : 0.25;
 
-          // Label
+          // Label — also the keyboard-operable control for filtering by this activity type
           svg += `<text x="${labelWidth - 6}" y="${y + barHeight/2 + 3}"
             text-anchor="end" fill="${isActive ? '#c8a04a' : '#5d7a6b'}" font-size="7"
-            font-family="Oswald, sans-serif" data-type="${d.type}">${d.type}</text>`;
+            font-family="Oswald, sans-serif" data-type="${d.type}"
+            tabindex="0" role="button" aria-pressed="${this.activeActivityFilter === d.type}"
+            aria-label="Filter by ${d.type}">${d.type}</text>`;
 
           // Draw intermittent segments for each active day
           const tooltip = `${d.type}: ${d.count} activities (${fmtDate(d.minDate)} – ${fmtDate(d.maxDate)})`;
@@ -1117,8 +1159,8 @@
         // Date axis
         const axisY = rows * rowHeight + 2;
         svg += `<line x1="${labelWidth}" y1="${axisY}" x2="${totalWidth - 10}" y2="${axisY}" stroke="#5d7a6b" stroke-opacity="0.3"/>`;
-        svg += `<text x="${labelWidth}" y="${axisY + 12}" fill="#f5efe0" font-size="9" opacity="0.4">${fmtAxis(min)}</text>`;
-        svg += `<text x="${totalWidth - 10}" y="${axisY + 12}" text-anchor="end" fill="#f5efe0" font-size="9" opacity="0.4">${fmtAxis(max)}</text>`;
+        svg += `<text x="${labelWidth}" y="${axisY + 12}" fill="#f5efe0" font-size="9" opacity="0.6">${fmtAxis(min)}</text>`;
+        svg += `<text x="${totalWidth - 10}" y="${axisY + 12}" text-anchor="end" fill="#f5efe0" font-size="9" opacity="0.6">${fmtAxis(max)}</text>`;
 
         // Animation cursor line
         if (this.animationDate) {
@@ -1133,9 +1175,19 @@
         container.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
         container.innerHTML = svg;
 
-        // Attach click handlers
+        // Attach click handlers (bars and labels)
         container.querySelectorAll('[data-type]').forEach(el => {
           el.addEventListener('click', () => this.filterByActivityType(el.dataset.type));
+        });
+
+        // Row labels are the keyboard-operable equivalent of clicking a bar
+        container.querySelectorAll('text[data-type]').forEach(el => {
+          el.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+              evt.preventDefault();
+              this.filterByActivityType(el.dataset.type);
+            }
+          });
         });
       },
 
@@ -1442,6 +1494,9 @@
       },
 
       openSidebar(activities, locationData = null) {
+        // Remember what had focus so closeSidebar() can restore it
+        this._sidebarTriggerEl = document.activeElement;
+
         // Sort activities by ID, then format dates and times
         const sortedActivities = [...activities].sort((a, b) => a.id - b.id);
 
@@ -1531,6 +1586,8 @@
             const sidebarWidth = window.innerWidth >= 768 ? 450 : Math.floor(window.innerWidth * 0.85);
             map.fitBounds(bounds, { paddingTopLeft: [40, 40], paddingBottomRight: [sidebarWidth + 40, 40] });
           }
+          // Move focus into the panel so it's announced and keyboard-reachable
+          if (this.$refs.sidebarHeading) this.$refs.sidebarHeading.focus();
         });
       },
 
@@ -1549,6 +1606,11 @@
           const bounds = L.latLngBounds(visibleLatLngs);
           map.fitBounds(bounds, { padding: [40, 40] });
         }
+        // Return focus to whatever opened the sidebar (marker, keyboard list item, etc.)
+        if (this._sidebarTriggerEl && this._sidebarTriggerEl.isConnected) {
+          this._sidebarTriggerEl.focus();
+        }
+        this._sidebarTriggerEl = null;
       },
 
       setSelectedMarker(marker) {
@@ -1675,6 +1737,16 @@
           alpineData.openSidebar(location.activities, location);
         });
 
+        makeMarkerAccessible(marker, () => {
+          const category = getCategoryLabel(location.locationType);
+          const name = location.locationName || location.locality || 'Location';
+          const activityCount = location.activities.length;
+          return `${name}${category ? ' — ' + category : ''}: ${activityCount} ${activityCount === 1 ? 'activity' : 'activities'}`;
+        }, () => {
+          alpineData.setSelectedMarker(marker);
+          alpineData.openSidebar(location.activities, location);
+        });
+
         groupedMarkers.push({
           marker: marker,
           locationData: location,
@@ -1687,6 +1759,7 @@
         let lat = null;
         let lon = null;
         let locationType = null;
+        let locationName = null;
         let visits = null;
 
         if (activity.locations) {
@@ -1694,6 +1767,7 @@
             lat = activity.locations[0].latitude || activity.locations[0].lat;
             lon = activity.locations[0].longitude || activity.locations[0].lon;
             locationType = activity.locations[0].location_type;
+            locationName = activity.locations[0].location_name || activity.locations[0].locality;
             visits = (activity.locations[0].visits !== null && activity.locations[0].visits !== undefined)
               ? parseInt(activity.locations[0].visits, 10)
               : null;
@@ -1701,6 +1775,7 @@
             lat = activity.locations.latitude || activity.locations.lat;
             lon = activity.locations.longitude || activity.locations.lon;
             locationType = activity.locations.location_type;
+            locationName = activity.locations.location_name || activity.locations.locality;
             visits = (activity.locations.visits !== null && activity.locations.visits !== undefined)
               ? parseInt(activity.locations.visits, 10)
               : null;
@@ -1733,6 +1808,16 @@
             alpineData.openSidebar([activity], locationData);
           });
 
+          makeMarkerAccessible(marker, () => {
+            const category = getCategoryLabel(locationType);
+            const name = locationName || 'Location';
+            return `${name}${category ? ' — ' + category : ''}`;
+          }, () => {
+            alpineData.setSelectedMarker(marker);
+            const locationData = { visits: visits };
+            alpineData.openSidebar([activity], locationData);
+          });
+
           individualMarkers.push({
             marker: marker,
             activity: activity,
@@ -1748,18 +1833,21 @@
         let lat = null;
         let lon = null;
         let visits = null;
+        let locationName = null;
         const activityType = activity.activity; // Activity type field
 
         if (activity.locations) {
           if (Array.isArray(activity.locations) && activity.locations.length > 0) {
             lat = activity.locations[0].latitude || activity.locations[0].lat;
             lon = activity.locations[0].longitude || activity.locations[0].lon;
+            locationName = activity.locations[0].location_name || activity.locations[0].locality;
             visits = (activity.locations[0].visits !== null && activity.locations[0].visits !== undefined)
               ? parseInt(activity.locations[0].visits, 10)
               : null;
           } else if (typeof activity.locations === 'object') {
             lat = activity.locations.latitude || activity.locations.lat;
             lon = activity.locations.longitude || activity.locations.lon;
+            locationName = activity.locations.location_name || activity.locations.locality;
             visits = (activity.locations.visits !== null && activity.locations.visits !== undefined)
               ? parseInt(activity.locations.visits, 10)
               : null;
@@ -1787,6 +1875,15 @@
 
           marker.on('click', function(e) {
             alpineData.setSelectedMarker(e.target);
+            const locationData = { visits: visits };
+            alpineData.openSidebar([activity], locationData);
+          });
+
+          makeMarkerAccessible(marker, () => {
+            const name = locationName || 'Location';
+            return `${activityType || 'Activity'} at ${name}`;
+          }, () => {
+            alpineData.setSelectedMarker(marker);
             const locationData = { visits: visits };
             alpineData.openSidebar([activity], locationData);
           });

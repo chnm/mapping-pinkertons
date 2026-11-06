@@ -12,7 +12,7 @@
 
       <!-- Per-investigation charts rendered here -->
       <div id="visualization-container">
-        <div class="flex items-center justify-center py-24 text-grit-text-dark/60">
+        <div role="status" aria-live="polite" class="flex items-center justify-center py-24 text-grit-text-dark/60">
           <p>Loading visualizations...</p>
         </div>
       </div>
@@ -59,12 +59,69 @@
     return Math.min(800, window.innerWidth - 100);
   }
 
+  // Builds a collapsible <table> as a non-visual equivalent to a chart, so the
+  // underlying data is available to screen reader / keyboard users without
+  // relying on the chart's pointer-only tooltips.
+  function dataTable(rows, columns) {
+    const details = document.createElement('details');
+    details.className = 'mt-3';
+
+    const summary = document.createElement('summary');
+    summary.className = 'text-sm text-grit-accent cursor-pointer hover:underline';
+    summary.textContent = 'View data as table';
+    details.appendChild(summary);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'overflow-x-auto mt-2';
+    const table = document.createElement('table');
+    table.className = 'w-full text-left text-sm';
+
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    columns.forEach(col => {
+      const th = document.createElement('th');
+      th.className = 'px-3 py-2 font-semibold text-gray-600 border-b-2 border-gray-300 bg-gray-50';
+      th.textContent = col.label;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-gray-200';
+      columns.forEach(col => {
+        const td = document.createElement('td');
+        td.className = 'px-3 py-2';
+        td.textContent = row[col.key];
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    wrap.appendChild(table);
+    details.appendChild(wrap);
+    return details;
+  }
+
+  // Wraps a Plot chart with role="img"/aria-label and an appended data table.
+  function chartWithTable(chart, ariaLabel, tableRows, tableColumns) {
+    const wrapper = document.createElement('div');
+    chart.setAttribute('role', 'img');
+    chart.setAttribute('aria-label', ariaLabel);
+    wrapper.appendChild(chart);
+    wrapper.appendChild(dataTable(tableRows, tableColumns));
+    return wrapper;
+  }
+
   // Chart renderers per viz type
   const renderers = {
     'activity-types': (data) => {
       const counts = countBy(data, 'activity').slice(0, 12);
       if (counts.length === 0) return null;
-      return Plot.plot({
+      const chart = Plot.plot({
         marginLeft: 140, marginBottom: 40,
         width: chartWidth(), height: Math.max(180, counts.length * 30 + 60),
         x: { grid: true, label: "Activities" },
@@ -74,6 +131,12 @@
           Plot.ruleX([0]),
         ],
       });
+      return chartWithTable(
+        chart,
+        `Bar chart of activity type counts (${counts.length} types)`,
+        counts.map(c => ({ Activity: c.value, Count: c.count })),
+        [{ key: 'Activity', label: 'Activity' }, { key: 'Count', label: 'Count' }]
+      );
     },
 
     'daily-activity': (data) => {
@@ -88,7 +151,7 @@
         "Surveillance": "#b5381e", "Shadowing": "#c8a04a", "Interview": "#5d7a6b",
         "Contact": "#6b7280", "Search": "#7c3aed", "Informant": "#0369a1", "Roping": "#d97706",
       };
-      return Plot.plot({
+      const chart = Plot.plot({
         marginLeft: 50, marginBottom: 60,
         width: chartWidth(), height: 250,
         x: { type: "time", label: "Date", tickFormat: "%b %d", tickRotate: -30 },
@@ -103,6 +166,27 @@
           Plot.ruleY([0]),
         ],
       });
+
+      // Build a "Date, Activity type, Count" table matching the day-by-type bins in the chart
+      const dayTypeCounts = {};
+      withDates.forEach(d => {
+        const day = d.dateObj.toISOString().substring(0, 10);
+        const key = `${day}|${d.activityType}`;
+        dayTypeCounts[key] = (dayTypeCounts[key] || 0) + 1;
+      });
+      const rows = Object.entries(dayTypeCounts)
+        .map(([key, count]) => {
+          const [date, type] = key.split('|');
+          return { Date: date, 'Activity type': type, Count: count };
+        })
+        .sort((a, b) => a.Date.localeCompare(b.Date) || a['Activity type'].localeCompare(b['Activity type']));
+
+      return chartWithTable(
+        chart,
+        `Histogram of daily activity counts by activity type (${activityTypes.length} types)`,
+        rows,
+        [{ key: 'Date', label: 'Date' }, { key: 'Activity type', label: 'Activity type' }, { key: 'Count', label: 'Count' }]
+      );
     },
 
     'location-types': (data) => {
@@ -117,7 +201,7 @@
       types.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
       const sorted = Object.entries(counts).map(([value, count]) => ({ value, count })).sort((a, b) => b.count - a.count).slice(0, 15);
       if (sorted.length === 0) return null;
-      return Plot.plot({
+      const chart = Plot.plot({
         marginLeft: 160, marginBottom: 40,
         width: chartWidth(), height: Math.max(180, sorted.length * 30 + 60),
         x: { grid: true, label: "Activities" },
@@ -127,12 +211,18 @@
           Plot.ruleX([0]),
         ],
       });
+      return chartWithTable(
+        chart,
+        `Bar chart of location type counts (${sorted.length} types)`,
+        sorted.map(c => ({ 'Location type': c.value, Count: c.count })),
+        [{ key: 'Location type', label: 'Location type' }, { key: 'Count', label: 'Count' }]
+      );
     },
 
     'workload': (data) => {
       const counts = countBy(data, 'operative').slice(0, 15);
       if (counts.length === 0) return null;
-      return Plot.plot({
+      const chart = Plot.plot({
         marginLeft: 160, marginBottom: 40,
         width: chartWidth(), height: Math.max(180, counts.length * 30 + 60),
         x: { grid: true, label: "Activities" },
@@ -142,12 +232,18 @@
           Plot.ruleX([0]),
         ],
       });
+      return chartWithTable(
+        chart,
+        `Bar chart of operative workload counts (${counts.length} operatives)`,
+        counts.map(c => ({ Operative: c.value, Count: c.count })),
+        [{ key: 'Operative', label: 'Operative' }, { key: 'Count', label: 'Count' }]
+      );
     },
 
     'top-subjects': (data) => {
       const counts = countBy(data, 'subject').slice(0, 15);
       if (counts.length === 0) return null;
-      return Plot.plot({
+      const chart = Plot.plot({
         marginLeft: 180, marginBottom: 40,
         width: chartWidth(), height: Math.max(180, counts.length * 30 + 60),
         x: { grid: true, label: "Activities" },
@@ -157,6 +253,12 @@
           Plot.ruleX([0]),
         ],
       });
+      return chartWithTable(
+        chart,
+        `Bar chart of top subjects watched (${counts.length} subjects)`,
+        counts.map(c => ({ Subject: c.value, Count: c.count })),
+        [{ key: 'Subject', label: 'Subject' }, { key: 'Count', label: 'Count' }]
+      );
     },
   };
 
@@ -182,7 +284,7 @@
 
       const renderer = renderers[vizType];
       if (!renderer) {
-        container.innerHTML = `<p class="text-grit-accent p-8 text-center">Unknown visualization type: ${vizType}</p>`;
+        container.innerHTML = `<p role="alert" class="text-grit-accent p-8 text-center">Unknown visualization type: ${vizType}</p>`;
         return;
       }
 
@@ -218,7 +320,7 @@
       }
     } catch (err) {
       console.error('Visualization error:', err);
-      container.innerHTML = `<p class="text-grit-accent p-8 text-center">Error loading data: ${err.message}</p>`;
+      container.innerHTML = `<p role="alert" class="text-grit-accent p-8 text-center">Error loading data: ${err.message}</p>`;
     }
   }
 

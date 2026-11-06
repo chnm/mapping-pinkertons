@@ -20,7 +20,7 @@
 
       <!-- Dashboard container (JS builds content here) -->
       <div id="dashboard-container">
-        <div id="dashboard-loading" class="flex flex-col items-center justify-center py-24 text-grit-text-dark/60">
+        <div id="dashboard-loading" role="status" aria-live="polite" class="flex flex-col items-center justify-center py-24 text-grit-text-dark/60">
           <svg id="dashboard-spinner" width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Loading">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"></circle>
             <path fill="currentColor" opacity="0.75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -79,6 +79,7 @@
       }
     } catch (err) {
       console.error('Dashboard error:', err);
+      loading.setAttribute('role', 'alert');
       loading.innerHTML =
         `<p class="text-grit-accent p-8 text-center">Error loading dashboard: ${err.message}</p>`;
     }
