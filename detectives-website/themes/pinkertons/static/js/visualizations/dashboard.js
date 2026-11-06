@@ -698,7 +698,7 @@ function renderMap(container, data, investigation) {
       attributionControl: false
     }).setView([center.lat, center.lon], center.zoom);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2t1o_4_377cfcda28890b2dd6983b1f', {
       subdomains: 'abcd',
       maxZoom: 20
     }).addTo(dashboardMap);
